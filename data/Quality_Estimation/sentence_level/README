@@ -1,0 +1,19 @@
+Each language folder contains the following files:
+
+Training/development files:
+
+<split>.<mt>.src -- source sentence
+<split>.<mt>.mt -- machine translated sentence
+<split>.<mt>.hter -- hter between translated and post-edited sentences, capped between 0 and 1
+<split>.<mt>.pe -- post-edited machine translation
+<split>.<mt>.ref -- reference translation (not pre-processed)
+<split>.<mt>.add-labels -- additional labels collected during post-editing:
+   -- post-editing time in seconds
+   -- number of keys pressed for 10 types of keys (we recommend summing these 10 columns)
+   -- post-editor id 
+
+where <split> is either dev or train and <mt> is either smt or nmt.
+
+
+
+
