@@ -1,5 +1,6 @@
 import logging
 import os
+import torch
 
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
@@ -20,7 +21,7 @@ TEST_SRC_FILE = "data/Quality_Estimation/task1_en-de_traindev/dev/dev.src"
 TEST_TARGET_FILE = "data/Quality_Estimation/task1_en-de_traindev/dev/dev.mt"
 TEST_HTER_FILE = "data/Quality_Estimation/task1_en-de_traindev/dev/dev.hter"
 
-model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=False,
+model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                    args=en_de_config)
 
 train = read_files(TRAIN_SRC_FILE, TRAIN_TARGET_FILE, TRAIN_HTER_FILE)
