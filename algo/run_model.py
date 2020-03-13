@@ -1,34 +1,48 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+
 from __future__ import absolute_import, division, print_function
 
 import math
 import os
+import random
 import warnings
 
 import numpy as np
 import pandas as pd
 import torch
-import wandb
 from scipy.stats import mode
-from sklearn.metrics import matthews_corrcoef, confusion_matrix, \
-    label_ranking_average_precision_score
-from tensorboardX import SummaryWriter
-from torch.utils.data import (
-    DataLoader,
-    RandomSampler,
-    SequentialSampler,
-    TensorDataset
+
+
+from sklearn.metrics import (
+    matthews_corrcoef,
+    confusion_matrix,
+    label_ranking_average_precision_score,
 )
+from tensorboardX import SummaryWriter
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, TensorDataset
 from tqdm.auto import trange, tqdm
-from transformers import AdamW, get_linear_schedule_with_warmup, InputExample
+from transformers import AdamW, get_linear_schedule_with_warmup, FlaubertForSequenceClassification
 from transformers import (
-    BertConfig, BertTokenizer,
-    XLNetConfig, XLNetTokenizer,
-    XLMConfig, XLMTokenizer,
-    RobertaConfig, RobertaTokenizer,
-    DistilBertConfig, DistilBertTokenizer,
-    AlbertConfig, AlbertTokenizer,
-    CamembertConfig, CamembertTokenizer,
-    XLMRobertaConfig, XLMRobertaTokenizer,
+    BertConfig,
+    BertTokenizer,
+    XLNetConfig,
+    XLNetTokenizer,
+    XLMConfig,
+    XLMTokenizer,
+    RobertaConfig,
+    RobertaTokenizer,
+    DistilBertConfig,
+    DistilBertTokenizer,
+    AlbertConfig,
+    AlbertTokenizer,
+    CamembertConfig,
+    CamembertTokenizer,
+    XLMRobertaConfig,
+    XLMRobertaTokenizer,
+    FlaubertConfig,
+    FlaubertTokenizer,
 )
 
 from algo.models.albert_model import AlbertForSequenceClassification
@@ -39,17 +53,22 @@ from algo.models.roberta_model import RobertaForSequenceClassification
 from algo.models.xlm_model import XLMForSequenceClassification
 from algo.models.xlm_roberta_model import XLMRobertaForSequenceClassification
 from algo.models.xlnet_model import XLNetForSequenceClassification
-from algo.utils import convert_examples_to_features
+from algo.utils import InputExample, convert_examples_to_features
+
+try:
+    import wandb
+    wandb_available = True
+except ImportError:
+    wandb_available = False
 
 
 class QuestModel:
     def __init__(
-            self, model_type, model_name, args, num_labels=None, weight=None, use_cuda=True, cuda_device=-1,
-            **kwargs,
+        self, model_type, model_name, num_labels=None, weight=None, args=None, use_cuda=True, cuda_device=-1, **kwargs,
     ):
 
         """
-        Initializes a QuestModel model.
+        Initializes a ClassificationModel model.
 
         Args:
             model_type: The type of model (bert, xlnet, xlm, roberta, distilbert)
@@ -66,12 +85,20 @@ class QuestModel:
             "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
             "xlnet": (XLNetConfig, XLNetForSequenceClassification, XLNetTokenizer),
             "xlm": (XLMConfig, XLMForSequenceClassification, XLMTokenizer),
-            "roberta": (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer,),
-            "distilbert": (DistilBertConfig, DistilBertForSequenceClassification, DistilBertTokenizer,),
+            "roberta": (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer),
+            "distilbert": (DistilBertConfig, DistilBertForSequenceClassification, DistilBertTokenizer),
             "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
-            "camembert": (CamembertConfig, CamembertForSequenceClassification, CamembertTokenizer,),
-            "xlmroberta": (XLMRobertaConfig, XLMRobertaForSequenceClassification, XLMRobertaTokenizer,),
+            "camembert": (CamembertConfig, CamembertForSequenceClassification, CamembertTokenizer),
+            "xlmroberta": (XLMRobertaConfig, XLMRobertaForSequenceClassification, XLMRobertaTokenizer),
+            "flaubert": (FlaubertConfig, FlaubertForSequenceClassification, FlaubertTokenizer),
         }
+
+        if args and 'manual_seed' in args:
+            random.seed(args['manual_seed'])
+            np.random.seed(args['manual_seed'])
+            torch.manual_seed(args['manual_seed'])
+            if 'n_gpu' in args and args['n_gpu'] > 0:
+                torch.cuda.manual_seed_all(args['manual_seed'])
 
         config_class, model_class, tokenizer_class = MODEL_CLASSES[model_type]
         if num_labels:
@@ -113,10 +140,11 @@ class QuestModel:
             "regression": False,
         }
 
+
         if not use_cuda:
             self.args["fp16"] = False
 
-        if args is not None:
+        if args:
             self.args.update(args)
 
         self.tokenizer = tokenizer_class.from_pretrained(model_name, do_lower_case=self.args["do_lower_case"], **kwargs)
@@ -131,26 +159,20 @@ class QuestModel:
             )
             self.args["use_multiprocessing"] = False
 
-        self.args["model_name"] = model_name
-        self.args["model_type"] = model_type
-
-        if model_type in ["camembert", "xlmroberta"]:
-            warnings.warn(
-                f"use_multiprocessing automatically disabled as {model_type}"
-                " fails when using multiprocessing for feature conversion."
-            )
-            self.args["use_multiprocessing"] = False
+        if self.args["wandb_project"] and not wandb_available:
+            warnings.warn("wandb_project specified but wandb is not available. Wandb disabled.")
+            self.args["wandb_project"] = None
 
     def train_model(
-            self,
-            train_df,
-            multi_label=False,
-            output_dir=None,
-            show_running_loss=True,
-            args=None,
-            eval_df=None,
-            verbose=True,
-            **kwargs,
+        self,
+        train_df,
+        multi_label=False,
+        output_dir=None,
+        show_running_loss=True,
+        args=None,
+        eval_df=None,
+        verbose=True,
+        **kwargs,
     ):
         """
         Trains the model using 'train_df'
@@ -215,8 +237,7 @@ class QuestModel:
 
         train_dataset = self.load_and_cache_examples(train_examples, verbose=verbose)
 
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
+        os.makedirs(output_dir, exist_ok=True)
 
         global_step, tr_loss = self.train(
             train_dataset,
@@ -237,14 +258,14 @@ class QuestModel:
             print("Training of {} model complete. Saved to {}.".format(self.args["model_type"], output_dir))
 
     def train(
-            self,
-            train_dataset,
-            output_dir,
-            multi_label=False,
-            show_running_loss=True,
-            eval_df=None,
-            verbose=True,
-            **kwargs,
+        self,
+        train_dataset,
+        output_dir,
+        multi_label=False,
+        show_running_loss=True,
+        eval_df=None,
+        verbose=True,
+        **kwargs,
     ):
         """
         Trains the model on train_dataset.
@@ -375,8 +396,8 @@ class QuestModel:
                         self._save_model(output_dir_current, model=model)
 
                     if args["evaluate_during_training"] and (
-                            args["evaluate_during_training_steps"] > 0
-                            and global_step % args["evaluate_during_training_steps"] == 0
+                        args["evaluate_during_training_steps"] > 0
+                        and global_step % args["evaluate_during_training_steps"] == 0
                     ):
                         # Only evaluate when single GPU otherwise metrics may not average well
                         results, _, _ = self.eval_model(
@@ -396,7 +417,7 @@ class QuestModel:
                             training_progress_scores[key].append(results[key])
                         report = pd.DataFrame(training_progress_scores)
                         report.to_csv(
-                            args["output_dir"] + "training_progress_scores.csv", index=False,
+                            os.path.join(args["output_dir"], "training_progress_scores.csv"), index=False,
                         )
 
                         if args["wandb_project"]:
@@ -447,7 +468,7 @@ class QuestModel:
                 for key in results:
                     training_progress_scores[key].append(results[key])
                 report = pd.DataFrame(training_progress_scores)
-                report.to_csv(args["output_dir"] + "training_progress_scores.csv", index=False)
+                report.to_csv(os.path.join(args["output_dir"], "training_progress_scores.csv"), index=False)
 
                 if not best_eval_loss:
                     best_eval_loss = results["eval_loss"]
@@ -550,8 +571,7 @@ class QuestModel:
             )
         else:
             eval_dataset = self.load_and_cache_examples(eval_examples, evaluate=True, verbose=verbose, silent=silent)
-        if not os.path.exists(eval_output_dir):
-            os.makedirs(eval_output_dir)
+        os.makedirs(eval_output_dir, exist_ok=True)
 
         eval_sampler = SequentialSampler(eval_dataset)
         eval_dataloader = DataLoader(eval_dataset, sampler=eval_sampler, batch_size=args["eval_batch_size"])
@@ -593,7 +613,7 @@ class QuestModel:
                 window_ranges.append([count, count + n_windows])
                 count += n_windows
 
-            preds = [preds[window_range[0]: window_range[1]] for window_range in window_ranges]
+            preds = [preds[window_range[0] : window_range[1]] for window_range in window_ranges]
             out_label_ids = [
                 out_label_ids[i] for i in range(len(out_label_ids)) if i in [window[0] for window in window_ranges]
             ]
@@ -630,7 +650,7 @@ class QuestModel:
         return results, model_outputs, wrong
 
     def load_and_cache_examples(
-            self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False
+        self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False
     ):
         """
         Converts a list of InputExample objects to a TensorDataset containing InputFeatures. Caches the InputFeatures.
@@ -643,15 +663,15 @@ class QuestModel:
         tokenizer = self.tokenizer
         args = self.args
 
-        no_cache = args["no_cache"]
+        if not no_cache:
+            no_cache = args["no_cache"]
 
         if not multi_label and args["regression"]:
             output_mode = "regression"
         else:
             output_mode = "classification"
 
-        if not os.path.isdir(self.args["cache_dir"]):
-            os.mkdir(self.args["cache_dir"])
+        os.makedirs(self.args["cache_dir"], exist_ok=True)
 
         mode = "dev" if evaluate else "train"
         cached_features_file = os.path.join(
@@ -662,8 +682,8 @@ class QuestModel:
         )
 
         if os.path.exists(cached_features_file) and (
-                (not args["reprocess_input_data"] and not no_cache) or (
-                mode == "dev" and args["use_cached_eval_features"])
+            (not args["reprocess_input_data"] and not no_cache) or (
+                mode == "dev" and args["use_cached_eval_features"] and not no_cache)
         ):
             features = torch.load(cached_features_file)
             if verbose:
@@ -841,7 +861,7 @@ class QuestModel:
                 window_ranges.append([count, count + n_windows])
                 count += n_windows
 
-            preds = [preds[window_range[0]: window_range[1]] for window_range in window_ranges]
+            preds = [preds[window_range[0] : window_range[1]] for window_range in window_ranges]
 
             model_outputs = preds
 

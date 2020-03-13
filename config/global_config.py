@@ -51,6 +51,13 @@ global_config = {
     'wandb_kwargs': {},
 
     "use_early_stopping": True,
-    "early_stopping_patience": 100,
+    "early_stopping_patience": 10,
     "early_stopping_delta": 0,
+    "early_stopping_metric": "eval_loss",
+    "early_stopping_metric_minimize": True,
+
+    "manual_seed": 777,
+
+    "encoding": None,
+
 }
