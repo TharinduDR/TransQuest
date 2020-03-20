@@ -1,33 +1,36 @@
 import logging
 import os
-
+import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from algo.evaluation import pearson_corr, spearman_corr
-from algo.run_model import QuestModel
+from algo.transformers.evaluation import pearson_corr, spearman_corr
+from algo.transformers.run_model import QuestModel
 from config.global_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, global_config, SEED, RESULT_FILE
-from util.reader import read_files
+from util.reader import min_max_normalisation
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-
-TRAIN_SRC_FILE = "data/Quality_Estimation/2018/sentence_level/en_lv/train.smt.src"
-TRAIN_TARGET_FILE = "data/Quality_Estimation/2018/sentence_level/en_lv/train.smt.mt"
-TRAIN_HTER_FILE = "data/Quality_Estimation/2018/sentence_level/en_lv/train.smt.hter"
-
-TEST_SRC_FILE = "data/Quality_Estimation/2018/sentence_level/en_lv/dev.smt.src"
-TEST_TARGET_FILE = "data/Quality_Estimation/2018/sentence_level/en_lv/dev.smt.mt"
-TEST_HTER_FILE = "data/Quality_Estimation/2018/sentence_level/en_lv/dev.smt.hter"
+TRAIN_FILE = "data/ro-en/train.roen.df.short.tsv"
+TEST_FILE = "data/ro-en/dev.roen.df.short.tsv"
 
 
 model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                    args=global_config)
 
-train = read_files(TRAIN_SRC_FILE, TRAIN_TARGET_FILE, TRAIN_HTER_FILE)
-test = read_files(TEST_SRC_FILE, TEST_TARGET_FILE, TEST_HTER_FILE)
+train = pd.read_csv(TRAIN_FILE, sep='\t')
+test = pd.read_csv(TEST_FILE, sep='\t')
+
+train = train[['original', 'translation', 'z_mean']]
+test = test[['original', 'translation', 'z_mean']]
+
+train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
+test = test.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
+
+train = min_max_normalisation(train, 'label')
+test = min_max_normalisation(test, 'label')
 
 logging.info("Started Training")
 
