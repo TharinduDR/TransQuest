@@ -6,7 +6,7 @@ RESULT_FILE = "result.tsv"
 MODEL_TYPE = "xlm"
 MODEL_NAME = "xlm-mlm-enro-1024"
 
-en_de_config = {
+ro_en_config = {
     'output_dir': 'temp_ro_en/outputs/',
     "best_model_dir": "temp_ro_en/outputs/best_model",
     'cache_dir': 'temp_ro_en/cache_dir/',
