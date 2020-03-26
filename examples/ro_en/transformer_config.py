@@ -4,9 +4,9 @@ SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
 MODEL_TYPE = "xlm"
-MODEL_NAME = "xlm-clm-ende-1024"
+MODEL_NAME = "xlm-mlm-enro-1024"
 
-en_de_config = {
+transformer_config = {
     'output_dir': 'temp/outputs/',
     "best_model_dir": "temp/outputs/best_model",
     'cache_dir': 'temp/cache_dir/',

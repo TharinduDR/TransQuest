@@ -1,15 +1,15 @@
 from multiprocessing import cpu_count
 
 SEED = 777
-TEMP_DIRECTORY = "temp_ro_en/data"
+TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
 MODEL_TYPE = "xlm"
-MODEL_NAME = "xlm-mlm-enro-1024"
+MODEL_NAME = "xlm-clm-ende-1024"
 
-ro_en_config = {
-    'output_dir': 'temp_ro_en/outputs/',
-    "best_model_dir": "temp_ro_en/outputs/best_model",
-    'cache_dir': 'temp_ro_en/cache_dir/',
+transformer_config = {
+    'output_dir': 'temp/outputs/',
+    "best_model_dir": "temp/outputs/best_model",
+    'cache_dir': 'temp/cache_dir/',
 
     'fp16': False,
     'fp16_opt_level': 'O1',

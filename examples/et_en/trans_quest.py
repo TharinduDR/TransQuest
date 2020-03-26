@@ -7,19 +7,18 @@ from sklearn.model_selection import train_test_split
 
 from algo.transformers.evaluation import pearson_corr, spearman_corr
 from algo.transformers.run_model import QuestModel
-from config.ro_en_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, ro_en_config, SEED, RESULT_FILE
+from examples.et_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
+    RESULT_FILE
 from util.reader import min_max_normalisation
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "data/ro-en/train.roen.df.short.tsv"
-TEST_FILE = "data/ro-en/dev.roen.df.short.tsv"
-
-
+TRAIN_FILE = "../../data/et-en/train.eten.df.short.tsv"
+TEST_FILE = "../../data/et-en/dev.eten.df.short.tsv"
 
 model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                   args=ro_en_config)
+                   args=transformer_config)
 
 train = pd.read_csv(TRAIN_FILE, sep='\t')
 test = pd.read_csv(TEST_FILE, sep='\t')
@@ -37,7 +36,7 @@ test = min_max_normalisation(test, 'labels')
 
 logging.info("Started Training")
 
-if ro_en_config["evaluate_during_training"]:
+if transformer_config["evaluate_during_training"]:
     train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED)
     model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                       mae=mean_absolute_error)
