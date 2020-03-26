@@ -51,6 +51,8 @@ logging.info("Finished Training")
 result, model_outputs, wrong_predictions = model.eval_model(test, pearson_corr=pearson_corr,
                                                             spearman_corr=spearman_corr, mae=mean_absolute_error)
 
+test['predictions'] = model_outputs
+
 test = un_fit(test, 'labels')
 test = un_fit(test, 'predictions')
 test.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
