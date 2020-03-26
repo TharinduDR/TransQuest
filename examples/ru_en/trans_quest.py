@@ -15,8 +15,8 @@ from examples.ru_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "../../data/ru-en/train.ruen.df.short.tsv"
-TEST_FILE = "../../data/ru-en/dev.ruen.df.short.tsv"
+TRAIN_FILE = "data/ru-en/train.ruen.df.short.tsv"
+TEST_FILE = "data/ru-en/dev.ruen.df.short.tsv"
 
 model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                    args=transformer_config)
