@@ -3,8 +3,8 @@ from multiprocessing import cpu_count
 SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
-MODEL_TYPE = "xlm"
-MODEL_NAME = "xlm-clm-ende-1024"
+MODEL_TYPE = "xlmroberta"
+MODEL_NAME = "xlm-roberta-base"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
