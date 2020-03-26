@@ -8,15 +8,15 @@ from sklearn.model_selection import train_test_split
 from algo.transformers.evaluation import pearson_corr, spearman_corr
 from algo.transformers.run_model import QuestModel
 from examples.common.util.normalizer import fit, un_fit
-from examples.et_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
+from examples.ru_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE
 
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "../../data/et-en/train.eten.df.short.tsv"
-TEST_FILE = "../../data/et-en/dev.eten.df.short.tsv"
+TRAIN_FILE = "../../data/ru-en/train.ruen.df.short.tsv"
+TEST_FILE = "../../data/ru-en/dev.ruen.df.short.tsv"
 
 model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                    args=transformer_config)
