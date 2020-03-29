@@ -9,7 +9,7 @@ from algo.transformers.evaluation import pearson_corr, spearman_corr
 from algo.transformers.run_model import QuestModel
 from examples.en_zh.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE
-from util.reader import min_max_normalisation
+
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)

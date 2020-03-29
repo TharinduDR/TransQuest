@@ -7,15 +7,16 @@ from sklearn.model_selection import train_test_split
 
 from algo.transformers.evaluation import pearson_corr, spearman_corr
 from algo.transformers.run_model import QuestModel
+from examples.common.util.draw import draw_scatterplot
 from examples.common.util.normalizer import fit, un_fit
 from examples.ro_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
-    RESULT_FILE
+    RESULT_FILE, RESULT_IMAGE
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "../../data/ro-en/train.roen.df.short.tsv"
-TEST_FILE = "../../data/ro_en/dev.roen.df.short.tsv"
+TRAIN_FILE = "data/ro-en/train.roen.df.short.tsv"
+TEST_FILE = "data/ro_en/dev.roen.df.short.tsv"
 
 model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                    args=transformer_config)
@@ -53,3 +54,4 @@ test['predictions'] = model_outputs
 test = un_fit(test, 'labels')
 test = un_fit(test, 'predictions')
 test.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
+draw_scatterplot(test, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE))
