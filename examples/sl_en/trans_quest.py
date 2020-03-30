@@ -19,7 +19,7 @@ if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
 TRAIN_FILE = "data/sl-en/train.slen.df.short.tsv"
-TEST_FILE = "data/sl_en/dev.slen.df.short.tsv"
+TEST_FILE = "data/sl-en/dev.slen.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t')
 test = pd.read_csv(TEST_FILE, sep='\t')
