@@ -12,14 +12,14 @@ from algo.transformers.evaluation import pearson_corr, spearman_corr
 from algo.transformers.run_model import QuestModel
 from examples.common.util.draw import draw_scatterplot
 from examples.common.util.normalizer import fit, un_fit
-from examples.sl_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
+from examples.si_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE, RESULT_IMAGE
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "data/sl-en/train.slen.df.short.tsv"
-TEST_FILE = "data/sl-en/dev.slen.df.short.tsv"
+TRAIN_FILE = "data/si-en/train.slen.df.short.tsv"
+TEST_FILE = "data/si-en/dev.slen.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t')
 test = pd.read_csv(TEST_FILE, sep='\t')
