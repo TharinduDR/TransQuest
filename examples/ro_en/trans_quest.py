@@ -1,5 +1,7 @@
 import logging
 import os
+import shutil
+
 import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
@@ -36,6 +38,10 @@ if transformer_config["evaluate_during_training"]:
     if transformer_config["n_fold"] > 1:
         test_preds = np.zeros((len(test), transformer_config["n_fold"]))
         for i in range(transformer_config["n_fold"]):
+
+            if os.path.exists(transformer_config['output_dir']) and os.path.isdir(transformer_config['output_dir']):
+                shutil.rmtree(transformer_config['output_dir'])
+
             model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                                args=transformer_config)
             train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED*i)
