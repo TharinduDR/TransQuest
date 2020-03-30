@@ -10,4 +10,4 @@ def spearman_corr(preds, labels):
 
 
 def rmse(preds, labels):
-    return np.sqrt(((preds - labels) ** 2).mean())
+    return np.sqrt(((np.asarray(preds, dtype=np.float32) - np.asarray(labels, dtype=np.float32)) ** 2).mean())
