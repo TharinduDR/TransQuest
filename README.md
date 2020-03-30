@@ -24,4 +24,24 @@ python -m examples.ro_en.trans_quest
 
 Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
 ------------| ----------------- |------------------:| -------------------:| 
-TransQuest  | XLM               | xlm-mlm-enro-1024 | 0.721             | 
+TransQuest  | XLM               | xlm-mlm-enro-1024 | 0.739               | 
+
+
+#### Russian - English 
+```bash
+python -m examples.ru_en.trans_quest
+```
+
+Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
+------------| ----------------- |------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base  | 0.692               | 
+
+
+#### Sinhala - English 
+```bash
+python -m examples.si_en.trans_quest
+```
+
+Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
+------------| ----------------- |------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base  | 0.380               | 
