@@ -54,4 +54,4 @@ test['predictions'] = model_outputs
 test = un_fit(test, 'labels')
 test = un_fit(test, 'predictions')
 test.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
-draw_scatterplot(test, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE))
+draw_scatterplot(test, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), MODEL_NAME + " " + MODEL_TYPE)
