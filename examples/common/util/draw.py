@@ -16,8 +16,7 @@ def draw_scatterplot(data_frame, real_column, prediction_column, path, topic):
     spearman = spearman_corr(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
     rmse_value = rmse(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
 
-    textstr = 'RMSE=%.3f\n$Pearson Correlation=%.3f$\n$Spearman Correlation=%.3f$' % (
-    rmse, pearson, spearman)
+    textstr = 'RMSE=%.3f\n$Pearson Correlation=%.3f$\n$Spearman Correlation=%.3f$' % (rmse_value, pearson, spearman)
 
     ax = data_frame.plot(kind='scatter', x='id', y=real_column, color='DarkBlue', label='z_mean', title=topic)
     ax = data_frame.plot(kind='scatter', x='id', y=prediction_column, color='DarkGreen', label='predicted z_mean',
