@@ -3,6 +3,7 @@ from multiprocessing import cpu_count
 SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
+RESULT_IMAGE = "result.jpg"
 MODEL_TYPE = "xlm"
 MODEL_NAME = "xlm-mlm-17-1280"
 
@@ -30,6 +31,7 @@ transformer_config = {
     'save_steps': 100,
     "no_cache": False,
     'save_model_every_epoch': True,
+    'n_fold': 5,
     'evaluate_during_training': True,
     'evaluate_during_training_steps': 100,
     "evaluate_during_training_verbose": True,
