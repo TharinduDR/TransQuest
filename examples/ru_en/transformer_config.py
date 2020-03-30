@@ -4,7 +4,7 @@ SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
-MODEL_TYPE = "xlm-roberta"
+MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "xlm-roberta-base"
 
 transformer_config = {
