@@ -3,8 +3,9 @@ from multiprocessing import cpu_count
 SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
+RESULT_IMAGE = "result.jpg"
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "xlm-roberta-large"
+MODEL_NAME = "xlm-roberta-base"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
@@ -29,6 +30,7 @@ transformer_config = {
     'logging_steps': 100,
     'save_steps': 100,
     "no_cache": False,
+    'n_fold': 5,
     'save_model_every_epoch': True,
     'evaluate_during_training': True,
     'evaluate_during_training_steps': 100,
