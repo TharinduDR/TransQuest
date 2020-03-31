@@ -20,8 +20,8 @@ if not os.path.exists(TEMP_DIRECTORY):
 TRAIN_FILE = "data/en-zh/train.enzh.df.short.tsv"
 TEST_FILE = "data/en-zh/dev.enzh.df.short.tsv"
 
-train = pd.read_csv(TRAIN_FILE, sep='\t')
-test = pd.read_csv(TEST_FILE, sep='\t')
+train = pd.read_csv(TRAIN_FILE, sep='\t', error_bad_lines=False)
+test = pd.read_csv(TEST_FILE, sep='\t', error_bad_lines=False)
 
 train = train[['original', 'translation', 'z_mean']]
 test = test[['original', 'translation', 'z_mean']]
