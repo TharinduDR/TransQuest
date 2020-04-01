@@ -36,6 +36,25 @@ Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation |
 ------------| ----------------- |------------------:| -------------------:| 
 TransQuest  | XLM-R             | xlm-roberta-base  | 0.692               | 
 
+### Estonian - English 
+```bash
+python -m examples.et_en.trans_quest
+```
+
+Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
+------------| ----------------- |------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base  | 0.672               | 
+
+### English - Chinese
+```bash
+python -m examples.en_zh.trans_quest
+```
+
+Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
+------------| ----------------- |------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base  | 0.493               | 
+
+
 ### English - German 
 ```bash
 python -m examples.en_de.trans_quest
