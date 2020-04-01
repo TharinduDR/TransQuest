@@ -4,8 +4,8 @@ SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
-MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "xlm-roberta-base"
+MODEL_TYPE = "bert"
+MODEL_NAME = "bert-base-multilingual-cased"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',

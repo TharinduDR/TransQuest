@@ -22,9 +22,10 @@ Examples are included in the repository but are not shipped with the library.
 python -m examples.ro_en.trans_quest
 ```
 
-Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
-------------| ----------------- |------------------:| -------------------:| 
-TransQuest  | XLM               | xlm-mlm-enro-1024 | 0.739               | 
+Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
+------------| ----------------- |-----------------------------:| -------------------:| 
+TransQuest  | XLM               | xlm-mlm-enro-1024            | 0.739               | 
+TransQuest  | BERT              | bert-base-multilingual-cased | 0.829               | 
 
 
 ### Russian - English 
@@ -53,6 +54,16 @@ python -m examples.en_zh.trans_quest
 Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
 ------------| ----------------- |------------------:| -------------------:| 
 TransQuest  | XLM-R             | xlm-roberta-base  | 0.493               | 
+
+
+### Nepalese - English 
+```bash
+python -m examples.si_en.trans_quest
+```
+
+Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
+------------| ----------------- |------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base  | 0.699               | 
 
 
 ### English - German 
