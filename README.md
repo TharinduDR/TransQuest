@@ -33,9 +33,10 @@ TransQuest  | BERT              | bert-base-multilingual-cased | 0.829          
 python -m examples.ru_en.trans_quest
 ```
 
-Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
-------------| ----------------- |------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base  | 0.692               | 
+Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
+------------| ----------------- |-----------------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base             | 0.692               | 
+TransQuest  | BERT              | bert-base-multilingual-cased | 0.642               | 
 
 ### Estonian - English 
 ```bash
@@ -51,9 +52,10 @@ TransQuest  | XLM-R             | xlm-roberta-base  | 0.672               |
 python -m examples.en_zh.trans_quest
 ```
 
-Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
-------------| ----------------- |------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base  | 0.493               | 
+Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
+------------| ----------------- |-----------------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base             | 0.493               |
+TransQuest  | BERT              | bert-base-multilingual-cased | 0.518               |  
 
 
 ### Nepalese - English 
@@ -71,9 +73,10 @@ TransQuest  | XLM-R             | xlm-roberta-base  | 0.699               |
 python -m examples.en_de.trans_quest
 ```
 
-Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
-------------| ----------------- |------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base  | 0.326               | 
+Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
+------------| ----------------- |-----------------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base             | 0.326               | 
+TransQuest  | BERT              | bert-base-multilingual-cased | 0.449               | 
 
 
 ### Sinhala - English 
