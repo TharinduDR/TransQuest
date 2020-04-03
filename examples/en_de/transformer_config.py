@@ -4,8 +4,10 @@ SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
+GOOGLE_DRIVE = True
+DRIVE_FILE_ID = "1r7__oW68GURddDbb3Y_9MmN_o3UC5DtZ"
 MODEL_TYPE = "bert"
-MODEL_NAME = "bert-base-multilingual-cased"
+MODEL_NAME = "models/bert-base-multilingual-cased-sts"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
