@@ -4,10 +4,10 @@ SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
-GOOGLE_DRIVE = True
-DRIVE_FILE_ID = "1HQEyfmtZXBmlYm-vMV7fir_f0_p9Rk9D"
+GOOGLE_DRIVE = False
+DRIVE_FILE_ID = None
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "models/xlm-roberta-base-sts"
+MODEL_NAME = "xlm-roberta-large"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
