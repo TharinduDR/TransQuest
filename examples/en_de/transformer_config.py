@@ -6,8 +6,8 @@ RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
-MODEL_TYPE = "bert"
-MODEL_NAME = "bert-base-multilingual-cased"
+MODEL_TYPE = "xlm"
+MODEL_NAME = "xlm-mlm-ende-1024"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
@@ -22,7 +22,7 @@ transformer_config = {
     'eval_batch_size': 8,
     'num_train_epochs': 3,
     'weight_decay': 0,
-    'learning_rate': 4e-5,
+    'learning_rate': 2e-5,
     'adam_epsilon': 1e-8,
     'warmup_ratio': 0.06,
     'warmup_steps': 0,
