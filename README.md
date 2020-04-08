@@ -60,6 +60,7 @@ python -m examples.en_zh.trans_quest
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
 ------------| ----------------- |-----------------------------:| -------------------:| 
 TransQuest  | XLM-R             | xlm-roberta-base             | 0.493               |
+TransQuest  | XLM-R             | xlm-roberta-large            | 0.501               |
 TransQuest  | BERT              | bert-base-multilingual-cased | 0.518               |  
 
 
@@ -82,7 +83,7 @@ python -m examples.en_de.trans_quest
 
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
 ------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM               | xlm-mlm-enro-1024            | 0.326               | 
+TransQuest  | XLM               | xlm-mlm-ende-1024            | 0.326               | 
 TransQuest  | BERT              | bert-base-multilingual-cased | 0.449               | 
 
 
@@ -91,6 +92,7 @@ TransQuest  | BERT              | bert-base-multilingual-cased | 0.449          
 python -m examples.si_en.trans_quest
 ```
 
-Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
-------------| ----------------- |------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base  | 0.380               | 
+Algo Type   | Transformer Type  | Transformer Name   | Pearson Correlation | 
+------------| ----------------- |-------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base   | 0.380               | 
+TransQuest  | XLM-R             | xlm-roberta-large  | 0.589               | 
