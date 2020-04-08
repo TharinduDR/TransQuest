@@ -6,8 +6,8 @@ RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
-MODEL_TYPE = "bert"
-MODEL_NAME = "bert-base-multilingual-cased"
+MODEL_TYPE = "xlmroberta"
+MODEL_NAME = "xlm-roberta-large"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
