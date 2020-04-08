@@ -214,12 +214,7 @@ class QuestModel:
 
         self._move_model_to_device()
 
-        if "text" in train_df.columns and "labels" in train_df.columns:
-            train_examples = [
-                InputExample(i, text, None, label)
-                for i, (text, label) in enumerate(zip(train_df["text"], train_df["labels"]))
-            ]
-        elif "text_a" in train_df.columns and "text_b" in train_df.columns:
+        if "text_a" in train_df.columns and "text_b" in train_df.columns:
             train_examples = [
                 InputExample(i, text_a, text_b, label)
                 for i, (text_a, text_b, label) in enumerate(
@@ -227,13 +222,9 @@ class QuestModel:
                 )
             ]
         else:
-            warnings.warn(
-                "Dataframe headers not specified. Falling back to using column 0 as text and column 1 as labels."
+            raise ValueError(
+                "Passed DataFrame is not in the correct format. Please rename your columns to text_a, text_b and labels"
             )
-            train_examples = [
-                InputExample(i, text, None, label)
-                for i, (text, label) in enumerate(zip(train_df.iloc[:, 0], train_df.iloc[:, 1]))
-            ]
 
         train_dataset = self.load_and_cache_examples(train_examples, verbose=verbose)
 
