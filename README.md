@@ -84,7 +84,8 @@ python -m examples.en_de.trans_quest
 
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
 ------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM               | xlm-mlm-ende-1024            | 0.326               | 
+TransQuest  | XLM               | xlm-mlm-ende-1024            | 0.326               |
+TransQuest  | XLM-R             | xlm-roberta-large            | 0.461               |   
 TransQuest  | BERT              | bert-base-multilingual-cased | 0.449               | 
 
 
