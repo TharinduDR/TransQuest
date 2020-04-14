@@ -1,8 +1,7 @@
 import seaborn as sns
-import matplotlib.pyplot as plt
 import pandas as pd
 
-from algo.transformers.evaluation import pearson_corr, spearman_corr, rmse
+from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr, rmse
 
 sns.set()
 

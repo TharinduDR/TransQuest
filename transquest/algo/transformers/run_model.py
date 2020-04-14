@@ -45,15 +45,15 @@ from transformers import (
     FlaubertTokenizer,
 )
 
-from algo.transformers.models.albert_model import AlbertForSequenceClassification
-from algo.transformers.models.bert_model import BertForSequenceClassification
-from algo.transformers.models.camembert_model import CamembertForSequenceClassification
-from algo.transformers.models.distilbert_model import DistilBertForSequenceClassification
-from algo.transformers.models.roberta_model import RobertaForSequenceClassification
-from algo.transformers.models.xlm_model import XLMForSequenceClassification
-from algo.transformers.models.xlm_roberta_model import XLMRobertaForSequenceClassification
-from algo.transformers.models.xlnet_model import XLNetForSequenceClassification
-from algo.transformers.utils import InputExample, convert_examples_to_features
+from transquest.algo import AlbertForSequenceClassification
+from transquest.algo import BertForSequenceClassification
+from transquest.algo import CamembertForSequenceClassification
+from transquest.algo.transformers.models.distilbert_model import DistilBertForSequenceClassification
+from transquest.algo import RobertaForSequenceClassification
+from transquest.algo import XLMForSequenceClassification
+from transquest.algo import XLMRobertaForSequenceClassification
+from transquest.algo import XLNetForSequenceClassification
+from transquest.algo import InputExample, convert_examples_to_features
 
 try:
     import wandb

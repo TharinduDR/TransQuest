@@ -1,4 +1,3 @@
-import logging
 import os
 import shutil
 
@@ -8,8 +7,8 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 import numpy as np
 
-from algo.transformers.evaluation import pearson_corr, spearman_corr
-from algo.transformers.run_model import QuestModel
+from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
+from transquest.algo import QuestModel
 from examples.common.util.download import download_from_google_drive
 from examples.common.util.draw import draw_scatterplot
 from examples.common.util.normalizer import fit, un_fit
