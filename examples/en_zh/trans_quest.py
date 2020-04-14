@@ -16,8 +16,8 @@ from transquest.algo.transformers.run_model import QuestModel
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "data/en-zh/train.enzh.df.short.tsv"
-TEST_FILE = "data/en-zh/dev.enzh.df.short.tsv"
+TRAIN_FILE = "examples/en_zh/data/en-zh/train.enzh.df.short.tsv"
+TEST_FILE = "examples/en_zh/data/en-zh/dev.enzh.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t', error_bad_lines=False)
 test = pd.read_csv(TEST_FILE, sep='\t', error_bad_lines=False)

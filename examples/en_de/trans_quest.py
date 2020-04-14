@@ -23,8 +23,8 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FILE = "data/en-de/train.ende.df.short.tsv"
-TEST_FILE = "data/en-de/dev.ende.df.short.tsv"
+TRAIN_FILE = "examples/en_de/data/en-de/train.ende.df.short.tsv"
+TEST_FILE = "examples/en_de/data/en-de/dev.ende.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t')
 test = pd.read_csv(TEST_FILE, sep='\t')
