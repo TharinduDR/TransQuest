@@ -22,24 +22,24 @@ if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
 TRAIN_FILE = "examples/ro_en/data/ro-en/train.roen.df.short.tsv"
-TEST_FILE = "examples/ro_en/data/ro-en/dev.roen.df.short.tsv"
+DEV_FILE = "examples/ro_en/data/ro-en/dev.roen.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t')
-test = pd.read_csv(TEST_FILE, sep='\t')
+dev = pd.read_csv(DEV_FILE, sep='\t')
 
 train = train[['original', 'translation', 'z_mean']]
-test = test[['original', 'translation', 'z_mean']]
+dev = dev[['original', 'translation', 'z_mean']]
 
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
-test = test.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
+dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 
 train = fit(train, 'labels')
-test = fit(test, 'labels')
+dev = fit(dev, 'labels')
 
 
 if transformer_config["evaluate_during_training"]:
     if transformer_config["n_fold"] > 1:
-        test_preds = np.zeros((len(test), transformer_config["n_fold"]))
+        dev_preds = np.zeros((len(dev), transformer_config["n_fold"]))
         for i in range(transformer_config["n_fold"]):
 
             if os.path.exists(transformer_config['output_dir']) and os.path.isdir(transformer_config['output_dir']):
@@ -51,12 +51,12 @@ if transformer_config["evaluate_during_training"]:
             model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
             model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1, use_cuda=torch.cuda.is_available(), args=transformer_config)
-            result, model_outputs, wrong_predictions = model.eval_model(test, pearson_corr=pearson_corr,
+            result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                         spearman_corr=spearman_corr,
                                                                         mae=mean_absolute_error)
-            test_preds[:, i] = model_outputs
+            dev_preds[:, i] = model_outputs
 
-        test['predictions'] = test_preds.mean(axis=1)
+        dev['predictions'] = dev_preds.mean(axis=1)
 
     else:
         model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
@@ -66,22 +66,22 @@ if transformer_config["evaluate_during_training"]:
                           mae=mean_absolute_error)
         model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
                            use_cuda=torch.cuda.is_available(), args=transformer_config)
-        result, model_outputs, wrong_predictions = model.eval_model(test, pearson_corr=pearson_corr,
+        result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                     spearman_corr=spearman_corr,
                                                                     mae=mean_absolute_error)
-        test['predictions'] = model_outputs
+        dev['predictions'] = model_outputs
 
 
 else:
     model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                        args=transformer_config)
     model.train_model(train, pearson_corr=pearson_corr, spearman_corr=spearman_corr, mae=mean_absolute_error)
-    result, model_outputs, wrong_predictions = model.eval_model(test, pearson_corr=pearson_corr,
+    result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                 spearman_corr=spearman_corr, mae=mean_absolute_error)
-    test['predictions'] = model_outputs
+    dev['predictions'] = model_outputs
 
 
-test = un_fit(test, 'labels')
-test = un_fit(test, 'predictions')
-test.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
-draw_scatterplot(test, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), MODEL_TYPE + " " + MODEL_NAME)
+dev = un_fit(dev, 'labels')
+dev = un_fit(dev, 'predictions')
+dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
+draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), MODEL_TYPE + " " + MODEL_NAME)
