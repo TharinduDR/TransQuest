@@ -1,12 +1,10 @@
-import seaborn as sns
 import pandas as pd
-
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr, rmse
 
-sns.set()
-
+import matplotlib.pyplot as plt
 
 def draw_scatterplot(data_frame, real_column, prediction_column, path, topic):
+
     data_frame = data_frame.sort_values(real_column)
     sort_id = list(range(0, len(data_frame.index)))
     data_frame['id'] = pd.Series(sort_id).values
@@ -19,10 +17,11 @@ def draw_scatterplot(data_frame, real_column, prediction_column, path, topic):
 
     print(textstr)
 
+    plt.figure()
     ax = data_frame.plot(kind='scatter', x='id', y=real_column, color='DarkBlue', label='z_mean', title=topic)
     ax = data_frame.plot(kind='scatter', x='id', y=prediction_column, color='DarkGreen', label='predicted z_mean',
                     ax=ax)
-    ax.text(1500, 0.05, textstr, fontsize=12)
+    ax.text(1500, 0.05, textstr, fontsize=10)
 
     fig = ax.get_figure()
     fig.savefig(path)

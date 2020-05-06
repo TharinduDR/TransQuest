@@ -32,6 +32,8 @@ setup(
         "tensorboardx",
         "pandas",
         "tokenizers",
+        "matplotlib"
         "wandb"
+        "googledrivedownloader"
     ],
 )
