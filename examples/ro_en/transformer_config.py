@@ -14,7 +14,7 @@ transformer_config = {
     "best_model_dir": "temp/outputs/best_model",
     'cache_dir': 'temp/cache_dir/',
 
-    'fp16': True,
+    'fp16': False,
     'fp16_opt_level': 'O1',
     'max_seq_length': 80,
     'train_batch_size': 8,
@@ -33,7 +33,7 @@ transformer_config = {
     'save_steps': 300,
     "no_cache": False,
     'save_model_every_epoch': True,
-    'n_fold': 5,
+    'n_fold': 1,
     'evaluate_during_training': True,
     'evaluate_during_training_steps': 300,
     "evaluate_during_training_verbose": True,
