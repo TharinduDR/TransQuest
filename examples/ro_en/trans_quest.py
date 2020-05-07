@@ -30,7 +30,7 @@ test = pd.read_csv(DEV_FILE, sep='\t')
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
-test = test[['index', 'original', 'translation', 'z_mean']]
+test = test[['index', 'original', 'translation']]
 
 index = test['index'].to_list()
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
@@ -46,6 +46,7 @@ dev = fit(dev, 'labels')
 if transformer_config["evaluate_during_training"]:
     if transformer_config["n_fold"] > 1:
         dev_preds = np.zeros((len(dev), transformer_config["n_fold"]))
+        test_preds = np.zeros((len(test), transformer_config["n_fold"]))
         for i in range(transformer_config["n_fold"]):
 
             if os.path.exists(transformer_config['output_dir']) and os.path.isdir(transformer_config['output_dir']):
@@ -60,9 +61,12 @@ if transformer_config["evaluate_during_training"]:
             result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                         spearman_corr=spearman_corr,
                                                                         mae=mean_absolute_error)
+            predictions, raw_outputs = model.predict(test_sentence_pairs)
             dev_preds[:, i] = model_outputs
+            test_preds[:, i] = predictions
 
         dev['predictions'] = dev_preds.mean(axis=1)
+        test['predictions'] = test_preds.mean(axis=1)
 
     else:
         model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
@@ -75,8 +79,9 @@ if transformer_config["evaluate_during_training"]:
         result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                     spearman_corr=spearman_corr,
                                                                     mae=mean_absolute_error)
+        predictions, raw_outputs = model.predict(test_sentence_pairs)
         dev['predictions'] = model_outputs
-
+        test['predictions'] = predictions
 
 else:
     model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
@@ -84,10 +89,12 @@ else:
     model.train_model(train, pearson_corr=pearson_corr, spearman_corr=spearman_corr, mae=mean_absolute_error)
     result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                 spearman_corr=spearman_corr, mae=mean_absolute_error)
+    predictions, raw_outputs = model.predict(test_sentence_pairs)
     dev['predictions'] = model_outputs
-
+    test['predictions'] = predictions
 
 dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
+test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
 draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Romanian-English")
