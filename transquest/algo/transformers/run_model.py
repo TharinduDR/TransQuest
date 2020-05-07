@@ -68,7 +68,7 @@ class QuestModel:
     ):
 
         """
-        Initializes a ClassificationModel model.
+        Initializes a QuestModel.
 
         Args:
             model_type: The type of model (bert, xlnet, xlm, roberta, distilbert)
