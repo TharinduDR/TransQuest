@@ -4,6 +4,7 @@ SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
+SUBMISSION_FILE = "predictions.txt"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
 MODEL_TYPE = "xlmroberta"
@@ -33,7 +34,7 @@ transformer_config = {
     'save_steps': 300,
     "no_cache": False,
     'save_model_every_epoch': True,
-    'n_fold': 5,
+    'n_fold': 3,
     'evaluate_during_training': True,
     'evaluate_during_training_steps': 300,
     "evaluate_during_training_verbose": True,
