@@ -1,18 +1,18 @@
 import os
 import shutil
 
+import numpy as np
 import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
-import numpy as np
 
-from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from examples.common.util.download import download_from_google_drive
 from examples.common.util.draw import draw_scatterplot
 from examples.common.util.normalizer import fit, un_fit
 from examples.ro_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID
+from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from transquest.algo.transformers.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
@@ -26,12 +26,18 @@ DEV_FILE = "examples/ro_en/data/ro-en/dev.roen.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t')
 dev = pd.read_csv(DEV_FILE, sep='\t')
+test = pd.read_csv(DEV_FILE, sep='\t')
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
+test = test[['index', 'original', 'translation', 'z_mean']]
 
+index = test['index'].to_list()
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
+test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
+
+test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
 
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
@@ -84,4 +90,4 @@ else:
 dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
-draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), MODEL_TYPE + " " + MODEL_NAME)
+draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Romanian-English")
