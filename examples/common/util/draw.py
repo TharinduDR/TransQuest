@@ -1,4 +1,6 @@
 import pandas as pd
+from sklearn.metrics import mean_absolute_error
+
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr, rmse
 
 import matplotlib.pyplot as plt
@@ -12,8 +14,9 @@ def draw_scatterplot(data_frame, real_column, prediction_column, path, topic):
     pearson = pearson_corr(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
     spearman = spearman_corr(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
     rmse_value = rmse(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
+    mae = mean_absolute_error(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
 
-    textstr = 'RMSE=%.4f\nPearson Correlation=%.4f\nSpearman Correlation=%.4f' % (rmse_value, pearson, spearman)
+    textstr = 'RMSE=%.4f\nMAE=%.4f\nPearson Correlation=%.4f\nSpearman Correlation=%.4f' % (rmse_value, mae, pearson, spearman)
 
     print(textstr)
 
