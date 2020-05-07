@@ -7,12 +7,13 @@ import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
+from examples.common.util.postprocess import format_submission
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from examples.common.util.download import download_from_google_drive
 from examples.common.util.draw import draw_scatterplot
 from examples.common.util.normalizer import fit, un_fit
 from examples.ru_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
-    RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID
+    RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
 from transquest.algo.transformers.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
@@ -22,7 +23,7 @@ if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
 TRAIN_FILE = "examples/ru_en/data/ru-en/train.ruen.df.short.tsv"
-TEST_FILE = "examples/ru_en/data/ru-en/dev.ruen.df.short.tsv"
+DEV_FILE = "examples/ru_en/data/ru-en/dev.ruen.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t')
 dev = pd.read_csv(DEV_FILE, sep='\t')
@@ -97,5 +98,5 @@ dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
 test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
-draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Estonian-English")
-format_submission(df=test, index=index, language_pair="et_en", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
+draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Russian-English")
+format_submission(df=test, index=index, language_pair="ru_en", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
