@@ -21,9 +21,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 TRAIN_FILE = "examples/ne_en/data/ne-en/train.neen.df.short.tsv"
 DEV_FILE = "examples/ne_en/data/ne-en/dev.neen.df.short.tsv"
 
-train = pd.read_csv(TRAIN_FILE, sep='\t')
-dev = pd.read_csv(DEV_FILE, sep='\t')
-test = pd.read_csv(DEV_FILE, sep='\t')
+train = pd.read_csv(TRAIN_FILE, sep='\t', error_bad_lines=False)
+dev = pd.read_csv(DEV_FILE, sep='\t', error_bad_lines=False)
+test = pd.read_csv(DEV_FILE, sep='\t', error_bad_lines=False)
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
