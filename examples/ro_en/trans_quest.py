@@ -8,7 +8,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
 from examples.common.util.download import download_from_google_drive
-from examples.common.util.draw import draw_scatterplot
+from examples.common.util.draw import draw_scatterplot, print_stat
 from examples.common.util.normalizer import fit, un_fit
 from examples.common.util.postprocess import format_submission
 from examples.ro_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
@@ -99,4 +99,5 @@ dev = un_fit(dev, 'predictions')
 test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
 draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Romanian-English")
+print_stat(dev, 'labels', 'predictions')
 format_submission(df=test, index=index, language_pair="ro_en", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
