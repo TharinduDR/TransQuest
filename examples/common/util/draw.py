@@ -1,15 +1,19 @@
 import pandas as pd
 from sklearn.metrics import mean_absolute_error
 
+from examples.common.util.normalizer import fit
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr, rmse
 
 import matplotlib.pyplot as plt
 
-def draw_scatterplot(data_frame, real_column, prediction_column, path, topic):
 
+def draw_scatterplot(data_frame, real_column, prediction_column, path, topic):
     data_frame = data_frame.sort_values(real_column)
     sort_id = list(range(0, len(data_frame.index)))
     data_frame['id'] = pd.Series(sort_id).values
+
+    data_frame = fit(data_frame, real_column)
+    data_frame = fit(data_frame, prediction_column)
 
     pearson = pearson_corr(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
     spearman = spearman_corr(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
@@ -17,8 +21,6 @@ def draw_scatterplot(data_frame, real_column, prediction_column, path, topic):
     mae = mean_absolute_error(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
 
     textstr = 'RMSE=%.4f\nMAE=%.4f\nPearson Correlation=%.4f\nSpearman Correlation=%.4f' % (rmse_value, mae, pearson, spearman)
-
-    print(textstr)
 
     plt.figure()
     ax = data_frame.plot(kind='scatter', x='id', y=real_column, color='DarkBlue', label='z_mean', title=topic)
@@ -28,3 +30,16 @@ def draw_scatterplot(data_frame, real_column, prediction_column, path, topic):
 
     fig = ax.get_figure()
     fig.savefig(path)
+
+
+def print_stat(data_frame, real_column, prediction_column):
+    data_frame = data_frame.sort_values(real_column)
+
+    pearson = pearson_corr(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
+    spearman = spearman_corr(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
+    rmse_value = rmse(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
+    mae = mean_absolute_error(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
+
+    textstr = 'RMSE=%.4f\nMAE=%.4f\nPearson Correlation=%.4f\nSpearman Correlation=%.4f' % (rmse_value, mae, pearson, spearman)
+
+    print(textstr)
