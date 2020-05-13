@@ -20,10 +20,11 @@ if not os.path.exists(TEMP_DIRECTORY):
 
 TRAIN_FILE = "examples/et_en/data/et-en/train.eten.df.short.tsv"
 DEV_FILE = "examples/et_en/data/et-en/dev.eten.df.short.tsv"
+TEST_FILE = "examples/et_en/data/et-en/test20.eten.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t')
 dev = pd.read_csv(DEV_FILE, sep='\t')
-test = pd.read_csv(DEV_FILE, sep='\t')
+test = pd.read_csv(TEST_FILE, sep='\t')
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
@@ -96,4 +97,4 @@ test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
 draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Estonian-English")
 print_stat(dev, 'labels', 'predictions')
-format_submission(df=test, index=index, language_pair="et_en", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
+format_submission(df=test, index=index, language_pair="et-en", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
