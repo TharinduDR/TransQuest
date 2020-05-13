@@ -24,10 +24,11 @@ if GOOGLE_DRIVE:
 
 TRAIN_FILE = "examples/ro_en/data/ro-en/train.roen.df.short.tsv"
 DEV_FILE = "examples/ro_en/data/ro-en/dev.roen.df.short.tsv"
+TEST_FILE = "examples/ro_en/data/ro-en/test20.roen.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t')
 dev = pd.read_csv(DEV_FILE, sep='\t')
-test = pd.read_csv(DEV_FILE, sep='\t')
+test = pd.read_csv(TEST_FILE, sep='\t')
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
