@@ -2,7 +2,7 @@ import csv
 import pandas as pd
 
 
-def read_annotated_file(path):
+def read_annotated_file(path, index="index"):
     indices = []
     originals = []
     translations = []
@@ -10,7 +10,7 @@ def read_annotated_file(path):
     with open(path, mode="r", encoding="utf-8-sig") as csvfile:
         reader = csv.DictReader(csvfile, delimiter="\t", quoting=csv.QUOTE_NONE)
         for row in reader:
-            indices.append(row["index"])
+            indices.append(row[index])
             originals.append(row["original"])
             translations.append(row["translation"])
             z_means.append(float(row["z_mean"]))
@@ -23,14 +23,14 @@ def read_annotated_file(path):
                 })
 
 
-def read_test_file(path):
+def read_test_file(path, index="index"):
     indices = []
     originals = []
     translations = []
     with open(path, mode="r", encoding="utf-8-sig") as csvfile:
         reader = csv.DictReader(csvfile, delimiter="\t", quoting=csv.QUOTE_NONE)
         for row in reader:
-            indices.append(row["index"])
+            indices.append(row[index])
             originals.append(row["original"])
             translations.append(row["translation"])
 

@@ -27,15 +27,15 @@ TRAIN_FILE = "examples/ru_en/data/ru-en/train.ruen.df.short.tsv"
 DEV_FILE = "examples/ru_en/data/ru-en/dev.ruen.df.short.tsv"
 TEST_FILE = "examples/ru_en/data/ru-en/test20.ruen.df.short.tsv"
 
-train = read_annotated_file(TRAIN_FILE)
-dev = read_annotated_file(DEV_FILE)
-test = read_test_file(TEST_FILE)
+train = read_annotated_file(TRAIN_FILE, index="segid")
+dev = read_annotated_file(DEV_FILE, index="segid")
+test = read_test_file(TEST_FILE, index="segid")
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
-test = test[['segid', 'original', 'translation']]
+test = test[['index', 'original', 'translation']]
 
-index = test['segid'].to_list()
+index = test['index'].to_list()
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
