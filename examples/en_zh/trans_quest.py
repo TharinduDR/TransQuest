@@ -7,6 +7,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
 from examples.common.util.postprocess import format_submission
+from examples.common.util.reader import read_annotated_file, read_test_file
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from examples.common.util.draw import draw_scatterplot, print_stat
 from examples.common.util.normalizer import fit, un_fit
@@ -21,9 +22,9 @@ TRAIN_FILE = "examples/en_zh/data/en-zh/train.enzh.df.short.tsv"
 DEV_FILE = "examples/en_zh/data/en-zh/dev.enzh.df.short.tsv"
 TEST_FILE = "examples/en_zh/data/en-zh/test20.enzh.df.short.tsv"
 
-train = pd.read_csv(TRAIN_FILE, sep='\t', error_bad_lines=False)
-dev = pd.read_csv(DEV_FILE, sep='\t', error_bad_lines=False)
-test = pd.read_csv(TEST_FILE, sep='\t', error_bad_lines=False)
+train = read_annotated_file(TRAIN_FILE)
+dev = read_annotated_file(DEV_FILE)
+test = read_test_file(TEST_FILE)
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
@@ -39,7 +40,7 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
-
+assert(len(index) == 1000)
 if transformer_config["evaluate_during_training"]:
     if transformer_config["n_fold"] > 1:
         dev_preds = np.zeros((len(dev), transformer_config["n_fold"]))

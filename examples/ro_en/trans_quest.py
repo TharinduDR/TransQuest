@@ -11,6 +11,7 @@ from examples.common.util.download import download_from_google_drive
 from examples.common.util.draw import draw_scatterplot, print_stat
 from examples.common.util.normalizer import fit, un_fit
 from examples.common.util.postprocess import format_submission
+from examples.common.util.reader import read_annotated_file, read_test_file
 from examples.ro_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
@@ -26,9 +27,9 @@ TRAIN_FILE = "examples/ro_en/data/ro-en/train.roen.df.short.tsv"
 DEV_FILE = "examples/ro_en/data/ro-en/dev.roen.df.short.tsv"
 TEST_FILE = "examples/ro_en/data/ro-en/test20.roen.df.short.tsv"
 
-train = pd.read_csv(TRAIN_FILE, sep='\t')
-dev = pd.read_csv(DEV_FILE, sep='\t')
-test = pd.read_csv(TEST_FILE, sep='\t')
+train = read_annotated_file(TRAIN_FILE)
+dev = read_annotated_file(DEV_FILE)
+test = read_test_file(TEST_FILE)
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
@@ -44,7 +45,7 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
-
+assert(len(index) == 1000)
 if transformer_config["evaluate_during_training"]:
     if transformer_config["n_fold"] > 1:
         dev_preds = np.zeros((len(dev), transformer_config["n_fold"]))

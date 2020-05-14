@@ -8,6 +8,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
 from examples.common.util.postprocess import format_submission
+from examples.common.util.reader import read_annotated_file, read_test_file
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from examples.common.util.download import download_from_google_drive
 from examples.common.util.draw import draw_scatterplot, print_stat
@@ -26,9 +27,9 @@ TRAIN_FILE = "examples/ru_en/data/ru-en/train.ruen.df.short.tsv"
 DEV_FILE = "examples/ru_en/data/ru-en/dev.ruen.df.short.tsv"
 TEST_FILE = "examples/ru_en/data/ru-en/test20.ruen.df.short.tsv"
 
-train = pd.read_csv(TRAIN_FILE, sep='\t')
-dev = pd.read_csv(DEV_FILE, sep='\t')
-test = pd.read_csv(TEST_FILE, sep='\t')
+train = read_annotated_file(TRAIN_FILE)
+dev = read_annotated_file(DEV_FILE)
+test = read_test_file(TEST_FILE)
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
