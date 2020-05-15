@@ -22,10 +22,12 @@ Examples are included in the repository but are not shipped with the library.
 python -m examples.ro_en.trans_quest
 ```
 
-Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
-------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM               | xlm-mlm-enro-1024            | 0.739               | 
-TransQuest  | BERT              | bert-base-multilingual-cased | 0.829               | 
+Algo Type   | Transformer Type  | Transformer Name                   | Pearson Correlation | 
+------------| ----------------- |-----------------------------------:| -------------------:| 
+TransQuest  | XLM               | xlm-mlm-enro-1024                  | 0.739               |
+TransQuest  | XLM-R             | xlm-roberta-large                  | 0.894               |  
+TransQuest  | BERT              | bert-base-multilingual-cased       | 0.829               | 
+TransQuest  | DistilBERT        | distilbert-base-multilingual-cased | 0.778               | 
 
 
 ### Russian - English 
@@ -33,10 +35,12 @@ TransQuest  | BERT              | bert-base-multilingual-cased | 0.829          
 python -m examples.ru_en.trans_quest
 ```
 
-Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
-------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base             | 0.692               | 
-TransQuest  | BERT              | bert-base-multilingual-cased | 0.642               | 
+Algo Type   | Transformer Type  | Transformer Name                   | Pearson Correlation | 
+------------| ----------------- |-----------------------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base                   | 0.692               | 
+TransQuest  | XLM-R             | xlm-roberta-large                  | 0.715               | 
+TransQuest  | BERT              | bert-base-multilingual-cased       | 0.642               |
+TransQuest  | DistilBERT        | distilbert-base-multilingual-cased | 0.644               | 
 
 ### Estonian - English 
 ```bash
@@ -45,7 +49,8 @@ python -m examples.et_en.trans_quest
 
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
 ------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base             | 0.672               | 
+TransQuest  | XLM-R             | xlm-roberta-base             | 0.672               |
+TransQuest  | XLM-R             | xlm-roberta-large            | 0.741               |  
 TransQuest  | BERT              | bert-base-multilingual-cased | 0.664               | 
 
 ### English - Chinese
@@ -56,6 +61,7 @@ python -m examples.en_zh.trans_quest
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
 ------------| ----------------- |-----------------------------:| -------------------:| 
 TransQuest  | XLM-R             | xlm-roberta-base             | 0.493               |
+TransQuest  | XLM-R             | xlm-roberta-large            | 0.501               |
 TransQuest  | BERT              | bert-base-multilingual-cased | 0.518               |  
 
 
@@ -66,7 +72,8 @@ python -m examples.si_en.trans_quest
 
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
 ------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base             | 0.699               | 
+TransQuest  | XLM-R             | xlm-roberta-base             | 0.699               |
+TransQuest  | XLM-R             | xlm-roberta-large            | 0.761               |  
 TransQuest  | BERT              | bert-base-multilingual-cased | 0.684               | 
 
 
@@ -77,7 +84,7 @@ python -m examples.en_de.trans_quest
 
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
 ------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base             | 0.326               | 
+TransQuest  | XLM               | xlm-mlm-ende-1024            | 0.326               | 
 TransQuest  | BERT              | bert-base-multilingual-cased | 0.449               | 
 
 
@@ -86,6 +93,7 @@ TransQuest  | BERT              | bert-base-multilingual-cased | 0.449          
 python -m examples.si_en.trans_quest
 ```
 
-Algo Type   | Transformer Type  | Transformer Name  | Pearson Correlation | 
-------------| ----------------- |------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base  | 0.380               | 
+Algo Type   | Transformer Type  | Transformer Name   | Pearson Correlation | 
+------------| ----------------- |-------------------:| -------------------:| 
+TransQuest  | XLM-R             | xlm-roberta-base   | 0.380               | 
+TransQuest  | XLM-R             | xlm-roberta-large  | 0.589               | 

@@ -4,8 +4,11 @@ SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
-MODEL_TYPE = "bert"
-MODEL_NAME = "bert-base-multilingual-cased"
+SUBMISSION_FILE = "predictions.txt"
+GOOGLE_DRIVE = False
+DRIVE_FILE_ID = None
+MODEL_TYPE = "xlmroberta"
+MODEL_NAME = "xlm-roberta-large"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
@@ -20,20 +23,20 @@ transformer_config = {
     'eval_batch_size': 8,
     'num_train_epochs': 3,
     'weight_decay': 0,
-    'learning_rate': 4e-5,
+    'learning_rate': 2e-5,
     'adam_epsilon': 1e-8,
     'warmup_ratio': 0.06,
     'warmup_steps': 0,
     'max_grad_norm': 1.0,
     'do_lower_case': False,
 
-    'logging_steps': 100,
-    'save_steps': 100,
+    'logging_steps': 300,
+    'save_steps': 300,
     "no_cache": False,
     'save_model_every_epoch': True,
-    'n_fold': 5,
+    'n_fold': 3,
     'evaluate_during_training': True,
-    'evaluate_during_training_steps': 100,
+    'evaluate_during_training_steps': 300,
     "evaluate_during_training_verbose": True,
     'use_cached_eval_features': False,
     'save_eval_checkpoints': True,
