@@ -3,7 +3,7 @@
 TransQuest provides state-of-the-art models for Quality Estimation.
 
 ## Installation
-you first need to install PyTorch.
+you first need to install PyTorch. THe recommended PyTorch version is 1.5.
 Please refer to [PyTorch installation page](https://pytorch.org/get-started/locally/#start-locally) regarding the specific install command for your platform.
 
 When PyTorch has been installed, you can install from source by cloning the repository and running:
@@ -61,7 +61,7 @@ python -m examples.en_zh.trans_quest
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
 ------------| ----------------- |-----------------------------:| -------------------:| 
 TransQuest  | XLM-R             | xlm-roberta-base             | 0.493               |
-TransQuest  | XLM-R             | xlm-roberta-large            | 0.501               |
+TransQuest  | XLM-R             | xlm-roberta-large            | 0.526               |
 TransQuest  | BERT              | bert-base-multilingual-cased | 0.518               |  
 
 
@@ -85,6 +85,7 @@ python -m examples.en_de.trans_quest
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
 ------------| ----------------- |-----------------------------:| -------------------:| 
 TransQuest  | XLM               | xlm-mlm-ende-1024            | 0.326               | 
+TransQuest  | XLM-R             | xlm-roberta-large            | 0.475               |
 TransQuest  | BERT              | bert-base-multilingual-cased | 0.449               | 
 
 
