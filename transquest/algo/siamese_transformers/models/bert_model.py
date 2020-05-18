@@ -6,6 +6,7 @@ import os
 import numpy as np
 import logging
 
+
 class BERT(nn.Module):
     """BERT model to generate token embeddings.
 

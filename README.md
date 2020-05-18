@@ -3,7 +3,9 @@
 TransQuest provides state-of-the-art models for Quality Estimation.
 
 ## Installation
-you first need to install PyTorch.
+We recommend Python 3.6 or higher. The model is implemented with PyTorch (at least 1.0.1) using transformers v2.8.0.
+
+You first need to install PyTorch.
 Please refer to [PyTorch installation page](https://pytorch.org/get-started/locally/#start-locally) regarding the specific install command for your platform.
 
 When PyTorch has been installed, you can install from source by cloning the repository and running:

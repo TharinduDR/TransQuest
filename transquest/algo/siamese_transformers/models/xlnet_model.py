@@ -6,6 +6,7 @@ from typing import Union, Tuple, List, Dict
 import os
 import numpy as np
 
+
 class XLNet(nn.Module):
     """XLNet model to generate token embeddings.
 

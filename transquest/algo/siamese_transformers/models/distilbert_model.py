@@ -7,6 +7,7 @@ import os
 import numpy as np
 import logging
 
+
 class DistilBERT(nn.Module):
     """DistilBERT model to generate token embeddings.
 

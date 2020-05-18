@@ -7,6 +7,7 @@ import os
 import numpy as np
 import logging
 
+
 class XLMRoBERTa(nn.Module):
     """RoBERTa model to generate token embeddings.
 

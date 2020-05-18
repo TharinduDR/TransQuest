@@ -7,6 +7,7 @@ import os
 import numpy as np
 import logging
 
+
 class ALBERT(nn.Module):
     """ALBERT model to generate token embeddings.
 
