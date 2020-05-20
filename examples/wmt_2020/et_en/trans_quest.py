@@ -7,12 +7,12 @@ import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.common.util.postprocess import format_submission
-from examples.common.util.reader import read_annotated_file, read_test_file
+from examples.wmt_2020.common.util.postprocess import format_submission
+from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
-from examples.common.util.draw import draw_scatterplot, print_stat
-from examples.common.util.normalizer import fit, un_fit
-from examples.et_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
+from examples.wmt_2020.common.util.draw import draw_scatterplot, print_stat
+from examples.wmt_2020.common.util.normalizer import fit, un_fit
+from examples.wmt_2020.et_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
 from transquest.algo.transformers.run_model import QuestModel
 
