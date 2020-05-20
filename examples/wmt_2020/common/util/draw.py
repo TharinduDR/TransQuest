@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.metrics import mean_absolute_error
 
-from examples.common.util.normalizer import fit
+from examples.wmt_2020.common.util.normalizer import fit
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr, rmse
 
 import matplotlib.pyplot as plt
