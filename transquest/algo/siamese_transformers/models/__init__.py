@@ -5,3 +5,5 @@ from .distilbert_model import DistilBERT
 from .roberta_model import RoBERTa
 from .xlm_roberta_model import XLMRoBERTa
 from .xlnet_model import XLNet
+from .Pooling import Pooling
+from .Transformer import Transformer

@@ -11,7 +11,8 @@ import transformers
 import torch
 from numpy import ndarray
 from torch import nn, Tensor
-from torch.optim import Optimizer
+from torch.optim.optimizer import Optimizer
+
 from torch.utils.data import DataLoader
 from tqdm import tqdm, trange
 
