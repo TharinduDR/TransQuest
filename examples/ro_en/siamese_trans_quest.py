@@ -12,7 +12,7 @@ from transquest.algo.siamese_transformers.evaluation.EmbeddingSimilarityEvaluato
 
 
 #### Just some code to print debug information to stdout
-from transquest.algo.siamese_transformers.readers import STSBenchmarkDataReader
+from transquest.algo.siamese_transformers.readers import STSDataReader
 
 logging.basicConfig(format='%(asctime)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
@@ -24,7 +24,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 train_batch_size = 16
 num_epochs = 4
 model_save_path = 'output/training_stsbenchmark_bert-'+datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-sts_reader = STSBenchmarkDataReader('examples/ro_en/data/ro-en/', s1_col_idx=1, s2_col_idx=2, score_col_idx=6, normalize_scores=True)
+sts_reader = STSDataReader('examples/ro_en/data/ro-en/', s1_col_idx=1, s2_col_idx=2, score_col_idx=6, normalize_scores=True, header=True)
 
 # Use BERT for mapping tokens to embeddings
 word_embedding_model = models.Transformer('xlm-roberta-large')
