@@ -24,7 +24,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 train_batch_size = 16
 num_epochs = 4
 model_save_path = 'output/training_stsbenchmark_bert-'+datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-sts_reader = STSBenchmarkDataReader('examples/ro_en/data/ro-en', s1_col_idx=0, s2_col_idx=1, score_col_idx=2, normalize_scores=True)
+sts_reader = STSBenchmarkDataReader('examples/ro_en/data/ro-en/', s1_col_idx=1, s2_col_idx=2, score_col_idx=6, normalize_scores=True)
 
 # Use BERT for mapping tokens to embeddings
 word_embedding_model = models.Transformer('xlm-roberta-base')
@@ -45,7 +45,7 @@ train_loss = losses.CosineSimilarityLoss(model=model)
 
 
 logging.info("Read STSbenchmark dev dataset")
-dev_data = SentencesDataset(examples=sts_reader.get_examples('sts-dev.csv'), model=model)
+dev_data = SentencesDataset(examples=sts_reader.get_examples('dev.roen.df.short.tsv'), model=model)
 dev_dataloader = DataLoader(dev_data, shuffle=False, batch_size=train_batch_size)
 evaluator = EmbeddingSimilarityEvaluator(dev_dataloader)
 
@@ -71,7 +71,7 @@ model.fit(train_objectives=[(train_dataloader, train_loss)],
 ##############################################################################
 
 model = SentenceTransformer(model_save_path)
-test_data = SentencesDataset(examples=sts_reader.get_examples("sts-test.csv"), model=model)
+test_data = SentencesDataset(examples=sts_reader.get_examples("test20.roen.df.short.tsv"), model=model)
 test_dataloader = DataLoader(test_data, shuffle=False, batch_size=train_batch_size)
 evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
 model.evaluate(evaluator)
