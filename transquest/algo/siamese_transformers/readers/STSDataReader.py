@@ -30,11 +30,11 @@ class STSDataReader:
         filepath = os.path.join(self.dataset_folder, filename)
         with gzip.open(filepath, 'rt', encoding='utf8') if filename.endswith('.gz') else open(filepath, encoding="utf-8") as fIn:
             data = csv.reader(fIn, delimiter=self.delimiter, quoting=self.quoting)
-
+            if self.header:
+                print("check")
+                next(data, None)
             examples = []
             for id, row in enumerate(data):
-                if self.header:
-                    next(data, None)
                 score = float(row[self.score_col_idx])
                 if self.normalize_scores:  # Normalize to a 0...1 value
                     score = (score - self.min_score) / (self.max_score - self.min_score)
