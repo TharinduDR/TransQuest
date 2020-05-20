@@ -1,10 +1,12 @@
-from sentence_transformers.evaluation import SentenceEvaluator
-from sentence_transformers.util import batch_to_device
+
 import torch
 import numpy as np
 import logging
 import os
 import csv
+
+from transquest.algo.siamese_transformers.evaluation import SentenceEvaluator
+from transquest.algo.siamese_transformers.util import batch_to_device
 
 
 class MSEEvaluator(SentenceEvaluator):
