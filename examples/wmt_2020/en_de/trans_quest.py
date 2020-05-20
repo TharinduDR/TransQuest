@@ -2,7 +2,6 @@ import os
 import shutil
 import numpy as np
 
-import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
@@ -15,7 +14,7 @@ from examples.common.util.download import download_from_google_drive
 from examples.common.util.draw import draw_scatterplot, print_stat
 
 from examples.common.util.normalizer import fit, un_fit
-from examples.en_de.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
+from examples.wmt_2020.en_de import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
 from transquest.algo.transformers.run_model import QuestModel
 

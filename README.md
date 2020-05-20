@@ -19,7 +19,7 @@ Examples are included in the repository but are not shipped with the library.
 
 ### Romanian - English 
 ```bash
-python -m examples.ro_en.trans_quest
+python -m examples.wmt_2020.ro_en.trans_quest
 ```
 
 Algo Type   | Transformer Type  | Transformer Name                   | Pearson Correlation | 
@@ -32,7 +32,7 @@ TransQuest  | DistilBERT        | distilbert-base-multilingual-cased | 0.778    
 
 ### Russian - English 
 ```bash
-python -m examples.ru_en.trans_quest
+python -m examples.wmt_2020.ru_en.trans_quest
 ```
 
 Algo Type   | Transformer Type  | Transformer Name                   | Pearson Correlation | 
@@ -44,7 +44,7 @@ TransQuest  | DistilBERT        | distilbert-base-multilingual-cased | 0.644    
 
 ### Estonian - English 
 ```bash
-python -m examples.et_en.trans_quest
+python -m examples.wmt_2020.et_en.trans_quest
 ```
 
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
@@ -55,7 +55,7 @@ TransQuest  | BERT              | bert-base-multilingual-cased | 0.664          
 
 ### English - Chinese
 ```bash
-python -m examples.en_zh.trans_quest
+python -m examples.wmt_2020.en_zh.trans_quest
 ```
 
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
@@ -67,7 +67,7 @@ TransQuest  | BERT              | bert-base-multilingual-cased | 0.518          
 
 ### Nepalese - English 
 ```bash
-python -m examples.si_en.trans_quest
+python -m examples.wmt_2020.si_en.trans_quest
 ```
 
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
@@ -79,7 +79,7 @@ TransQuest  | BERT              | bert-base-multilingual-cased | 0.684          
 
 ### English - German 
 ```bash
-python -m examples.en_de.trans_quest
+python -m examples.wmt_2020.en_de.trans_quest
 ```
 
 Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
@@ -91,7 +91,7 @@ TransQuest  | BERT              | bert-base-multilingual-cased | 0.449          
 
 ### Sinhala - English 
 ```bash
-python -m examples.si_en.trans_quest
+python -m examples.wmt_2020.si_en.trans_quest
 ```
 
 Algo Type   | Transformer Type  | Transformer Name   | Pearson Correlation | 
