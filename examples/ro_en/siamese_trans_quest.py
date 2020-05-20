@@ -27,7 +27,7 @@ model_save_path = 'output/training_stsbenchmark_bert-'+datetime.now().strftime("
 sts_reader = STSBenchmarkDataReader('examples/ro_en/data/ro-en/', s1_col_idx=1, s2_col_idx=2, score_col_idx=6, normalize_scores=True)
 
 # Use BERT for mapping tokens to embeddings
-word_embedding_model = models.Transformer('xlm-roberta-base')
+word_embedding_model = models.Transformer('xlm-roberta-large')
 
 # Apply mean pooling to get one fixed sized sentence vector
 pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
