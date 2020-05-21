@@ -31,7 +31,6 @@ class STSDataReader:
         with gzip.open(filepath, 'rt', encoding='utf8') if filename.endswith('.gz') else open(filepath, encoding="utf-8") as fIn:
             data = csv.reader(fIn, delimiter=self.delimiter, quoting=self.quoting)
             if self.header:
-                print("check")
                 next(data, None)
             examples = []
             for id, row in enumerate(data):
@@ -47,14 +46,3 @@ class STSDataReader:
                     break
 
         return examples
-
-
-class STSBenchmarkDataReader(STSDataReader):
-    """
-    Reader especially for the STS benchmark dataset. There, the sentences are in column 5 and 6, the score is in column 4.
-    Scores are normalized from 0...5 to 0...1
-    """
-    def __init__(self, dataset_folder, s1_col_idx=5, s2_col_idx=6, score_col_idx=4, delimiter="\t",
-                 quoting=csv.QUOTE_NONE, normalize_scores=True, min_score=0, max_score=5):
-        super().__init__(dataset_folder=dataset_folder, s1_col_idx=s1_col_idx, s2_col_idx=s2_col_idx, score_col_idx=score_col_idx, delimiter="\t",
-                 quoting=quoting, normalize_scores=normalize_scores, min_score=min_score, max_score=max_score)
