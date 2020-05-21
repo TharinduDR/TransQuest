@@ -7,21 +7,25 @@ import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.common.util.postprocess import format_submission
-from examples.common.util.reader import read_annotated_file, read_test_file
+from examples.wmt_2020.common.util.download import download_from_google_drive
+from examples.wmt_2020.common.util.draw import draw_scatterplot, print_stat
+from examples.wmt_2020.common.util.normalizer import fit, un_fit
+from examples.wmt_2020.common.util.postprocess import format_submission
+from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
+from examples.wmt_2020.ro_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
+    RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
-from examples.common.util.draw import draw_scatterplot, print_stat
-from examples.common.util.normalizer import fit, un_fit
-from examples.si_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
-    RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
 from transquest.algo.transformers.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "examples/si_en/data/si-en/train.sien.df.short.tsv"
-DEV_FILE = "examples/si_en/data/si-en/dev.sien.df.short.tsv"
-TEST_FILE = "examples/si_en/data/si-en/test20.sien.df.short.tsv"
+if GOOGLE_DRIVE:
+    download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
+
+TRAIN_FILE = "examples/ro_en/data/ro-en/train.roen.df.short.tsv"
+DEV_FILE = "examples/ro_en/data/ro-en/dev.roen.df.short.tsv"
+TEST_FILE = "examples/ro_en/data/ro-en/test20.roen.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
@@ -96,6 +100,6 @@ dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
 test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
-draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Sinhala-English")
+draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Romanian-English")
 print_stat(dev, 'labels', 'predictions')
-format_submission(df=test, index=index, language_pair="si-en", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
+format_submission(df=test, index=index, language_pair="ro-en", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))

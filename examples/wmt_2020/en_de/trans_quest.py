@@ -2,26 +2,32 @@ import os
 import shutil
 import numpy as np
 
-import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.common.util.postprocess import format_submission
-from examples.common.util.reader import read_test_file, read_annotated_file
+from examples.wmt_2020.common.util.postprocess import format_submission
+from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
+from examples.wmt_2020.en_de.transformer_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
+    transformer_config, MODEL_TYPE, SEED, RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
-from examples.common.util.draw import draw_scatterplot, print_stat
-from examples.common.util.normalizer import fit, un_fit
-from examples.ne_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
-    RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
+
+from examples.wmt_2020.common.util.download import download_from_google_drive
+from examples.wmt_2020.common.util.draw import draw_scatterplot, print_stat
+
+from examples.wmt_2020.common.util.normalizer import fit, un_fit
+
 from transquest.algo.transformers.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "examples/ne_en/data/ne-en/train.neen.df.short.tsv"
-DEV_FILE = "examples/ne_en/data/ne-en/dev.neen.df.short.tsv"
-TEST_FILE = "examples/ne_en/data/ne-en/test20.neen.df.short.tsv"
+if GOOGLE_DRIVE:
+    download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
+
+TRAIN_FILE = "examples/en_de/data/en-de/train.ende.df.short.tsv"
+DEV_FILE = "examples/en_de/data/en-de/dev.ende.df.short.tsv"
+TEST_FILE = "examples/en_de/data/en-de/test20.ende.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
@@ -96,6 +102,6 @@ dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
 test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
-draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Nepalese-English")
+draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "English-German")
 print_stat(dev, 'labels', 'predictions')
-format_submission(df=test, index=index, language_pair="ne-en", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
+format_submission(df=test, index=index, language_pair="en-de", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
