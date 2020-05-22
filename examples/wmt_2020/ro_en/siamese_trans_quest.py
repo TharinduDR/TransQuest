@@ -68,15 +68,18 @@ if siamese_transformer_config["evaluate_during_training"]:
             if os.path.exists(siamese_transformer_config['output_dir']) and os.path.isdir(siamese_transformer_config['output_dir']):
                 shutil.rmtree(siamese_transformer_config['output_dir'])
 
-            os.makedirs(siamese_transformer_config['output_dir'])
+            if os.path.exists(siamese_transformer_config['cache_dir']) and os.path.isdir(siamese_transformer_config['cache_dir']):
+                shutil.rmtree(siamese_transformer_config['cache_dir'])
+
+            os.makedirs(siamese_transformer_config['cache_dir'])
 
             train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
-            train.to_csv(os.path.join(siamese_transformer_config['output_dir'], "train.tsv"), header=True, sep='\t',
+            train.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "train.tsv"), header=True, sep='\t',
                          index=False, quoting=csv.QUOTE_NONE)
-            eval_df.to_csv(os.path.join(siamese_transformer_config['output_dir'], "eval_df.tsv"), header=True, sep='\t',
+            eval_df.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "eval_df.tsv"), header=True, sep='\t',
                          index=False, quoting=csv.QUOTE_NONE)
 
-            sts_reader = STSDataReader(siamese_transformer_config['output_dir'], s1_col_idx=0, s2_col_idx=1, score_col_idx=2,
+            sts_reader = STSDataReader(siamese_transformer_config['cache_dir'], s1_col_idx=0, s2_col_idx=1, score_col_idx=2,
                                        normalize_scores=True, min_score=0, max_score=1, header=True)
 
             word_embedding_model = models.Transformer(MODEL_NAME)
