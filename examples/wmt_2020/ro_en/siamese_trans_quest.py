@@ -176,11 +176,11 @@ model.fit(train_objectives=[(train_dataloader, train_loss)],
 
 model = SentenceTransformer(model_save_path)
 test = read_test_file("examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv")
-test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
+test_sentence_pairs = list(map(list, zip(test['original'].to_list(), test['translation'].to_list())))
 predictions = model.predict(test_sentence_pairs)
 test['predictions'] = predictions
 index = test['index'].to_list()
-format_submission(df=test, index=index, language_pair="ro-en", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
+format_submission(df=test, index=index, language_pair="ro-en", method="SiameseTransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
 
 # test_data = SentencesDataset(examples=sts_reader.get_examples("test20.roen.df.short.tsv"), model=model)
 # test_dataloader = DataLoader(test_data, shuffle=False, batch_size=train_batch_size)
