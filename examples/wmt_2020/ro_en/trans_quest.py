@@ -23,9 +23,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FILE = "examples/ro_en/data/ro-en/train.roen.df.short.tsv"
-DEV_FILE = "examples/ro_en/data/ro-en/dev.roen.df.short.tsv"
-TEST_FILE = "examples/ro_en/data/ro-en/test20.roen.df.short.tsv"
+TRAIN_FILE = "examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.tsv"
+DEV_FILE = "examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv"
+TEST_FILE = "examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
@@ -57,8 +57,8 @@ if transformer_config["evaluate_during_training"]:
 
             model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                                args=transformer_config)
-            train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED*i)
-            model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
+            train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED*i)
+            model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
             model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1, use_cuda=torch.cuda.is_available(), args=transformer_config)
             result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
