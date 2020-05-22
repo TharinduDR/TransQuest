@@ -55,8 +55,8 @@ test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).drop
 dev_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
 test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
 
-train = fit(train, 'labels')
-dev = fit(dev, 'labels')
+# train = fit(train, 'labels')
+# dev = fit(dev, 'labels')
 
 assert(len(index) == 1000)
 if siamese_transformer_config["evaluate_during_training"]:
@@ -115,9 +115,9 @@ if siamese_transformer_config["evaluate_during_training"]:
         dev['predictions'] = dev_preds.mean(axis=1)
         test['predictions'] = test_preds.mean(axis=1)
 
-dev = un_fit(dev, 'labels')
-dev = un_fit(dev, 'predictions')
-test = un_fit(test, 'predictions')
+# dev = un_fit(dev, 'labels')
+# dev = un_fit(dev, 'predictions')
+# test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
 draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Romanian-English")
 print_stat(dev, 'labels', 'predictions')
