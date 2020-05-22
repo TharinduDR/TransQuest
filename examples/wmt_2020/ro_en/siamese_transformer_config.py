@@ -21,7 +21,7 @@ siamese_transformer_config = {
     'train_batch_size': 16,
     'gradient_accumulation_steps': 1,
     'eval_batch_size': 16,
-    'num_train_epochs': 3,
+    'num_train_epochs': 4,
     'weight_decay': 0,
     'learning_rate': 2e-5,
     'adam_epsilon': 1e-8,
