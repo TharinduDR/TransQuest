@@ -68,6 +68,8 @@ if siamese_transformer_config["evaluate_during_training"]:
             if os.path.exists(siamese_transformer_config['output_dir']) and os.path.isdir(siamese_transformer_config['output_dir']):
                 shutil.rmtree(siamese_transformer_config['output_dir'])
 
+            os.makedirs(siamese_transformer_config['output_dir'])
+
             train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
             train.to_csv(os.path.join(siamese_transformer_config['output_dir'], "train.tsv"), header=True, sep='\t',
                          index=False, quoting=csv.QUOTE_NONE)
