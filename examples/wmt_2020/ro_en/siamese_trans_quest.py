@@ -54,7 +54,7 @@ train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
 
-dev_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
+dev_sentence_pairs = list(map(list, zip(dev['text_a'].to_list(), test['text_b'].to_list())))
 test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
 
 train = fit(train, 'labels')
