@@ -425,15 +425,6 @@ class SentenceTransformer(nn.Sequential):
             os.makedirs(output_path, exist_ok=True)
         return evaluator(self, output_path)
 
-    def predict(self, sentence_pairs):
-        originals = [sentence_pair[0] for sentence_pair in sentence_pairs]
-        translations = [sentence_pair[1] for sentence_pair in sentence_pairs]
-
-        original_embeddings = self.encode(originals)
-        translation_embeddings = self.encode(translations)
-
-        return scipy.spatial.distance.cdist(original_embeddings, translation_embeddings, "cosine")[0]
-
     def _eval_during_training(self, evaluator, output_path, save_best_model, epoch, steps):
         """Runs evaluation during the training"""
         if evaluator is not None:

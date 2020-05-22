@@ -22,6 +22,7 @@ from examples.wmt_2020.ro_en.siamese_transformer_config import TEMP_DIRECTORY, G
     siamese_transformer_config, SEED, RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
 from transquest.algo.siamese_transformers import losses, models, LoggingHandler, SentencesDataset, SentenceTransformer
 from transquest.algo.siamese_transformers.evaluation.EmbeddingSimilarityEvaluator import EmbeddingSimilarityEvaluator
+from transquest.algo.siamese_transformers.predict import sentence_pairs_predict
 
 from transquest.algo.siamese_transformers.readers import STSDataReader
 
@@ -81,7 +82,7 @@ if siamese_transformer_config["evaluate_during_training"]:
                          index=False, quoting=csv.QUOTE_NONE)
 
             sts_reader = STSDataReader(siamese_transformer_config['cache_dir'], s1_col_idx=0, s2_col_idx=1, score_col_idx=2,
-                                       normalize_scores=True, min_score=0, max_score=1, header=True)
+                                       normalize_scores=False, min_score=0, max_score=1, header=True)
 
             word_embedding_model = models.Transformer(MODEL_NAME)
 
@@ -104,14 +105,17 @@ if siamese_transformer_config["evaluate_during_training"]:
             model.fit(train_objectives=[(train_dataloader, train_loss)],
                       evaluator=evaluator,
                       epochs=siamese_transformer_config['num_train_epochs'],
-                      evaluation_steps=1000,
+                      evaluation_steps=100,
+                      optimizer_params={'lr':  siamese_transformer_config["learning_rate"],
+                                        'eps':  siamese_transformer_config["adam_epsilon"],
+                                        'correct_bias': False},
                       warmup_steps=warmup_steps,
                       output_path=siamese_transformer_config['output_dir'])
 
             model = SentenceTransformer(siamese_transformer_config['output_dir'])
 
-            dev_preds[:, i] = model.predict(dev_sentence_pairs)
-            test_preds[:, i] = model.predict(test_sentence_pairs)
+            dev_preds[:, i] = sentence_pairs_predict(model, dev_sentence_pairs)
+            test_preds[:, i] = sentence_pairs_predict(model, test_sentence_pairs)
 
         dev['predictions'] = dev_preds.mean(axis=1)
         test['predictions'] = test_preds.mean(axis=1)
