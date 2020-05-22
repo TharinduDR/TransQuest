@@ -80,7 +80,7 @@ if siamese_transformer_config["evaluate_during_training"]:
                          index=False, quoting=csv.QUOTE_NONE)
 
             sts_reader = STSDataReader(siamese_transformer_config['cache_dir'], s1_col_idx=0, s2_col_idx=1, score_col_idx=2,
-                                       normalize_scores=False, min_score=0, max_score=1, header=True)
+                                       normalize_scores=True, min_score=0, max_score=5, header=True)
 
             word_embedding_model = models.Transformer(MODEL_NAME)
 
