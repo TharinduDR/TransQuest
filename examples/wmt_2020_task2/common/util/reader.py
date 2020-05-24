@@ -12,7 +12,7 @@ def read_annotated_file(path, original_file, translation_file, hter_file):
         translations = f.read().splitlines()
 
     with open(os.path.join(path, hter_file)) as f:
-        hters = list(map(int, f.read().splitlines()))
+        hters = list(map(float, f.read().splitlines()))
 
     assert(len(originals) == len(translations))
     assert(len(originals) == len(hters))
