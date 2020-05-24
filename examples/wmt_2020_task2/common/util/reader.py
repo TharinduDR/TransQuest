@@ -33,7 +33,7 @@ def read_test_file(path, original_file, translation_file):
         translations = f.read().splitlines()
 
     assert (len(originals) == len(translations))
-    indices = list(range(0, len(original_file)))
+    indices = list(range(0, len(originals)))
 
     return pd.DataFrame(
         {'original': originals,
