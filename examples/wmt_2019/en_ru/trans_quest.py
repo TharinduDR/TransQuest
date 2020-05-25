@@ -25,7 +25,7 @@ if GOOGLE_DRIVE:
 TRAIN_FOLDER = "examples/wmt_2019/en_ru/data/en-ru/train"
 DEV_FOLDER = "examples/wmt_2019/en_ru/data/en-ru/dev"
 TEST_FOLDER = "examples/wmt_2019/en_ru/data/en-ru/test-blind"
-ANNOTATED_TEST_FOLDER = "examples/wmt_2019/en-ru/data/en_ru/test"
+ANNOTATED_TEST_FOLDER = "examples/wmt_2019/en-ru/data/en-ru/test"
 
 train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", translation_file="train.mt", hter_file="train.hter")
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.src", translation_file="dev.mt", hter_file="dev.hter")
