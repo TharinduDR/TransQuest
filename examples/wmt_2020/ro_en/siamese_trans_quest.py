@@ -5,6 +5,7 @@ that can be compared using cosine-similarity to measure the similarity.
 import shutil
 from datetime import datetime
 
+import torch
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 import math
@@ -68,6 +69,7 @@ if siamese_transformer_config["evaluate_during_training"]:
         test_preds = np.zeros((len(test), siamese_transformer_config["n_fold"]))
         for i in range(siamese_transformer_config["n_fold"]):
 
+            torch.cuda.empty_cache()
             if os.path.exists(siamese_transformer_config['output_dir']) and os.path.isdir(siamese_transformer_config['output_dir']):
                 shutil.rmtree(siamese_transformer_config['output_dir'])
 
