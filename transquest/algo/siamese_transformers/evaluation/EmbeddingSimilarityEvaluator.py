@@ -48,7 +48,7 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
         self.csv_file = "similarity_evaluation"+name+"_results.csv"
         self.csv_headers = ["epoch", "steps", "cosine_pearson", "cosine_spearman", "euclidean_pearson", "euclidean_spearman", "manhattan_pearson", "manhattan_spearman", "dot_pearson", "dot_spearman"]
 
-    def __call__(self, model, output_path: str = None, result_path: str = None, verbose: bool = False, epoch: int = -1, steps: int = -1) -> float:
+    def __call__(self, model, output_path: str = None, result_path: str = None, verbose: bool = True, epoch: int = -1, steps: int = -1) -> float:
         model.eval()
         embeddings1 = []
         embeddings2 = []

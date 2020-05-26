@@ -128,7 +128,7 @@ if siamese_transformer_config["evaluate_during_training"]:
             test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
             evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
             model.evaluate(evaluator,
-                           result_path=os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt"))
+                           result_path=os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt"), verbose=False)
 
             with open(os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt")) as f:
                 dev_preds[:, i] = map(float, f.read().splitlines())
