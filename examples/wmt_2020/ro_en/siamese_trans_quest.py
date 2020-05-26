@@ -69,7 +69,6 @@ if siamese_transformer_config["evaluate_during_training"]:
         test_preds = np.zeros((len(test), siamese_transformer_config["n_fold"]))
         for i in range(siamese_transformer_config["n_fold"]):
 
-            torch.cuda.empty_cache()
             if os.path.exists(siamese_transformer_config['output_dir']) and os.path.isdir(siamese_transformer_config['output_dir']):
                 shutil.rmtree(siamese_transformer_config['output_dir'])
 
@@ -137,6 +136,9 @@ if siamese_transformer_config["evaluate_during_training"]:
 
             with open(os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt")) as f:
                 test_preds[:, i] = list(map(float, f.read().splitlines()))
+
+            del model
+            torch.cuda.empty_cache()
 
         dev['predictions'] = dev_preds.mean(axis=1)
         test['predictions'] = test_preds.mean(axis=1)
