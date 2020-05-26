@@ -131,10 +131,10 @@ if siamese_transformer_config["evaluate_during_training"]:
                            result_path=os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt"), verbose=False)
 
             with open(os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt")) as f:
-                dev_preds[:, i] = map(float, f.read().splitlines())
+                dev_preds[:, i] = list(map(float, f.read().splitlines()))
 
             with open(os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt")) as f:
-                test_preds[:, i] = map(float, f.read().splitlines())
+                test_preds[:, i] = list(map(float, f.read().splitlines()))
 
         dev['predictions'] = dev_preds.mean(axis=1)
         test['predictions'] = test_preds.mean(axis=1)
