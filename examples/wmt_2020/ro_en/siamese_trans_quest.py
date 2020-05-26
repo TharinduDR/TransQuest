@@ -64,7 +64,7 @@ test["labels"] = 0
 
 assert(len(index) == 1000)
 if siamese_transformer_config["evaluate_during_training"]:
-    if siamese_transformer_config["n_fold"] > 1:
+    if siamese_transformer_config["n_fold"] > 0:
         dev_preds = np.zeros((len(dev), siamese_transformer_config["n_fold"]))
         test_preds = np.zeros((len(test), siamese_transformer_config["n_fold"]))
         for i in range(siamese_transformer_config["n_fold"]):
