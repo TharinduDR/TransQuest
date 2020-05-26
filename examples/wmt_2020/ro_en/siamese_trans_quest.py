@@ -54,11 +54,12 @@ train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
 
-dev_sentence_pairs = list(map(list, zip(dev['text_a'].to_list(), test['text_b'].to_list())))
-test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
+# dev_sentence_pairs = list(map(list, zip(dev['text_a'].to_list(), test['text_b'].to_list())))
+# test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
 
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
+test["labels"] = 0
 
 assert(len(index) == 1000)
 if siamese_transformer_config["evaluate_during_training"]:
@@ -75,11 +76,15 @@ if siamese_transformer_config["evaluate_during_training"]:
 
             os.makedirs(siamese_transformer_config['cache_dir'])
 
-            train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
-            train.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "train.tsv"), header=True, sep='\t',
+            train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
+            train_df.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "train.tsv"), header=True, sep='\t',
                          index=False, quoting=csv.QUOTE_NONE)
             eval_df.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "eval_df.tsv"), header=True, sep='\t',
                          index=False, quoting=csv.QUOTE_NONE)
+            dev.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "dev.tsv"), header=True, sep='\t',
+                           index=False, quoting=csv.QUOTE_NONE)
+            test.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "test.tsv"), header=True, sep='\t',
+                       index=False, quoting=csv.QUOTE_NONE)
 
             sts_reader = STSDataReader(siamese_transformer_config['cache_dir'], s1_col_idx=0, s2_col_idx=1, score_col_idx=2,
                                        normalize_scores=False, min_score=0, max_score=1, header=True)
@@ -114,11 +119,26 @@ if siamese_transformer_config["evaluate_during_training"]:
 
             model = SentenceTransformer(siamese_transformer_config['output_dir'])
 
-            dev_preds[:, i] = sentence_pairs_predict(model, dev_sentence_pairs)
-            test_preds[:, i] = sentence_pairs_predict(model, test_sentence_pairs)
+            dev_data = SentencesDataset(examples=sts_reader.get_examples("dev.tsv"), model=model)
+            dev_dataloader = DataLoader(dev_data, shuffle=False, batch_size=8)
+            evaluator = EmbeddingSimilarityEvaluator(dev_dataloader)
+            model.evaluate(evaluator, result_path=os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt"))
+
+            test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv"), model=model)
+            test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
+            evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
+            model.evaluate(evaluator,
+                           result_path=os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt"))
+
+            with open(os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt")) as f:
+                dev_preds[:, i] = map(float, f.read().splitlines())
+
+            with open(os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt")) as f:
+                test_preds[:, i] = map(float, f.read().splitlines())
 
         dev['predictions'] = dev_preds.mean(axis=1)
         test['predictions'] = test_preds.mean(axis=1)
+
 
 dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')

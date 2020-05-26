@@ -48,7 +48,7 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
         self.csv_file = "similarity_evaluation"+name+"_results.csv"
         self.csv_headers = ["epoch", "steps", "cosine_pearson", "cosine_spearman", "euclidean_pearson", "euclidean_spearman", "manhattan_pearson", "manhattan_spearman", "dot_pearson", "dot_spearman"]
 
-    def __call__(self, model, output_path: str = None, epoch: int = -1, steps: int = -1) -> float:
+    def __call__(self, model, output_path: str = None, result_path: str = None, verbose: bool = False, epoch: int = -1, steps: int = -1) -> float:
         model.eval()
         embeddings1 = []
         embeddings2 = []
@@ -62,7 +62,8 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
         else:
             out_txt = ":"
 
-        logging.info("Evaluation the model on "+self.name+" dataset"+out_txt)
+        if verbose:
+            logging.info("Evaluation the model on "+self.name+" dataset"+out_txt)
 
         self.dataloader.collate_fn = model.smart_batching_collate
 
@@ -103,14 +104,15 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
         eval_pearson_dot, _ = pearsonr(labels, dot_products)
         eval_spearman_dot, _ = spearmanr(labels, dot_products)
 
-        logging.info("Cosine-Similarity :\tPearson: {:.4f}\tSpearman: {:.4f}".format(
-            eval_pearson_cosine, eval_spearman_cosine))
-        logging.info("Manhattan-Distance:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
-            eval_pearson_manhattan, eval_spearman_manhattan))
-        logging.info("Euclidean-Distance:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
-            eval_pearson_euclidean, eval_spearman_euclidean))
-        logging.info("Dot-Product-Similarity:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
-            eval_pearson_dot, eval_spearman_dot))
+        if verbose:
+            logging.info("Cosine-Similarity :\tPearson: {:.4f}\tSpearman: {:.4f}".format(
+                eval_pearson_cosine, eval_spearman_cosine))
+            logging.info("Manhattan-Distance:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
+                eval_pearson_manhattan, eval_spearman_manhattan))
+            logging.info("Euclidean-Distance:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
+                eval_pearson_euclidean, eval_spearman_euclidean))
+            logging.info("Dot-Product-Similarity:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
+                eval_pearson_dot, eval_spearman_dot))
 
         if output_path is not None:
             csv_path = os.path.join(output_path, self.csv_file)
@@ -123,6 +125,10 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
                 writer.writerow([epoch, steps, eval_pearson_cosine, eval_spearman_cosine, eval_pearson_euclidean,
                                  eval_spearman_euclidean, eval_pearson_manhattan, eval_spearman_manhattan, eval_pearson_dot, eval_spearman_dot])
 
+        if result_path is not None:
+            with open(result_path, 'w') as f:
+                for label in cosine_scores:
+                    f.write("%s\n" % label)
 
         if self.main_similarity == SimilarityFunction.COSINE:
             return eval_spearman_cosine

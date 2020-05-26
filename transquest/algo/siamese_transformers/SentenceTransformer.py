@@ -412,7 +412,7 @@ class SentenceTransformer(nn.Sequential):
 
             self._eval_during_training(evaluator, output_path, save_best_model, epoch, -1)
 
-    def evaluate(self, evaluator: SentenceEvaluator, output_path: str = None):
+    def evaluate(self, evaluator: SentenceEvaluator, output_path: str = None, result_path: str = None):
         """
         Evaluate the model
 
@@ -423,7 +423,7 @@ class SentenceTransformer(nn.Sequential):
         """
         if output_path is not None:
             os.makedirs(output_path, exist_ok=True)
-        return evaluator(self, output_path)
+        return evaluator(self, output_path, result_path)
 
     def _eval_during_training(self, evaluator, output_path, save_best_model, epoch, steps):
         """Runs evaluation during the training"""
