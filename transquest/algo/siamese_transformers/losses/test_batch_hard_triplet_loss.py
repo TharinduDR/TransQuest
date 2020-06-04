@@ -1,7 +1,6 @@
 import numpy as np
 import torch
 
-
 # Test-suite from https://github.com/omoindrot/tensorflow-triplet-loss/blob/master/model/tests/test_triplet_loss.py
 # Skipped the `test_gradients_pairwise_distances()` test since it's trivial to see if your model loss turns NaN
 # and porting it proved more difficult than expected.
@@ -30,6 +29,7 @@ def pairwise_distance_np(feature, squared=False):
         pairwise_distances.diagonal())
     return pairwise_distances
 
+
 def test_pairwise_distances():
     """Test the pairwise distances function."""
     num_data = 64
@@ -42,6 +42,7 @@ def test_pairwise_distances():
         res_np = pairwise_distance_np(embeddings, squared=squared)
         res_pt = BatchHardTripletLoss._pairwise_distances(torch.from_numpy(embeddings), squared=squared)
         assert np.allclose(res_np, res_pt)
+
 
 def test_pairwise_distances_are_positive():
     """Test that the pairwise distances are always positive.
@@ -78,6 +79,7 @@ def test_triplet_mask():
     mask_tf_val = BatchHardTripletLoss._get_triplet_mask(torch.from_numpy(labels))
     assert np.allclose(mask_np, mask_tf_val)
 
+
 def test_anchor_positive_triplet_mask():
     """Test function _get_anchor_positive_triplet_mask."""
     num_data = 64
@@ -95,6 +97,7 @@ def test_anchor_positive_triplet_mask():
     mask_tf_val = BatchHardTripletLoss._get_anchor_positive_triplet_mask(torch.from_numpy(labels))
 
     assert np.allclose(mask_np, mask_tf_val)
+
 
 def test_anchor_negative_triplet_mask():
     """Test function _get_anchor_negative_triplet_mask."""
@@ -114,6 +117,7 @@ def test_anchor_negative_triplet_mask():
 
     assert np.allclose(mask_np, mask_tf_val)
 
+
 def test_simple_batch_all_triplet_loss():
     """Test the triplet loss with batch all triplet mining in a simple case.
     There is just one class in this super simple edge case, and we want to make sure that
@@ -132,7 +136,8 @@ def test_simple_batch_all_triplet_loss():
         loss_np = 0.0
 
         # Compute the loss in TF.
-        loss_tf_val, fraction_val = BatchHardTripletLoss.batch_all_triplet_loss(labels, embeddings, margin, squared=squared)
+        loss_tf_val, fraction_val = BatchHardTripletLoss.batch_all_triplet_loss(labels, embeddings, margin,
+                                                                                squared=squared)
 
         assert np.allclose(loss_np, loss_tf_val)
         assert np.allclose(fraction_val, 0.0)
@@ -173,9 +178,12 @@ def test_batch_all_triplet_loss():
         loss_np /= num_positives
 
         # Compute the loss in TF.
-        loss_tf_val, fraction_val = BatchHardTripletLoss.batch_all_triplet_loss(torch.from_numpy(labels), torch.from_numpy(embeddings), margin, squared=squared)
+        loss_tf_val, fraction_val = BatchHardTripletLoss.batch_all_triplet_loss(torch.from_numpy(labels),
+                                                                                torch.from_numpy(embeddings), margin,
+                                                                                squared=squared)
         assert np.allclose(loss_np, loss_tf_val)
         assert np.allclose(num_positives / num_valid, fraction_val)
+
 
 def test_batch_hard_triplet_loss():
     """Test the triplet loss with batch hard triplet mining"""
@@ -186,7 +194,7 @@ def test_batch_hard_triplet_loss():
     min_class = 100
 
     embeddings = np.random.rand(num_data, feat_dim).astype(np.float32)
-    labels = np.random.randint(min_class, min_class+num_classes, size=(num_data)).astype(np.float32)
+    labels = np.random.randint(min_class, min_class + num_classes, size=(num_data)).astype(np.float32)
 
     for squared in [True, False]:
         pdist_matrix = pairwise_distance_np(embeddings, squared=squared)
@@ -199,15 +207,17 @@ def test_batch_hard_triplet_loss():
             # Select the hardest negative
             min_neg_dist = np.min(pdist_matrix[i][labels != labels[i]])
 
-
             loss = np.maximum(0.0, max_pos_dist - min_neg_dist + margin)
             loss_np += loss
 
         loss_np /= num_data
 
         # Compute the loss in TF.
-        loss_tf_val = BatchHardTripletLoss.batch_hard_triplet_loss(torch.from_numpy(labels), torch.from_numpy(embeddings), margin, squared=squared)
+        loss_tf_val = BatchHardTripletLoss.batch_hard_triplet_loss(torch.from_numpy(labels),
+                                                                   torch.from_numpy(embeddings), margin,
+                                                                   squared=squared)
         assert np.allclose(loss_np, loss_tf_val)
+
 
 if __name__ == '__main__':
     test_pairwise_distances()

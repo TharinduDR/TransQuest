@@ -1,7 +1,7 @@
-from . import InputExample
 import csv
-import gzip
 import os
+
+from . import InputExample
 
 
 class TripletReader(object):
@@ -9,6 +9,7 @@ class TripletReader(object):
     Reads in the a Triplet Dataset: Each line contains (at least) 3 columns, one anchor column (s1),
     one positive example (s2) and one negative example (s3)
     """
+
     def __init__(self, dataset_folder, s1_col_idx=0, s2_col_idx=1, s3_col_idx=2, has_header=False, delimiter="\t",
                  quoting=csv.QUOTE_NONE):
         self.dataset_folder = dataset_folder
@@ -34,7 +35,7 @@ class TripletReader(object):
             s2 = row[self.s2_col_idx]
             s3 = row[self.s3_col_idx]
 
-            examples.append(InputExample(guid=filename+str(id), texts=[s1, s2, s3], label=1))
+            examples.append(InputExample(guid=filename + str(id), texts=[s1, s2, s3], label=1))
             if max_examples > 0 and len(examples) >= max_examples:
                 break
 

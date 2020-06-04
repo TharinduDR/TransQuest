@@ -1,8 +1,9 @@
 """
 This file contains sampler functions, that can be used to sample mini-batches with specific properties.
 """
-from torch.utils.data import Sampler
 import numpy as np
+from torch.utils.data import Sampler
+
 from .datasets import SentenceLabelDataset
 
 
@@ -21,6 +22,7 @@ class LabelSampler(Sampler):
 
 
     """
+
     def __init__(self, data_source: SentenceLabelDataset, samples_per_label: int = 5,
                  with_replacement: bool = False):
         """
@@ -52,7 +54,7 @@ class LabelSampler(Sampler):
             if label not in already_seen:
                 already_seen[label] = []
 
-            left_border = 0 if label == 0 else self.borders[label-1]
+            left_border = 0 if label == 0 else self.borders[label - 1]
             right_border = self.borders[label]
 
             if self.with_replacement:

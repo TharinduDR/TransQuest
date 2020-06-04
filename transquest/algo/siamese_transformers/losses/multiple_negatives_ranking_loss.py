@@ -1,8 +1,10 @@
+from typing import Iterable, Dict
+
 import torch
 from torch import nn, Tensor
-from typing import Union, Tuple, List, Iterable, Dict
-import torch.nn.functional as F
+
 from ..run_model import SiameseTransQuestModel
+
 
 class MultipleNegativesRankingLoss(nn.Module):
     def __init__(self, model: SiameseTransQuestModel):

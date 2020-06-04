@@ -1,8 +1,10 @@
-from torch.utils.data import Dataset
-from typing import List
-import torch
 import logging
+from typing import List
+
+import torch
+from torch.utils.data import Dataset
 from tqdm import tqdm
+
 from .. import SiameseTransQuestModel
 from ..readers.input_example import InputExample
 
@@ -14,12 +16,14 @@ class SentencesDataset(Dataset):
     The SentenceBertEncoder.smart_batching_collate is required for this to work.
     SmartBatchingDataset does *not* work without it.
     """
+
     def __init__(self, examples: List[InputExample], model: SiameseTransQuestModel, show_progress_bar: bool = None):
         """
         Create a new SentencesDataset with the tokenized texts and the labels as Tensor
         """
         if show_progress_bar is None:
-            show_progress_bar = (logging.getLogger().getEffectiveLevel() == logging.INFO or logging.getLogger().getEffectiveLevel() == logging.DEBUG)
+            show_progress_bar = (
+                        logging.getLogger().getEffectiveLevel() == logging.INFO or logging.getLogger().getEffectiveLevel() == logging.DEBUG)
         self.show_progress_bar = show_progress_bar
 
         self.convert_input_examples(examples, model)

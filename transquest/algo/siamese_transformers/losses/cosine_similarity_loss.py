@@ -1,13 +1,15 @@
+from typing import Iterable, Dict
+
 import torch
 from torch import nn, Tensor
-from typing import Union, Tuple, List, Iterable, Dict
+
 from ..run_model import SiameseTransQuestModel
+
 
 class CosineSimilarityLoss(nn.Module):
     def __init__(self, model: SiameseTransQuestModel):
         super(CosineSimilarityLoss, self).__init__()
         self.model = model
-
 
     def forward(self, sentence_features: Iterable[Dict[str, Tensor]], labels: Tensor):
         reps = [self.model(sentence_feature)['sentence_embedding'] for sentence_feature in sentence_features]

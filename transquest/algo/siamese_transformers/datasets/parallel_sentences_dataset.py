@@ -1,9 +1,11 @@
-from torch.utils.data import Dataset
-import torch
-import logging
 import gzip
+import logging
 import os
 import random
+
+import torch
+from torch.utils.data import Dataset
+
 from .. import SiameseTransQuestModel
 
 
@@ -47,7 +49,8 @@ class ParallelSentencesDataset(Dataset):
         :return:
         """
         sentences_map = {}
-        with gzip.open(filepath, 'rt', encoding='utf8') if filepath.endswith('.gz') else open(filepath, encoding='utf8') as fIn:
+        with gzip.open(filepath, 'rt', encoding='utf8') if filepath.endswith('.gz') else open(filepath,
+                                                                                              encoding='utf8') as fIn:
             count = 0
             for line in fIn:
                 sentences = line.strip().split("\t")

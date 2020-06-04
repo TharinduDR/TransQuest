@@ -1,19 +1,22 @@
-from . import SentenceEvaluator, SimilarityFunction
-import torch
-from torch.utils.data import DataLoader
-import logging
-from tqdm import tqdm
-from ..util import batch_to_device
-import os
 import csv
+import logging
+import os
+
+import torch
 from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+
+from . import SentenceEvaluator, SimilarityFunction
+from ..util import batch_to_device
 
 
 class TripletEvaluator(SentenceEvaluator):
     """
     Evaluate a model based on a triplet: (sentence, positive_example, negative_example). Checks if distance(sentence,positive_example) < distance(sentence, negative_example).
     """
-    def __init__(self, dataloader: DataLoader, main_distance_function: SimilarityFunction = None, name: str =''):
+
+    def __init__(self, dataloader: DataLoader, main_distance_function: SimilarityFunction = None, name: str = ''):
         """
         Constructs an evaluator based for the dataset
 
@@ -28,9 +31,9 @@ class TripletEvaluator(SentenceEvaluator):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.name = name
         if name:
-            name = "_"+name
+            name = "_" + name
 
-        self.csv_file: str = "triplet_evaluation"+name+"_results.csv"
+        self.csv_file: str = "triplet_evaluation" + name + "_results.csv"
         self.csv_headers = ["epoch", "steps", "accuracy_cosinus", "accuracy_manhatten", "accuracy_euclidean"]
 
     def __call__(self, model, output_path: str = None, epoch: int = -1, steps: int = -1) -> float:
@@ -44,7 +47,7 @@ class TripletEvaluator(SentenceEvaluator):
         else:
             out_txt = ":"
 
-        logging.info("Evaluation the model on "+self.name+" dataset"+out_txt)
+        logging.info("Evaluation the model on " + self.name + " dataset" + out_txt)
 
         num_triplets = 0
         num_correct_cos_triplets, num_correct_manhatten_triplets, num_correct_euclidean_triplets = 0, 0, 0
@@ -53,9 +56,10 @@ class TripletEvaluator(SentenceEvaluator):
         for step, batch in enumerate(tqdm(self.dataloader, desc="Evaluating")):
             features, label_ids = batch_to_device(batch, self.device)
             with torch.no_grad():
-                emb1, emb2, emb3 = [model(sent_features)['sentence_embedding'].to("cpu").numpy() for sent_features in features]
+                emb1, emb2, emb3 = [model(sent_features)['sentence_embedding'].to("cpu").numpy() for sent_features in
+                                    features]
 
-            #Cosine distance
+            # Cosine distance
             pos_cos_distance = paired_cosine_distances(emb1, emb2)
             neg_cos_distances = paired_cosine_distances(emb1, emb3)
 
@@ -78,8 +82,6 @@ class TripletEvaluator(SentenceEvaluator):
 
                 if pos_euclidean_distance[idx] < neg_euclidean_distances[idx]:
                     num_correct_euclidean_triplets += 1
-
-
 
         accuracy_cos = num_correct_cos_triplets / num_triplets
         accuracy_manhatten = num_correct_manhatten_triplets / num_triplets

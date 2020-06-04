@@ -1,10 +1,11 @@
+import json
+import os
+from typing import List, Dict
+
+import numpy as np
 from torch import Tensor
 from torch import nn
 from transformers import XLNetModel, XLNetTokenizer
-import json
-from typing import Union, Tuple, List, Dict
-import os
-import numpy as np
 
 
 class XLNet(nn.Module):
@@ -12,6 +13,7 @@ class XLNet(nn.Module):
 
     Each token is mapped to an output vector from XLNet.
     """
+
     def __init__(self, model_name_or_path: str, max_seq_length: int = 128, do_lower_case: bool = False):
         super(XLNet, self).__init__()
         self.config_keys = ['max_seq_length', 'do_lower_case']
@@ -25,9 +27,11 @@ class XLNet(nn.Module):
 
     def forward(self, features):
         """Returns token_embeddings, cls_token"""
-        output_tokens = self.xlnet(input_ids=features['input_ids'], token_type_ids=features['token_type_ids'], attention_mask=features['input_mask'])[0]
+        output_tokens = self.xlnet(input_ids=features['input_ids'], token_type_ids=features['token_type_ids'],
+                                   attention_mask=features['input_mask'])[0]
         cls_tokens = output_tokens[:, 0, :]  # CLS token is first token
-        features.update({'token_embeddings': output_tokens, 'cls_token_embeddings': cls_tokens, 'input_mask': features['input_mask']})
+        features.update({'token_embeddings': output_tokens, 'cls_token_embeddings': cls_tokens,
+                         'input_mask': features['input_mask']})
         return features
 
     def get_word_embedding_dimension(self) -> int:
@@ -80,7 +84,6 @@ class XLNet(nn.Module):
         assert len(input_mask) == pad_seq_length
         assert len(token_type_ids) == pad_seq_length
 
-
         return {'input_ids': np.asarray(input_ids, dtype=np.int64),
                 'token_type_ids': np.asarray(token_type_ids, dtype=np.int64),
                 'input_mask': np.asarray(input_mask, dtype=np.int64),
@@ -101,9 +104,3 @@ class XLNet(nn.Module):
         with open(os.path.join(input_path, 'sentence_xlnet_config.json')) as fIn:
             config = json.load(fIn)
         return XLNet(model_name_or_path=input_path, **config)
-
-
-
-
-
-

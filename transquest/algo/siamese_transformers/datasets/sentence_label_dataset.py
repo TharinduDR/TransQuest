@@ -1,12 +1,15 @@
-from torch.utils.data import Dataset
-from typing import List
 import bisect
-import torch
 import logging
+from typing import List
+
 import numpy as np
+import torch
+from torch.utils.data import Dataset
 from tqdm import tqdm
+
 from .. import SiameseTransQuestModel
 from ..readers.input_example import InputExample
+
 
 class SentenceLabelDataset(Dataset):
     """
@@ -79,7 +82,9 @@ class SentenceLabelDataset(Dataset):
                     label_type = torch.float
             tokenized_text = model.tokenize(example.texts[0])
 
-            if hasattr(model, 'max_seq_length') and model.max_seq_length is not None and model.max_seq_length > 0 and len(tokenized_text) >= model.max_seq_length:
+            if hasattr(model,
+                       'max_seq_length') and model.max_seq_length is not None and model.max_seq_length > 0 and len(
+                    tokenized_text) >= model.max_seq_length:
                 too_long += 1
             if example.label in label_sent_mapping:
                 label_sent_mapping[example.label].append(ex_index)
@@ -108,9 +113,10 @@ class SentenceLabelDataset(Dataset):
             return [self.tokens[item]], self.labels[item]
 
         label = bisect.bisect_right(self.labels_right_border, item)
-        left_border = 0 if label == 0 else self.labels_right_border[label-1]
+        left_border = 0 if label == 0 else self.labels_right_border[label - 1]
         right_border = self.labels_right_border[label]
-        positive_item = np.random.choice(np.concatenate([self.idxs[left_border:item], self.idxs[item+1:right_border]]))
+        positive_item = np.random.choice(
+            np.concatenate([self.idxs[left_border:item], self.idxs[item + 1:right_border]]))
         negative_item = np.random.choice(np.concatenate([self.idxs[0:left_border], self.idxs[right_border:]]))
 
         if self.positive:
@@ -122,7 +128,7 @@ class SentenceLabelDataset(Dataset):
         else:
             negative = []
 
-        return [self.tokens[item]]+positive+negative, self.labels[item]
+        return [self.tokens[item]] + positive + negative, self.labels[item]
 
     def __len__(self):
         return len(self.tokens)

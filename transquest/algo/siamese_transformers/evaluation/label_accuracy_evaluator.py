@@ -1,11 +1,13 @@
-from . import SentenceEvaluator
+import csv
+import logging
+import os
+
 import torch
 from torch.utils.data import DataLoader
-import logging
 from tqdm import tqdm
+
+from . import SentenceEvaluator
 from ..util import batch_to_device
-import os
-import csv
 
 
 class LabelAccuracyEvaluator(SentenceEvaluator):
@@ -17,7 +19,7 @@ class LabelAccuracyEvaluator(SentenceEvaluator):
     The results are written in a CSV. If a CSV already exists, then values are appended.
     """
 
-    def __init__(self, dataloader: DataLoader, name: str = "", softmax_model = None):
+    def __init__(self, dataloader: DataLoader, name: str = "", softmax_model=None):
         """
         Constructs an evaluator for the given dataset
 
@@ -31,9 +33,9 @@ class LabelAccuracyEvaluator(SentenceEvaluator):
         self.softmax_model.to(self.device)
 
         if name:
-            name = "_"+name
+            name = "_" + name
 
-        self.csv_file = "accuracy_evaluation"+name+"_results.csv"
+        self.csv_file = "accuracy_evaluation" + name + "_results.csv"
         self.csv_headers = ["epoch", "steps", "accuracy"]
 
     def __call__(self, model, output_path: str = None, epoch: int = -1, steps: int = -1) -> float:
@@ -49,7 +51,7 @@ class LabelAccuracyEvaluator(SentenceEvaluator):
         else:
             out_txt = ":"
 
-        logging.info("Evaluation on the "+self.name+" dataset"+out_txt)
+        logging.info("Evaluation on the " + self.name + " dataset" + out_txt)
         self.dataloader.collate_fn = model.smart_batching_collate
         for step, batch in enumerate(tqdm(self.dataloader, desc="Evaluating")):
             features, label_ids = batch_to_device(batch, self.device)
@@ -58,7 +60,7 @@ class LabelAccuracyEvaluator(SentenceEvaluator):
 
             total += prediction.size(0)
             correct += torch.argmax(prediction, dim=1).eq(label_ids).sum().item()
-        accuracy = correct/total
+        accuracy = correct / total
 
         logging.info("Accuracy: {:.4f} ({}/{})\n".format(accuracy, correct, total))
 

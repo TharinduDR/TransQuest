@@ -1,9 +1,9 @@
-import requests
-from torch import Tensor, device
-from typing import Tuple, List
-from tqdm import tqdm
-import sys
 import importlib
+import sys
+
+import requests
+from torch import device
+from tqdm import tqdm
 
 
 def batch_to_device(batch, target_device: device):
@@ -34,25 +34,25 @@ def http_get(url, path):
         total = int(content_length) if content_length is not None else None
         progress = tqdm(unit="B", total=total, unit_scale=True)
         for chunk in req.iter_content(chunk_size=1024):
-            if chunk: # filter out keep-alive new chunks
+            if chunk:  # filter out keep-alive new chunks
                 progress.update(len(chunk))
                 file_binary.write(chunk)
     progress.close()
 
 
 def fullname(o):
-  # o.__module__ + "." + o.__class__.__qualname__ is an example in
-  # this context of H.L. Mencken's "neat, plausible, and wrong."
-  # Python makes no guarantees as to whether the __module__ special
-  # attribute is defined, so we take a more circumspect approach.
-  # Alas, the module name is explicitly excluded from __qualname__
-  # in Python 3.
+    # o.__module__ + "." + o.__class__.__qualname__ is an example in
+    # this context of H.L. Mencken's "neat, plausible, and wrong."
+    # Python makes no guarantees as to whether the __module__ special
+    # attribute is defined, so we take a more circumspect approach.
+    # Alas, the module name is explicitly excluded from __qualname__
+    # in Python 3.
 
-  module = o.__class__.__module__
-  if module is None or module == str.__class__.__module__:
-    return o.__class__.__name__  # Avoid reporting __builtin__
-  else:
-    return module + '.' + o.__class__.__name__
+    module = o.__class__.__module__
+    if module is None or module == str.__class__.__module__:
+        return o.__class__.__name__  # Avoid reporting __builtin__
+    else:
+        return module + '.' + o.__class__.__name__
 
 
 def import_from_string(dotted_path):

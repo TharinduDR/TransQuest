@@ -20,7 +20,7 @@ def draw_scatterplot(data_frame, real_column, prediction_column, path, topic):
     mae = mean_absolute_error(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
 
     textstr = 'RMSE=%.4f\nMAE=%.4f\nPearson Correlation=%.4f\nSpearman Correlation=%.4f' % (
-    rmse_value, mae, pearson, spearman)
+        rmse_value, mae, pearson, spearman)
 
     plt.figure()
     ax = data_frame.plot(kind='scatter', x='id', y=real_column, color='DarkBlue', label='z_mean', title=topic)
@@ -43,6 +43,6 @@ def print_stat(data_frame, real_column, prediction_column):
     mae = mean_absolute_error(data_frame[real_column].tolist(), data_frame[prediction_column].tolist())
 
     textstr = 'RMSE=%.4f\nMAE=%.4f\nPearson Correlation=%.4f\nSpearman Correlation=%.4f' % (
-    rmse_value, mae, pearson, spearman)
+        rmse_value, mae, pearson, spearman)
 
     print(textstr)

@@ -1,6 +1,7 @@
+from typing import Iterable, Dict
+
 import torch
 from torch import nn, Tensor
-from typing import Union, Tuple, List, Iterable, Dict
 
 
 class BatchHardTripletLoss(nn.Module):
@@ -10,10 +11,10 @@ class BatchHardTripletLoss(nn.Module):
         self.triplet_margin = triplet_margin
 
     def forward(self, sentence_features: Iterable[Dict[str, Tensor]], labels: Tensor):
-        reps = [self.sentence_embedder(sentence_feature)['sentence_embedding'] for sentence_feature in sentence_features]
+        reps = [self.sentence_embedder(sentence_feature)['sentence_embedding'] for sentence_feature in
+                sentence_features]
 
         return BatchHardTripletLoss.batch_hard_triplet_loss(labels, reps[0], margin=self.triplet_margin)
-
 
     # Hard Triplet Loss
     # Source: https://github.com/NegatioN/OnlineMiningTripletLoss/blob/master/triplet_loss.py
@@ -159,7 +160,7 @@ class BatchHardTripletLoss(nn.Module):
 
         distinct_indices = (i_not_equal_j & i_not_equal_k) & j_not_equal_k
 
-        label_equal = labels.unsqueeze(0)==labels.unsqueeze(1)
+        label_equal = labels.unsqueeze(0) == labels.unsqueeze(1)
         i_equal_j = label_equal.unsqueeze(2)
         i_equal_k = label_equal.unsqueeze(1)
 
@@ -183,7 +184,7 @@ class BatchHardTripletLoss(nn.Module):
 
         # Check if labels[i] == labels[j]
         # Uses broadcasting where the 1st argument has shape (1, batch_size) and the 2nd (batch_size, 1)
-        labels_equal = labels.unsqueeze(0)==labels.unsqueeze(1)
+        labels_equal = labels.unsqueeze(0) == labels.unsqueeze(1)
 
         return labels_equal & indices_not_equal
 
@@ -198,4 +199,4 @@ class BatchHardTripletLoss(nn.Module):
         # Check if labels[i] != labels[k]
         # Uses broadcasting where the 1st argument has shape (1, batch_size) and the 2nd (batch_size, 1)
 
-        return ~(labels.unsqueeze(0)==labels.unsqueeze(1))
+        return ~(labels.unsqueeze(0) == labels.unsqueeze(1))

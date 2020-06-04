@@ -20,7 +20,8 @@ from examples.wmt_2020.common.util.postprocess import format_submission
 from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
 from examples.wmt_2020.ro_en.siamese_transformer_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
     siamese_transformer_config, SEED, RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
-from transquest.algo.siamese_transformers import losses, models, LoggingHandler, SentencesDataset, SiameseTransQuestModel
+from transquest.algo.siamese_transformers import losses, models, LoggingHandler, SentencesDataset, \
+    SiameseTransQuestModel
 from transquest.algo.siamese_transformers.evaluation.embedding_similarity_evaluator import EmbeddingSimilarityEvaluator
 from transquest.algo.siamese_transformers.readers import QEDataReader
 

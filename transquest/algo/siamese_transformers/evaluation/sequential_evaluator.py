@@ -1,5 +1,6 @@
-from . import SentenceEvaluator
 from typing import Iterable
+
+from . import SentenceEvaluator
 
 
 class SequentialEvaluator(SentenceEvaluator):
@@ -9,7 +10,8 @@ class SequentialEvaluator(SentenceEvaluator):
 
     All scores are passed to 'main_score_function', which derives one final score value
     """
-    def __init__(self, evaluators: Iterable[SentenceEvaluator], main_score_function = lambda scores: scores[-1]):
+
+    def __init__(self, evaluators: Iterable[SentenceEvaluator], main_score_function=lambda scores: scores[-1]):
         self.evaluators = evaluators
         self.main_score_function = main_score_function
 

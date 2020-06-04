@@ -1,11 +1,12 @@
-from torch import Tensor
+from torch import nn
+import json
+import logging
+import os
+from typing import List
+
+import numpy as np
 from torch import nn
 from transformers import RobertaModel, RobertaTokenizer
-import json
-from typing import Union, Tuple, List, Dict
-import os
-import numpy as np
-import logging
 
 
 class RoBERTa(nn.Module):
@@ -13,16 +14,17 @@ class RoBERTa(nn.Module):
 
     Each token is mapped to an output vector from RoBERTa.
     """
+
     def __init__(self, model_name_or_path: str, max_seq_length: int = 128, do_lower_case: bool = True):
         super(RoBERTa, self).__init__()
         self.config_keys = ['max_seq_length', 'do_lower_case']
         self.do_lower_case = do_lower_case
 
         if max_seq_length > 511:
-            logging.warning("RoBERTa only allows a max_seq_length of 511 (514 with special tokens). Value will be set to 511")
+            logging.warning(
+                "RoBERTa only allows a max_seq_length of 511 (514 with special tokens). Value will be set to 511")
             max_seq_length = 511
         self.max_seq_length = max_seq_length
-
 
         self.roberta = RobertaModel.from_pretrained(model_name_or_path)
         self.tokenizer = RobertaTokenizer.from_pretrained(model_name_or_path, do_lower_case=do_lower_case)
@@ -31,10 +33,12 @@ class RoBERTa(nn.Module):
 
     def forward(self, features):
         """Returns token_embeddings, cls_token"""
-        #RoBERTa does not use token_type_ids
-        output_tokens = self.roberta(input_ids=features['input_ids'], token_type_ids=None, attention_mask=features['input_mask'])[0]
+        # RoBERTa does not use token_type_ids
+        output_tokens = \
+        self.roberta(input_ids=features['input_ids'], token_type_ids=None, attention_mask=features['input_mask'])[0]
         cls_tokens = output_tokens[:, 0, :]  # CLS token is first token
-        features.update({'token_embeddings': output_tokens, 'cls_token_embeddings': cls_tokens, 'input_mask': features['input_mask']})
+        features.update({'token_embeddings': output_tokens, 'cls_token_embeddings': cls_tokens,
+                         'input_mask': features['input_mask']})
         return features
 
     def get_word_embedding_dimension(self) -> int:
@@ -75,8 +79,9 @@ class RoBERTa(nn.Module):
         assert len(input_ids) == pad_seq_length
         assert len(input_mask) == pad_seq_length
 
-
-        return {'input_ids': np.asarray(input_ids, dtype=np.int64), 'input_mask': np.asarray(input_mask, dtype=np.int64), 'sentence_lengths': np.asarray(sentence_length, dtype=np.int64)}
+        return {'input_ids': np.asarray(input_ids, dtype=np.int64),
+                'input_mask': np.asarray(input_mask, dtype=np.int64),
+                'sentence_lengths': np.asarray(sentence_length, dtype=np.int64)}
 
     def get_config_dict(self):
         return {key: self.__dict__[key] for key in self.config_keys}
@@ -93,9 +98,3 @@ class RoBERTa(nn.Module):
         with open(os.path.join(input_path, 'sentence_roberta_config.json')) as fIn:
             config = json.load(fIn)
         return RoBERTa(model_name_or_path=input_path, **config)
-
-
-
-
-
-

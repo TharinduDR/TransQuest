@@ -1,8 +1,11 @@
+import logging
+from typing import Iterable, Dict
+
 import torch
 from torch import nn, Tensor
-from typing import Union, Tuple, List, Iterable, Dict
+
 from ..run_model import SiameseTransQuestModel
-import logging
+
 
 class SoftmaxLoss(nn.Module):
     def __init__(self,

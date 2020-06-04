@@ -1,13 +1,15 @@
-from . import SentenceEvaluator, SimilarityFunction
-import torch
-from torch.utils.data import DataLoader
-import logging
-from tqdm import tqdm
-from ..util import batch_to_device
-import os
 import csv
-from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
+import logging
+import os
+
 import numpy as np
+import torch
+from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+
+from . import SentenceEvaluator, SimilarityFunction
+from ..util import batch_to_device
 
 
 class BinaryEmbeddingSimilarityEvaluator(SentenceEvaluator):
@@ -22,8 +24,9 @@ class BinaryEmbeddingSimilarityEvaluator(SentenceEvaluator):
 
     The results are written in a CSV. If a CSV already exists, then values are appended.
     """
+
     def __init__(self, dataloader: DataLoader,
-                 main_similarity: SimilarityFunction = SimilarityFunction.COSINE, name:str =''):
+                 main_similarity: SimilarityFunction = SimilarityFunction.COSINE, name: str = ''):
         """
         Constructs an evaluator based for the dataset
 
@@ -40,9 +43,9 @@ class BinaryEmbeddingSimilarityEvaluator(SentenceEvaluator):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.name = name
         if name:
-            name = "_"+name
+            name = "_" + name
 
-        self.csv_file = "binary_similarity_evaluation"+name+"_results.csv"
+        self.csv_file = "binary_similarity_evaluation" + name + "_results.csv"
         self.csv_headers = ["epoch", "steps", "cosine_acc", "euclidean_acc", "manhattan_acc"]
 
     def __call__(self, model, output_path: str = None, epoch: int = -1, steps: int = -1) -> float:
@@ -59,12 +62,13 @@ class BinaryEmbeddingSimilarityEvaluator(SentenceEvaluator):
         else:
             out_txt = ":"
 
-        logging.info("Evaluation the model on "+self.name+" dataset"+out_txt)
+        logging.info("Evaluation the model on " + self.name + " dataset" + out_txt)
         self.dataloader.collate_fn = model.smart_batching_collate
         for step, batch in enumerate(tqdm(self.dataloader, desc="Evaluating")):
             features, label_ids = batch_to_device(batch, self.device)
             with torch.no_grad():
-                emb1, emb2 = [model(sent_features)['sentence_embedding'].to("cpu").numpy() for sent_features in features]
+                emb1, emb2 = [model(sent_features)['sentence_embedding'].to("cpu").numpy() for sent_features in
+                              features]
 
             labels.extend(label_ids.to("cpu").numpy())
             embeddings1.extend(emb1)
@@ -73,7 +77,7 @@ class BinaryEmbeddingSimilarityEvaluator(SentenceEvaluator):
         manhattan_distances = -paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = -paired_euclidean_distances(embeddings1, embeddings2)
 
-        #Ensure labels are just 0 or 1
+        # Ensure labels are just 0 or 1
         for label in labels:
             assert (label == 0 or label == 1)
 

@@ -1,11 +1,12 @@
-from torch import Tensor
+from torch import nn
+import json
+import logging
+import os
+from typing import List
+
+import numpy as np
 from torch import nn
 from transformers import DistilBertModel, DistilBertTokenizer
-import json
-from typing import Union, Tuple, List, Dict
-import os
-import numpy as np
-import logging
 
 
 class DistilBERT(nn.Module):
@@ -13,17 +14,17 @@ class DistilBERT(nn.Module):
 
     Each token is mapped to an output vector from DistilBERT.
     """
+
     def __init__(self, model_name_or_path: str, max_seq_length: int = 128, do_lower_case: bool = True):
         super(DistilBERT, self).__init__()
         self.config_keys = ['max_seq_length', 'do_lower_case']
         self.do_lower_case = do_lower_case
 
         if max_seq_length > 510:
-            logging.warning("BERT only allows a max_seq_length of 510 (512 with special tokens). Value will be set to 510")
+            logging.warning(
+                "BERT only allows a max_seq_length of 510 (512 with special tokens). Value will be set to 510")
             max_seq_length = 510
         self.max_seq_length = max_seq_length
-
-
 
         self.bert = DistilBertModel.from_pretrained(model_name_or_path)
         self.tokenizer = DistilBertTokenizer.from_pretrained(model_name_or_path, do_lower_case=do_lower_case)
@@ -35,7 +36,8 @@ class DistilBERT(nn.Module):
         # DistilBERT does not use token_type_ids
         output_tokens = self.bert(input_ids=features['input_ids'], attention_mask=features['input_mask'])[0]
         cls_tokens = output_tokens[:, 0, :]  # CLS token is first token
-        features.update({'token_embeddings': output_tokens, 'cls_token_embeddings': cls_tokens, 'input_mask': features['input_mask']})
+        features.update({'token_embeddings': output_tokens, 'cls_token_embeddings': cls_tokens,
+                         'input_mask': features['input_mask']})
         return features
 
     def get_word_embedding_dimension(self) -> int:
@@ -65,7 +67,6 @@ class DistilBERT(nn.Module):
 
         pad_seq_length += 2  ##Add Space for CLS + SEP token
 
-
         input_mask = [1] * len(input_ids)
 
         # Zero-pad up to the sequence length. BERT: Pad to the right
@@ -77,8 +78,9 @@ class DistilBERT(nn.Module):
         assert len(input_ids) == pad_seq_length
         assert len(input_mask) == pad_seq_length
 
-
-        return {'input_ids': np.asarray(input_ids, dtype=np.int64), 'input_mask': np.asarray(input_mask, dtype=np.int64), 'sentence_lengths': np.asarray(sentence_length, dtype=np.int64)}
+        return {'input_ids': np.asarray(input_ids, dtype=np.int64),
+                'input_mask': np.asarray(input_mask, dtype=np.int64),
+                'sentence_lengths': np.asarray(sentence_length, dtype=np.int64)}
 
     def get_config_dict(self):
         return {key: self.__dict__[key] for key in self.config_keys}
@@ -95,9 +97,3 @@ class DistilBERT(nn.Module):
         with open(os.path.join(input_path, 'sentence_distilbert_config.json')) as fIn:
             config = json.load(fIn)
         return DistilBERT(model_name_or_path=input_path, **config)
-
-
-
-
-
-

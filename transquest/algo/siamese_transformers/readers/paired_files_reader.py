@@ -1,14 +1,13 @@
+import gzip
+
 from . import InputExample
-import csv
-import gzip
-import os
-import gzip
 
 
 class PairedFilesReader(object):
     """
     Reads in the a Pair Dataset, split in two files
     """
+
     def __init__(self, filepaths):
         self.filepaths = filepaths
 
@@ -17,7 +16,8 @@ class PairedFilesReader(object):
         """
         fIns = []
         for filepath in self.filepaths:
-            fIn = gzip.open(filepath, 'rt', encoding='utf-8') if filepath.endswith('.gz') else open(filepath, encoding='utf-8')
+            fIn = gzip.open(filepath, 'rt', encoding='utf-8') if filepath.endswith('.gz') else open(filepath,
+                                                                                                    encoding='utf-8')
             fIns.append(fIn)
 
         examples = []

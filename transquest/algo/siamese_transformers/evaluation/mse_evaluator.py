@@ -1,9 +1,9 @@
-
-import torch
-import numpy as np
+import csv
 import logging
 import os
-import csv
+
+import numpy as np
+import torch
 
 from transquest.algo.siamese_transformers.evaluation import SentenceEvaluator
 from transquest.algo.siamese_transformers.util import batch_to_device
@@ -14,17 +14,18 @@ class MSEEvaluator(SentenceEvaluator):
     Computes the mean squared error (x100) between the computed sentence embedding
     and some target sentence embedding
     """
+
     def __init__(self, dataloader, name=''):
         self.dataloader = dataloader
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.name = name
 
         if name:
-            name = "_"+name
+            name = "_" + name
         self.csv_file = "mse_evaluation" + name + "_results.csv"
         self.csv_headers = ["epoch", "steps", "MSE"]
 
-    def __call__(self, model, output_path, epoch  = -1, steps = -1):
+    def __call__(self, model, output_path, epoch=-1, steps=-1):
         model.eval()
         self.dataloader.collate_fn = model.smart_batching_collate
 
@@ -41,12 +42,12 @@ class MSEEvaluator(SentenceEvaluator):
         embeddings = np.asarray(embeddings)
         labels = np.asarray(labels)
 
-        mse = ((embeddings - labels)**2).mean()
+        mse = ((embeddings - labels) ** 2).mean()
 
-        logging.info("MSE evaluation on "+self.name+" dataset")
+        logging.info("MSE evaluation on " + self.name + " dataset")
         mse *= 100
 
-        logging.info("embeddings shape:\t"+str(embeddings.shape))
+        logging.info("embeddings shape:\t" + str(embeddings.shape))
         logging.info("MSE (*100):\t{:4f}".format(mse))
 
         if output_path is not None:
@@ -59,5 +60,4 @@ class MSEEvaluator(SentenceEvaluator):
 
                 writer.writerow([epoch, steps, mse])
 
-
-        return -mse #Return negative score as SentenceTransformers maximizes the performance
+        return -mse  # Return negative score as SentenceTransformers maximizes the performance

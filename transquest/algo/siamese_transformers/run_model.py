@@ -7,20 +7,18 @@ from typing import List, Dict, Tuple, Iterable, Type
 from zipfile import ZipFile
 
 import numpy as np
-import scipy.spatial
-import transformers
 import torch
+import transformers
 from numpy import ndarray
-from torch import nn, Tensor
+from torch import nn
 from torch.optim.optimizer import Optimizer
-
 from torch.utils.data import DataLoader
 from tqdm import tqdm, trange
 
 from . import __DOWNLOAD_SERVER__
+from . import __version__
 from .evaluation import SentenceEvaluator
 from .util import import_from_string, batch_to_device, http_get
-from . import __version__
 
 
 class SiameseTransQuestModel(nn.Sequential):
@@ -31,7 +29,8 @@ class SiameseTransQuestModel(nn.Sequential):
         if model_name_or_path is not None and model_name_or_path != "":
             logging.info("Load pretrained SentenceTransformer: {}".format(model_name_or_path))
 
-            if '/' not in model_name_or_path and '\\' not in model_name_or_path and not os.path.isdir(model_name_or_path):
+            if '/' not in model_name_or_path and '\\' not in model_name_or_path and not os.path.isdir(
+                    model_name_or_path):
                 logging.info("Did not find a '/' or '\\' in the name. Assume to download model from server.")
                 model_name_or_path = __DOWNLOAD_SERVER__ + model_name_or_path + '.zip'
 
@@ -53,7 +52,8 @@ class SiameseTransQuestModel(nn.Sequential):
                 if not os.listdir(model_path):
                     if model_url[-1] == "/":
                         model_url = model_url[:-1]
-                    logging.info("Downloading sentence transformer model from {} and saving it at {}".format(model_url, model_path))
+                    logging.info("Downloading sentence transformer model from {} and saving it at {}".format(model_url,
+                                                                                                             model_path))
                     try:
                         zip_save_path = os.path.join(model_path, 'model.zip')
                         http_get(model_url, zip_save_path)
@@ -73,7 +73,9 @@ class SiameseTransQuestModel(nn.Sequential):
                     with open(os.path.join(model_path, 'config.json')) as fIn:
                         config = json.load(fIn)
                         if config['__version__'] > __version__:
-                            logging.warning("You try to use a model that was created with version {}, however, your version is {}. This might cause unexpected behavior or errors. In that case, try to update to the latest version.\n\n\n".format(config['__version__'], __version__))
+                            logging.warning(
+                                "You try to use a model that was created with version {}, however, your version is {}. This might cause unexpected behavior or errors. In that case, try to update to the latest version.\n\n\n".format(
+                                    config['__version__'], __version__))
 
                 with open(os.path.join(model_path, 'modules.json')) as fIn:
                     contained_modules = json.load(fIn)
@@ -84,7 +86,6 @@ class SiameseTransQuestModel(nn.Sequential):
                     module = module_class.load(os.path.join(model_path, module_config['path']))
                     modules[module_config['name']] = module
 
-
         super().__init__(modules)
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -93,7 +94,8 @@ class SiameseTransQuestModel(nn.Sequential):
         self.device = torch.device(device)
         self.to(device)
 
-    def encode(self, sentences: List[str], batch_size: int = 8, show_progress_bar: bool = None, output_value: str = 'sentence_embedding', convert_to_numpy: bool = True) -> List[ndarray]:
+    def encode(self, sentences: List[str], batch_size: int = 8, show_progress_bar: bool = None,
+               output_value: str = 'sentence_embedding', convert_to_numpy: bool = True) -> List[ndarray]:
         """
         Computes sentence embeddings
 
@@ -113,7 +115,8 @@ class SiameseTransQuestModel(nn.Sequential):
         """
         self.eval()
         if show_progress_bar is None:
-            show_progress_bar = (logging.getLogger().getEffectiveLevel()==logging.INFO or logging.getLogger().getEffectiveLevel()==logging.DEBUG)
+            show_progress_bar = (
+                        logging.getLogger().getEffectiveLevel() == logging.INFO or logging.getLogger().getEffectiveLevel() == logging.DEBUG)
 
         all_embeddings = []
         length_sorted_idx = np.argsort([len(sen) for sen in sentences])
@@ -146,7 +149,7 @@ class SiameseTransQuestModel(nn.Sequential):
                     features[feature_name].append(sentence_features[feature_name])
 
             for feature_name in features:
-                #features[feature_name] = torch.tensor(np.asarray(features[feature_name])).to(self.device)
+                # features[feature_name] = torch.tensor(np.asarray(features[feature_name])).to(self.device)
                 features[feature_name] = torch.cat(features[feature_name]).to(self.device)
 
             with torch.no_grad():
@@ -154,7 +157,7 @@ class SiameseTransQuestModel(nn.Sequential):
                 embeddings = out_features[output_value]
 
                 if output_value == 'token_embeddings':
-                    #Set token embeddings to 0 for padding tokens
+                    # Set token embeddings to 0 for padding tokens
                     input_mask = out_features['attention_mask']
                     input_mask_expanded = input_mask.unsqueeze(-1).expand(embeddings.size()).float()
                     embeddings = embeddings * input_mask_expanded
@@ -204,10 +207,11 @@ class SiameseTransQuestModel(nn.Sequential):
 
         for idx, name in enumerate(self._modules):
             module = self._modules[name]
-            model_path = os.path.join(path, str(idx)+"_"+type(module).__name__)
+            model_path = os.path.join(path, str(idx) + "_" + type(module).__name__)
             os.makedirs(model_path, exist_ok=True)
             module.save(model_path)
-            contained_modules.append({'idx': idx, 'name': name, 'path': os.path.basename(model_path), 'type': type(module).__module__})
+            contained_modules.append(
+                {'idx': idx, 'name': name, 'path': os.path.basename(model_path), 'type': type(module).__module__})
 
         with open(os.path.join(path, 'modules.json'), 'w') as fOut:
             json.dump(contained_modules, fOut, indent=2)
@@ -249,26 +253,23 @@ class SiameseTransQuestModel(nn.Sequential):
 
                     feature_lists[feature_name].append(sentence_features[feature_name])
 
-
             for feature_name in feature_lists:
-                #feature_lists[feature_name] = torch.tensor(np.asarray(feature_lists[feature_name]))
+                # feature_lists[feature_name] = torch.tensor(np.asarray(feature_lists[feature_name]))
                 feature_lists[feature_name] = torch.cat(feature_lists[feature_name])
 
             features.append(feature_lists)
 
         return {'features': features, 'labels': torch.stack(labels)}
 
-
-
     def fit(self,
             train_objectives: Iterable[Tuple[DataLoader, nn.Module]],
             evaluator: SentenceEvaluator,
             epochs: int = 1,
-            steps_per_epoch = None,
+            steps_per_epoch=None,
             scheduler: str = 'WarmupLinear',
             warmup_steps: int = 10000,
             optimizer_class: Type[Optimizer] = transformers.AdamW,
-            optimizer_params : Dict[str, object ]= {'lr': 2e-5, 'eps': 1e-6, 'correct_bias': False},
+            optimizer_params: Dict[str, object] = {'lr': 2e-5, 'eps': 1e-6, 'correct_bias': False},
             weight_decay: float = 0.01,
             evaluation_steps: int = 0,
             output_path: str = None,
@@ -335,7 +336,8 @@ class SiameseTransQuestModel(nn.Sequential):
 
             no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
             optimizer_grouped_parameters = [
-                {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': weight_decay},
+                {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)],
+                 'weight_decay': weight_decay},
                 {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
             ]
             t_total = num_train_steps
@@ -343,7 +345,8 @@ class SiameseTransQuestModel(nn.Sequential):
                 t_total = t_total // torch.distributed.get_world_size()
 
             optimizer = optimizer_class(optimizer_grouped_parameters, **optimizer_params)
-            scheduler_obj = self._get_scheduler(optimizer, scheduler=scheduler, warmup_steps=warmup_steps, t_total=t_total)
+            scheduler_obj = self._get_scheduler(optimizer, scheduler=scheduler, warmup_steps=warmup_steps,
+                                                t_total=t_total)
 
             optimizers.append(optimizer)
             schedulers.append(scheduler_obj)
@@ -355,7 +358,8 @@ class SiameseTransQuestModel(nn.Sequential):
                 raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
 
             for train_idx in range(len(loss_models)):
-                model, optimizer = amp.initialize(loss_models[train_idx], optimizers[train_idx], opt_level=fp16_opt_level)
+                model, optimizer = amp.initialize(loss_models[train_idx], optimizers[train_idx],
+                                                  opt_level=fp16_opt_level)
                 loss_models[train_idx] = model
                 optimizers[train_idx] = optimizer
 
@@ -381,7 +385,7 @@ class SiameseTransQuestModel(nn.Sequential):
                     try:
                         data = next(data_iterator)
                     except StopIteration:
-                        #logging.info("Restart data_iterator")
+                        # logging.info("Restart data_iterator")
                         data_iterator = iter(dataloaders[train_idx])
                         data_iterators[train_idx] = data_iterator
                         data = next(data_iterator)
@@ -412,7 +416,8 @@ class SiameseTransQuestModel(nn.Sequential):
 
             self._eval_during_training(evaluator, output_path, save_best_model, epoch, -1)
 
-    def evaluate(self, evaluator: SentenceEvaluator, output_path: str = None, result_path: str = None, verbose: bool = True):
+    def evaluate(self, evaluator: SentenceEvaluator, output_path: str = None, result_path: str = None,
+                 verbose: bool = True):
         """
         Evaluate the model
 
@@ -437,7 +442,6 @@ class SiameseTransQuestModel(nn.Sequential):
                 self.save(output_path)
                 self.best_score = score
 
-
     def _get_scheduler(self, optimizer, scheduler: str, warmup_steps: int, t_total: int):
         """
         Returns the correct learning rate scheduler
@@ -448,10 +452,14 @@ class SiameseTransQuestModel(nn.Sequential):
         elif scheduler == 'warmupconstant':
             return transformers.get_constant_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps)
         elif scheduler == 'warmuplinear':
-            return transformers.get_linear_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=t_total)
+            return transformers.get_linear_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps,
+                                                                num_training_steps=t_total)
         elif scheduler == 'warmupcosine':
-            return transformers.get_cosine_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=t_total)
+            return transformers.get_cosine_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps,
+                                                                num_training_steps=t_total)
         elif scheduler == 'warmupcosinewithhardrestarts':
-            return transformers.get_cosine_with_hard_restarts_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=t_total)
+            return transformers.get_cosine_with_hard_restarts_schedule_with_warmup(optimizer,
+                                                                                   num_warmup_steps=warmup_steps,
+                                                                                   num_training_steps=t_total)
         else:
             raise ValueError("Unknown scheduler {}".format(scheduler))

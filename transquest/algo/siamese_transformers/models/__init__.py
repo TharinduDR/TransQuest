@@ -2,8 +2,8 @@ from .albert_model import ALBERT
 from .bert_model import BERT
 from .camembert_model import CamemBERT
 from .distilbert_model import DistilBERT
+from .pooling import Pooling
 from .roberta_model import RoBERTa
+from .transformer import Transformer
 from .xlm_roberta_model import XLMRoBERTa
 from .xlnet_model import XLNet
-from .pooling import Pooling
-from .transformer import Transformer
