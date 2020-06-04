@@ -2,7 +2,7 @@ from .albert_model import ALBERT
 from .bert_model import BERT
 from .camembert_model import CamemBERT
 from .distilbert_model import DistilBERT
-from .pooling import Pooling
+from .Pooling import Pooling
 from .roberta_model import RoBERTa
 from .Transformer import Transformer
 from .xlm_roberta_model import XLMRoBERTa
