@@ -153,5 +153,5 @@ test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
 draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Romanian-English")
 print_stat(dev, 'labels', 'predictions')
-format_submission(df=test, index=index, language_pair="ro-en", method="TransQuest",
+format_submission(df=test, index=index, language_pair="ro-en", method="SiameseTransQuest",
                   path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
