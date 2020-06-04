@@ -31,9 +31,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FILE = "examples/si_en/data/si-en/train.sien.df.short.tsv"
-DEV_FILE = "examples/si_en/data/si-en/dev.sien.df.short.tsv"
-TEST_FILE = "examples/si_en/data/si-en/test20.sien.df.short.tsv"
+TRAIN_FILE = "examples/wmt_2020/si_en/data/si-en/train.sien.df.short.tsv"
+DEV_FILE = "examples/wmt_2020/si_en/data/si-en/dev.sien.df.short.tsv"
+TEST_FILE = "examples/wmt_2020/si_en/data/si-en/test20.sien.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
