@@ -31,9 +31,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FILE = "examples/en_zh/data/en-zh/train.enzh.df.short.tsv"
-DEV_FILE = "examples/en_zh/data/en-zh/dev.enzh.df.short.tsv"
-TEST_FILE = "examples/en_zh/data/en-zh/test20.enzh.df.short.tsv"
+TRAIN_FILE = "examples/ne_en/data/ne-en/train.neen.df.short.tsv"
+DEV_FILE = "examples/ne_en/data/ne-en/dev.neen.df.short.tsv"
+TEST_FILE = "examples/ne_en/data/ne-en/test20.neen.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
@@ -144,7 +144,7 @@ dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
 test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
-draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "English-Chinese")
+draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Nepalese-English")
 print_stat(dev, 'labels', 'predictions')
-format_submission(df=test, index=index, language_pair="en-zh", method="SiameseTransQuest",
+format_submission(df=test, index=index, language_pair="ne-en", method="SiameseTransQuest",
                   path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
