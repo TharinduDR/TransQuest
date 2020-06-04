@@ -1,7 +1,3 @@
-"""
-This examples trains BERT for the STSbenchmark from scratch. It generates sentence embeddings
-that can be compared using cosine-similarity to measure the similarity.
-"""
 import csv
 import logging
 import math
@@ -9,7 +5,6 @@ import os
 import shutil
 
 import numpy as np
-import torch
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
@@ -88,7 +83,8 @@ if siamese_transformer_config["evaluate_during_training"]:
                                       score_col_idx=2,
                                       normalize_scores=False, min_score=0, max_score=1, header=True)
 
-            word_embedding_model = models.transformer.Transformer(MODEL_NAME, max_seq_length=siamese_transformer_config['max_seq_length'])
+            word_embedding_model = models.transformer.Transformer(MODEL_NAME, max_seq_length=siamese_transformer_config[
+                'max_seq_length'])
 
             pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
                                            pooling_mode_mean_tokens=True,
@@ -140,7 +136,6 @@ if siamese_transformer_config["evaluate_during_training"]:
 
             with open(os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt")) as f:
                 test_preds[:, i] = list(map(float, f.read().splitlines()))
-
 
         dev['predictions'] = dev_preds.mean(axis=1)
         test['predictions'] = test_preds.mean(axis=1)
