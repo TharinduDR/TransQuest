@@ -7,8 +7,8 @@ import torch
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
-from .. import SiameseTransQuestModel
-from ..readers.input_example import InputExample
+from transquest.algo.siamese_transformers import SiameseTransQuestModel
+from transquest.algo.siamese_transformers.readers import InputExample
 
 
 class SentenceLabelDataset(Dataset):
