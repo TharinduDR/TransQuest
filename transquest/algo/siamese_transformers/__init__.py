@@ -4,4 +4,4 @@ __DOWNLOAD_SERVER__ = 'https://public.ukp.informatik.tu-darmstadt.de/reimers/sen
 from .datasets import SentencesDataset, SentenceLabelDataset, ParallelSentencesDataset
 from .data_samplers import LabelSampler
 from .logging_handler import LoggingHandler
-from .run_model import SiameseTransQuest
+from .run_model import SiameseTransQuestModel

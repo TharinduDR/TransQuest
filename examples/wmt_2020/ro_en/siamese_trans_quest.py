@@ -20,7 +20,7 @@ from examples.wmt_2020.common.util.postprocess import format_submission
 from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
 from examples.wmt_2020.ro_en.siamese_transformer_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
     siamese_transformer_config, SEED, RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
-from transquest.algo.siamese_transformers import losses, models, LoggingHandler, SentencesDataset, SiameseTransQuest
+from transquest.algo.siamese_transformers import losses, models, LoggingHandler, SentencesDataset, SiameseTransQuestModel
 from transquest.algo.siamese_transformers.evaluation.embedding_similarity_evaluator import EmbeddingSimilarityEvaluator
 from transquest.algo.siamese_transformers.readers import QEDataReader
 
@@ -94,7 +94,7 @@ if siamese_transformer_config["evaluate_during_training"]:
                                            pooling_mode_cls_token=False,
                                            pooling_mode_max_tokens=False)
 
-            model = SiameseTransQuest(modules=[word_embedding_model, pooling_model])
+            model = SiameseTransQuestModel(modules=[word_embedding_model, pooling_model])
             train_data = SentencesDataset(sts_reader.get_examples('train.tsv'), model)
             train_dataloader = DataLoader(train_data, shuffle=True,
                                           batch_size=siamese_transformer_config['train_batch_size'])
@@ -119,7 +119,7 @@ if siamese_transformer_config["evaluate_during_training"]:
                       warmup_steps=warmup_steps,
                       output_path=siamese_transformer_config['output_dir'])
 
-            model = SiameseTransQuest(siamese_transformer_config['output_dir'])
+            model = SiameseTransQuestModel(siamese_transformer_config['output_dir'])
 
             dev_data = SentencesDataset(examples=sts_reader.get_examples("dev.tsv"), model=model)
             dev_dataloader = DataLoader(dev_data, shuffle=False, batch_size=8)

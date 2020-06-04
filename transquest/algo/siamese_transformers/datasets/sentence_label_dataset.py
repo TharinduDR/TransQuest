@@ -5,7 +5,7 @@ import torch
 import logging
 import numpy as np
 from tqdm import tqdm
-from .. import SiameseTransQuest
+from .. import SiameseTransQuestModel
 from ..readers.input_example import InputExample
 
 class SentenceLabelDataset(Dataset):
@@ -21,7 +21,7 @@ class SentenceLabelDataset(Dataset):
     This also uses smart batching like SentenceDataset.
     """
 
-    def __init__(self, examples: List[InputExample], model: SiameseTransQuest, provide_positive: bool = True,
+    def __init__(self, examples: List[InputExample], model: SiameseTransQuestModel, provide_positive: bool = True,
                  provide_negative: bool = True):
         """
         Converts input examples to a SentenceLabelDataset usable to train the model with
@@ -49,7 +49,7 @@ class SentenceLabelDataset(Dataset):
         self.positive = provide_positive
         self.negative = provide_negative
 
-    def convert_input_examples(self, examples: List[InputExample], model: SiameseTransQuest):
+    def convert_input_examples(self, examples: List[InputExample], model: SiameseTransQuestModel):
         """
         Converts input examples to a SentenceLabelDataset.
 

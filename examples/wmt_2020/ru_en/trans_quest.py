@@ -6,15 +6,14 @@ import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
+from examples.wmt_2020.common.util.download import download_from_google_drive
+from examples.wmt_2020.common.util.draw import draw_scatterplot, print_stat
+from examples.wmt_2020.common.util.normalizer import fit, un_fit
 from examples.wmt_2020.common.util.postprocess import format_submission
 from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
 from examples.wmt_2020.ru_en.transformer_config import TEMP_DIRECTORY, DRIVE_FILE_ID, GOOGLE_DRIVE, MODEL_NAME, \
     transformer_config, MODEL_TYPE, SEED, RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
-from examples.wmt_2020.common.util.download import download_from_google_drive
-from examples.wmt_2020.common.util.draw import draw_scatterplot, print_stat
-from examples.wmt_2020.common.util.normalizer import fit, un_fit
-
 from transquest.algo.transformers.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
@@ -45,7 +44,6 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
-
 if transformer_config["evaluate_during_training"]:
     if transformer_config["n_fold"] > 1:
         dev_preds = np.zeros((len(dev), transformer_config["n_fold"]))
@@ -57,10 +55,11 @@ if transformer_config["evaluate_during_training"]:
 
             model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                                args=transformer_config)
-            train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED*i)
+            train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
             model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
-            model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1, use_cuda=torch.cuda.is_available(), args=transformer_config)
+            model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
+                               use_cuda=torch.cuda.is_available(), args=transformer_config)
             result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                         spearman_corr=spearman_corr,
                                                                         mae=mean_absolute_error)
@@ -102,4 +101,5 @@ test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
 draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Russian-English")
 print_stat(dev, 'labels', 'predictions')
-format_submission(df=test, index=index, language_pair="ru-en", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
+format_submission(df=test, index=index, language_pair="ru-en", method="TransQuest",
+                  path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))

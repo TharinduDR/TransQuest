@@ -1,10 +1,10 @@
 import torch
 from torch import nn, Tensor
 from typing import Union, Tuple, List, Iterable, Dict
-from ..run_model import SiameseTransQuest
+from ..run_model import SiameseTransQuestModel
 
 class CosineSimilarityLoss(nn.Module):
-    def __init__(self, model: SiameseTransQuest):
+    def __init__(self, model: SiameseTransQuestModel):
         super(CosineSimilarityLoss, self).__init__()
         self.model = model
 

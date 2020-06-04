@@ -3,7 +3,7 @@ from typing import List
 import torch
 import logging
 from tqdm import tqdm
-from .. import SiameseTransQuest
+from .. import SiameseTransQuestModel
 from ..readers.input_example import InputExample
 
 
@@ -14,7 +14,7 @@ class SentencesDataset(Dataset):
     The SentenceBertEncoder.smart_batching_collate is required for this to work.
     SmartBatchingDataset does *not* work without it.
     """
-    def __init__(self, examples: List[InputExample], model: SiameseTransQuest, show_progress_bar: bool = None):
+    def __init__(self, examples: List[InputExample], model: SiameseTransQuestModel, show_progress_bar: bool = None):
         """
         Create a new SentencesDataset with the tokenized texts and the labels as Tensor
         """
@@ -24,7 +24,7 @@ class SentencesDataset(Dataset):
 
         self.convert_input_examples(examples, model)
 
-    def convert_input_examples(self, examples: List[InputExample], model: SiameseTransQuest):
+    def convert_input_examples(self, examples: List[InputExample], model: SiameseTransQuestModel):
         """
         Converts input examples to a SmartBatchingDataset usable to train the model with
         SentenceTransformer.smart_batching_collate as the collate_fn for the DataLoader

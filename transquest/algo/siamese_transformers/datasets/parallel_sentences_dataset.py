@@ -4,7 +4,7 @@ import logging
 import gzip
 import os
 import random
-from .. import SiameseTransQuest
+from .. import SiameseTransQuestModel
 
 
 class ParallelSentencesDataset(Dataset):
@@ -24,7 +24,7 @@ class ParallelSentencesDataset(Dataset):
     returns a list of sentence embeddings
     """
 
-    def __init__(self, student_model: SiameseTransQuest, teacher_model):
+    def __init__(self, student_model: SiameseTransQuestModel, teacher_model):
         """
         Parallel sentences dataset reader to train student model given a teacher model
         :param student_model: Student sentence embedding model that should be trained
