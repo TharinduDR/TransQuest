@@ -88,7 +88,7 @@ if siamese_transformer_config["evaluate_during_training"]:
                                       score_col_idx=2,
                                       normalize_scores=False, min_score=0, max_score=1, header=True)
 
-            word_embedding_model = models.Transformer(MODEL_NAME, max_seq_length=siamese_transformer_config['max_seq_length'])
+            word_embedding_model = models.transformer.Transformer(MODEL_NAME, max_seq_length=siamese_transformer_config['max_seq_length'])
 
             pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
                                            pooling_mode_mean_tokens=True,
