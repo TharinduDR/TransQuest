@@ -4,6 +4,6 @@ from .camembert_model import CamemBERT
 from .distilbert_model import DistilBERT
 from .pooling import Pooling
 from .roberta_model import RoBERTa
-from .transformer import Transformer
+from .Transformer import Transformer
 from .xlm_roberta_model import XLMRoBERTa
 from .xlnet_model import XLNet
