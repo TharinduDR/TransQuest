@@ -1,9 +1,9 @@
-from .SentenceEvaluator import SentenceEvaluator
-from .SimilarityFunction import SimilarityFunction
+from .sentence_evaluator import SentenceEvaluator
+from .similarity_function import SimilarityFunction
 
-from .BinaryEmbeddingSimilarityEvaluator import BinaryEmbeddingSimilarityEvaluator
-from .EmbeddingSimilarityEvaluator import EmbeddingSimilarityEvaluator
-from .LabelAccuracyEvaluator import LabelAccuracyEvaluator
-from .SequentialEvaluator import SequentialEvaluator
-from .TripletEvaluator import TripletEvaluator
-from .MSEEvaluator import MSEEvaluator
+from .binary_embedding_similarity_evaluator import BinaryEmbeddingSimilarityEvaluator
+from .embedding_similarity_evaluator import EmbeddingSimilarityEvaluator
+from .label_accuracy_evaluator import LabelAccuracyEvaluator
+from .sequential_evaluator import SequentialEvaluator
+from .triplet_evaluator import TripletEvaluator
+from .mse_evaluator import MSEEvaluator

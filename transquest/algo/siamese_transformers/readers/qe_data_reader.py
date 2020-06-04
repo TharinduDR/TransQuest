@@ -4,7 +4,7 @@ import gzip
 import os
 
 
-class STSDataReader:
+class QEDataReader:
     """
     Reads in the STS dataset. Each line contains two sentences (s1_col_idx, s2_col_idx) and one label (score_col_idx)
 

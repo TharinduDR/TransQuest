@@ -3,7 +3,7 @@ from torch import nn, Tensor
 from typing import Union, Tuple, List, Iterable, Dict
 import torch.nn.functional as F
 from enum import Enum
-from ..SentenceTransformer import SentenceTransformer
+from ..run_model import SiameseTransQuest
 
 class TripletDistanceMetric(Enum):
     """
@@ -14,7 +14,7 @@ class TripletDistanceMetric(Enum):
     MANHATTAN = lambda x, y: F.pairwise_distance(x, y, p=1)
 
 class TripletLoss(nn.Module):
-    def __init__(self, model: SentenceTransformer, distance_metric=TripletDistanceMetric.EUCLIDEAN, triplet_margin=1):
+    def __init__(self, model: SiameseTransQuest, distance_metric=TripletDistanceMetric.EUCLIDEAN, triplet_margin=1):
         super(TripletLoss, self).__init__()
         self.model = model
         self.distance_metric = distance_metric

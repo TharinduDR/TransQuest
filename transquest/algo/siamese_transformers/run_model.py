@@ -23,7 +23,7 @@ from .util import import_from_string, batch_to_device, http_get
 from . import __version__
 
 
-class SentenceTransformer(nn.Sequential):
+class SiameseTransQuest(nn.Sequential):
     def __init__(self, model_name_or_path: str = None, modules: Iterable[nn.Module] = None, device: str = None):
         if modules is not None and not isinstance(modules, OrderedDict):
             modules = OrderedDict([(str(idx), module) for idx, module in enumerate(modules)])
