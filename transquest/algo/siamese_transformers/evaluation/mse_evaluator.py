@@ -5,7 +5,7 @@ import os
 import numpy as np
 import torch
 
-from transquest.algo.siamese_transformers.evaluation import SentenceEvaluator
+from transquest.algo.siamese_transformers.evaluation.sentence_evaluator import SentenceEvaluator
 from transquest.algo.siamese_transformers.util import batch_to_device
 
 

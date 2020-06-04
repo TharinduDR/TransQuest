@@ -1,7 +1,7 @@
 import gzip
 import os
 
-from transquest.algo.siamese_transformers.readers import InputExample
+from transquest.algo.siamese_transformers.readers.input_example import InputExample
 
 
 class NLIDataReader(object):

@@ -1,7 +1,7 @@
 import csv
 import os
 
-from transquest.algo.siamese_transformers.readers import InputExample
+from transquest.algo.siamese_transformers.readers.input_example import InputExample
 
 
 class TripletReader(object):

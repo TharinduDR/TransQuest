@@ -17,7 +17,7 @@ from tqdm import tqdm, trange
 
 from . import __DOWNLOAD_SERVER__
 from . import __version__
-from .evaluation import SentenceEvaluator
+from .evaluation.sentence_evaluator import SentenceEvaluator
 from .util import http_get, import_from_string, batch_to_device
 
 

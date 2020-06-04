@@ -4,7 +4,7 @@ import torch
 # Test-suite from https://github.com/omoindrot/tensorflow-triplet-loss/blob/master/model/tests/test_triplet_loss.py
 # Skipped the `test_gradients_pairwise_distances()` test since it's trivial to see if your model loss turns NaN
 # and porting it proved more difficult than expected.
-from transquest.algo.siamese_transformers.losses import BatchHardTripletLoss
+from transquest.algo.siamese_transformers.losses.batch_hard_triplet_loss import BatchHardTripletLoss
 
 
 def pairwise_distance_np(feature, squared=False):
