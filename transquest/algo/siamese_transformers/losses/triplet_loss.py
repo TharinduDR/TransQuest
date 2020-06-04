@@ -1,11 +1,10 @@
-from torch import nn, Tensor
 from enum import Enum
 from typing import Iterable, Dict
 
 import torch.nn.functional as F
 from torch import nn, Tensor
 
-from ..run_model import SiameseTransQuestModel
+from transquest.algo.siamese_transformers.run_model import SiameseTransQuestModel
 
 
 class TripletDistanceMetric(Enum):

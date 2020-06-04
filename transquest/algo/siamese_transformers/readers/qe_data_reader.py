@@ -2,7 +2,7 @@ import csv
 import gzip
 import os
 
-from . import InputExample
+from transquest.algo.siamese_transformers.readers import InputExample
 
 
 class QEDataReader:

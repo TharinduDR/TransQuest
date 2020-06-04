@@ -6,7 +6,7 @@ import random
 import torch
 from torch.utils.data import Dataset
 
-from transquest.algo.siamese_transformers import SiameseTransQuestModel
+from transquest.algo.siamese_transformers.run_model import SiameseTransQuestModel
 
 
 class ParallelSentencesDataset(Dataset):

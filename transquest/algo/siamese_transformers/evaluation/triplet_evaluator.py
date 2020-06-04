@@ -7,8 +7,7 @@ from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_d
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from . import SentenceEvaluator, SimilarityFunction
-from ..util import batch_to_device
+from transquest.algo.siamese_transformers.evaluation import SentenceEvaluator, SimilarityFunction
 
 
 class TripletEvaluator(SentenceEvaluator):

@@ -6,8 +6,8 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from . import SentenceEvaluator
-from ..util import batch_to_device
+from transquest.algo.siamese_transformers.evaluation import SentenceEvaluator
+from transquest.algo.siamese_transformers.util import batch_to_device
 
 
 class LabelAccuracyEvaluator(SentenceEvaluator):

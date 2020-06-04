@@ -18,7 +18,7 @@ from tqdm import tqdm, trange
 from . import __DOWNLOAD_SERVER__
 from . import __version__
 from .evaluation import SentenceEvaluator
-from .util import import_from_string, batch_to_device, http_get
+from .util import http_get, import_from_string, batch_to_device
 
 
 class SiameseTransQuestModel(nn.Sequential):

@@ -1,6 +1,6 @@
 import gzip
 
-from . import InputExample
+from transquest.algo.siamese_transformers.readers import InputExample
 
 
 class PairedFilesReader(object):

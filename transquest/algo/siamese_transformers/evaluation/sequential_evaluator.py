@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from . import SentenceEvaluator
+from transquest.algo.siamese_transformers.evaluation import SentenceEvaluator
 
 
 class SequentialEvaluator(SentenceEvaluator):
