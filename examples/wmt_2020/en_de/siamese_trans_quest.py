@@ -31,9 +31,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FILE = "examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.tsv"
-DEV_FILE = "examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv"
-TEST_FILE = "examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"
+TRAIN_FILE = "examples/en_de/data/en-de/train.ende.df.short.tsv"
+DEV_FILE = "examples/en_de/data/en-de/dev.ende.df.short.tsv"
+TEST_FILE = "examples/en_de/data/en-de/test20.ende.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
@@ -146,5 +146,5 @@ test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
 draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Romanian-English")
 print_stat(dev, 'labels', 'predictions')
-format_submission(df=test, index=index, language_pair="ro-en", method="SiameseTransQuest",
+format_submission(df=test, index=index, language_pair="en-de", method="SiameseTransQuest",
                   path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
