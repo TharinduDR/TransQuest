@@ -35,14 +35,16 @@ TRAIN_FILE = "examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.tsv"
 DEV_FILE = "examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv"
 TEST_FILE = "examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"
 
-train = read_annotated_file(TRAIN_FILE)
-dev = read_annotated_file(DEV_FILE)
-test = read_test_file(TEST_FILE)
-index = test['index'].to_list()
+train = read_annotated_file(TRAIN_FILE, index="segid")
+dev = read_annotated_file(DEV_FILE, index="segid")
+test = read_test_file(TEST_FILE, index="segid")
+
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
 test = test[['original', 'translation']]
+
+index = test['index'].to_list()
 
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
