@@ -102,4 +102,4 @@ dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', ind
 draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "Russian-English")
 print_stat(dev, 'labels', 'predictions')
 format_submission(df=test, index=index, language_pair="ru-en", method="TransQuest",
-                  path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
+                  path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE), index_type="Auto")
