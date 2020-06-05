@@ -1,5 +1,5 @@
-from scipy.stats import pearsonr, spearmanr
 import numpy as np
+from scipy.stats import pearsonr, spearmanr
 
 
 def pearson_corr(preds, labels):

@@ -13,8 +13,6 @@ import numpy as np
 import pandas as pd
 import torch
 from scipy.stats import mode
-
-
 from sklearn.metrics import (
     matthews_corrcoef,
     confusion_matrix,
@@ -57,6 +55,7 @@ from transquest.algo.transformers.utils import InputExample, convert_examples_to
 
 try:
     import wandb
+
     wandb_available = True
 except ImportError:
     wandb_available = False
@@ -64,7 +63,8 @@ except ImportError:
 
 class QuestModel:
     def __init__(
-        self, model_type, model_name, num_labels=None, weight=None, args=None, use_cuda=True, cuda_device=-1, **kwargs,
+            self, model_type, model_name, num_labels=None, weight=None, args=None, use_cuda=True, cuda_device=-1,
+            **kwargs,
     ):
 
         """
@@ -140,7 +140,6 @@ class QuestModel:
             "regression": False,
         }
 
-
         if not use_cuda:
             self.args["fp16"] = False
 
@@ -164,15 +163,15 @@ class QuestModel:
             self.args["wandb_project"] = None
 
     def train_model(
-        self,
-        train_df,
-        multi_label=False,
-        output_dir=None,
-        show_running_loss=True,
-        args=None,
-        eval_df=None,
-        verbose=True,
-        **kwargs,
+            self,
+            train_df,
+            multi_label=False,
+            output_dir=None,
+            show_running_loss=True,
+            args=None,
+            eval_df=None,
+            verbose=True,
+            **kwargs,
     ):
         """
         Trains the model using 'train_df'
@@ -249,14 +248,14 @@ class QuestModel:
             print("Training of {} model complete. Saved to {}.".format(self.args["model_type"], output_dir))
 
     def train(
-        self,
-        train_dataset,
-        output_dir,
-        multi_label=False,
-        show_running_loss=True,
-        eval_df=None,
-        verbose=True,
-        **kwargs,
+            self,
+            train_dataset,
+            output_dir,
+            multi_label=False,
+            show_running_loss=True,
+            eval_df=None,
+            verbose=True,
+            **kwargs,
     ):
         """
         Trains the model on train_dataset.
@@ -387,8 +386,8 @@ class QuestModel:
                         self._save_model(output_dir_current, model=model)
 
                     if args["evaluate_during_training"] and (
-                        args["evaluate_during_training_steps"] > 0
-                        and global_step % args["evaluate_during_training_steps"] == 0
+                            args["evaluate_during_training_steps"] > 0
+                            and global_step % args["evaluate_during_training_steps"] == 0
                     ):
                         # Only evaluate when single GPU otherwise metrics may not average well
                         results, _, _ = self.eval_model(
@@ -604,7 +603,7 @@ class QuestModel:
                 window_ranges.append([count, count + n_windows])
                 count += n_windows
 
-            preds = [preds[window_range[0] : window_range[1]] for window_range in window_ranges]
+            preds = [preds[window_range[0]: window_range[1]] for window_range in window_ranges]
             out_label_ids = [
                 out_label_ids[i] for i in range(len(out_label_ids)) if i in [window[0] for window in window_ranges]
             ]
@@ -641,7 +640,7 @@ class QuestModel:
         return results, model_outputs, wrong
 
     def load_and_cache_examples(
-        self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False
+            self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False
     ):
         """
         Converts a list of InputExample objects to a TensorDataset containing InputFeatures. Caches the InputFeatures.
@@ -673,7 +672,7 @@ class QuestModel:
         )
 
         if os.path.exists(cached_features_file) and (
-            (not args["reprocess_input_data"] and not no_cache) or (
+                (not args["reprocess_input_data"] and not no_cache) or (
                 mode == "dev" and args["use_cached_eval_features"] and not no_cache)
         ):
             features = torch.load(cached_features_file)
@@ -852,7 +851,7 @@ class QuestModel:
                 window_ranges.append([count, count + n_windows])
                 count += n_windows
 
-            preds = [preds[window_range[0] : window_range[1]] for window_range in window_ranges]
+            preds = [preds[window_range[0]: window_range[1]] for window_range in window_ranges]
 
             model_outputs = preds
 

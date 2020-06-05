@@ -1,4 +1,5 @@
 import csv
+
 import pandas as pd
 
 
@@ -16,11 +17,11 @@ def read_annotated_file(path, index="index"):
             z_means.append(float(row["z_mean"]))
 
     return pd.DataFrame(
-                {'index': indices,
-                'original': originals,
-                'translation': translations,
-                'z_mean': z_means
-                })
+        {'index': indices,
+         'original': originals,
+         'translation': translations,
+         'z_mean': z_means
+         })
 
 
 def read_test_file(path, index="index"):
@@ -35,7 +36,7 @@ def read_test_file(path, index="index"):
             translations.append(row["translation"])
 
     return pd.DataFrame(
-                {'index': indices,
-                'original': originals,
-                'translation': translations,
-                })
+        {'index': indices,
+         'original': originals,
+         'translation': translations,
+         })
