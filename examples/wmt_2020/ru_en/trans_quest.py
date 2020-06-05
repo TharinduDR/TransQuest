@@ -35,6 +35,7 @@ dev = dev[['original', 'translation', 'z_mean']]
 test = test[['index', 'original', 'translation']]
 
 index = test['index'].to_list()
+
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()

@@ -42,7 +42,7 @@ test = read_test_file(TEST_FILE, index="segid")
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
-test = test[['original', 'translation']]
+test = test[['index', 'original', 'translation']]
 
 index = test['index'].to_list()
 
