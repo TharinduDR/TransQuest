@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Downloads](https://pepy.tech/badge/transquest)](https://pepy.tech/project/transquest)
+
 # TransQuest : Transformer based Translation Quality Estimation. 
 
 TransQuest provides state-of-the-art models for Quality Estimation.
