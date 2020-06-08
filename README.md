@@ -28,23 +28,6 @@ pip install -r requirements.txt
 pip install transquest
 ```
 
-## Minimal Start
-Once TransQuest is properly installed you can train your own models using the following scripts. For more information, please refer the "Run the examples" section.
-
-### TransQuest Model
-```bash
-model = QuestModel("xlmroberta", "xlm-roberta-large", num_labels=1, use_cuda=torch.cuda.is_available(),
-                               args=transformer_config)
-model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
-                              mae=mean_absolute_error)
-predictions, raw_outputs = model.predict(test_sentence_pairs)
-```
-
-### SiameseTransQuest Model
-```bash
-pip install transquest
-```
-
 ## Run the examples
 Examples are included in the repository but are not shipped with the library.
 
@@ -64,7 +47,7 @@ Following pre-trained models are released. We will be keep releasing new models.
 |                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/30mO5mW)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6804 | 0.7047  |  0.9022 |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4770 | 0.9176  |  1.1382 |
 | Nepalese-English |  Direct    | TransQuest          | [model.zip](https://bit.ly/2MHnCZc)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.7914 | 0.3975  |  0.5078 |
-|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6081 | 0.6531  |  0.7950 |
+|                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/3h674bc)                                     | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6081 | 0.6531  |  0.7950 |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3860 | 0.7353  |  0.8713 |
 | Sinhala-English  |  Direct    | TransQuest          | [model.zip](https://bit.ly/3dKM3ki)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6525 | 0.4510  |  0.5570 |
 |                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
@@ -78,9 +61,9 @@ Following pre-trained models are released. We will be keep releasing new models.
 |                  |  HTER      | TransQuest          |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4994 | 0.1486  |  0.1842 |
 |                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3916 | 0.1500  |  0.1896 |
-|                  |  HTER      | TransQuest          |                                      | [WMT 2019](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | SiameseTransQuest   |                                      | [WMT 2019](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | OpenKiwi            |                                      | [WMT 2019](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |  HTER      | TransQuest          |                                      | [WMT 2019](http://www.statmt.org/wmt19/qe-task.html)                 |         |         |         |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2019](http://www.statmt.org/wmt19/qe-task.html)                 |         |         |         |
+|                  |            | OpenKiwi            |                                      | [WMT 2019](http://www.statmt.org/wmt19/qe-task.html)                 |         |         |         |
 | English-Chinese  |  Direct    | TransQuest          | [model.zip](https://bit.ly/2XGAx3Q)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4779 | 0.9865  | 1.1338  |
 |                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/3h4WSQ8)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4067 | 1.0389  | 1.1973  |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.1676 | 0.6559  | 0.8503  |
@@ -88,7 +71,16 @@ Following pre-trained models are released. We will be keep releasing new models.
 |                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
   
- 
+Once downloading them and unzipping it, they can be loaded easily
+
+```bash
+model = QuestModel("xlmroberta", "path, num_labels=1,
+                               use_cuda=torch.cuda.is_available(), args=transformer_config)
+```
+
+```bash
+model = SiameseTransQuestModel("path")
+``` 
 
 ## Citation
 Please consider citing us if you use the library. 
