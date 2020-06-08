@@ -2,101 +2,96 @@
 
 # TransQuest : Transformer based Translation Quality Estimation. 
 
-TransQuest provides state-of-the-art models for Quality Estimation.
+TransQuest provides state-of-the-art models for translation quality estimation.
+
+### Features
+- Sentence-level translation quality estimation on both aspects: predicting post editing efforts and direct assessment.
+- Perform significantly better than current state-of-the-art quality estimation methods like DeepQuest and OpenKiwi in all the languages experimented. 
+- Pre-trained quality estimation models for seven languages.  
 
 ## Installation
-you first need to install PyTorch. THe recommended PyTorch version is 1.5.
+You first need to install PyTorch. The recommended PyTorch version is 1.5.
 Please refer to [PyTorch installation page](https://pytorch.org/get-started/locally/#start-locally) regarding the specific install command for your platform.
 
-When PyTorch has been installed, you can install from source by cloning the repository and running:
+When PyTorch has been installed, you can install TransQuest from source or from pip. 
+
+#### From Source
 
 ```bash
 git clone https://github.com/TharinduDR/TransQuest.git
 cd TransQuest
 pip install -r requirements.txt
 ```
+#### From pip
+
+```bash
+pip install transquest
+```
+
+## Minimal Start
+Once TransQuest is properly installed you can train your own models using the following scripts easily.
+
+### TransQuest Model
+```bash
+model = QuestModel("xlmroberta", "xlm-roberta-large", num_labels=1, use_cuda=torch.cuda.is_available(),
+                               args=transformer_config)
+model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
+                              mae=mean_absolute_error)
+predictions, raw_outputs = model.predict(test_sentence_pairs)
+```
+
+### SiameseTransQuest Model
+```bash
+pip install transquest
+```
 
 ## Run the examples
 Examples are included in the repository but are not shipped with the library.
 
-### Romanian - English 
+1. [WMT 2020 Sentence-level Direct Assessment QE Shared Task](examples/wmt_2020)
+2. [WMT 2020 Sentence-level Post-Editing Effort QE Shared Task](examples/wmt_2020_task2)
+3. [WMT 2019 Sentence-level Post-Editing Effort QE Shared Task](examples/wmt_2019)
+
+## Pre-trained models
+Following pre-trained models are released. We will be keep releasing new models. Please keep in touch. 
+
+| Language Pair    |  Objective |     Algorithm       |  Model Link                                                                      | Data                                                                 | Pearson | MAE     | RMSE    |
+|:----------------:|----------- |:-------------------:|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------:| ------: | ------: | ------: |  
+| Romanian-English |  Direct    | TransQuest          | [model.zip](https://drive.google.com/open?id=1K4yGlUdZ_q6v_dU8g2hACvvzy8iVTmFt)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.8982 | 0.3121  |  0.4097 |
+|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.8501 | 0.3637  |  0.4932 |
+|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6845 | 0.7596  |  1.0522 |
+| Estonian-English |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.7748 | 0.5904  |  0.7321 |
+|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6804 | 0.7047  |  0.9022 |
+|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4770 | 0.9176  |  1.1382 |
+| Nepalese-English |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.7914 | 0.3975  |  0.5078 |
+|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3860 | 0.7353  |  0.8713 |
+| Sinhala-English  |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6525 | 0.4510  |  0.5570 |
+|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3737 | 0.7517  |  0.8978 |
+| Russian-English  |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+| English-German   |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |  HTER      | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                                                                   | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |  HTER      | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+| English-Chinese  |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                                                                   | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |  HTER      | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+  
+ 
+
+## Citation
 ```bash
-python -m examples.wmt_2020.ro_en.trans_quest
+Coming soon!
+Please keep in touch
 ```
-
-Algo Type   | Transformer Type  | Transformer Name                   | Pearson Correlation | 
-------------| ----------------- |-----------------------------------:| -------------------:| 
-TransQuest  | XLM               | xlm-mlm-enro-1024                  | 0.739               |
-TransQuest  | XLM-R             | xlm-roberta-large                  | 0.894               |  
-TransQuest  | BERT              | bert-base-multilingual-cased       | 0.829               | 
-TransQuest  | DistilBERT        | distilbert-base-multilingual-cased | 0.778               | 
-
-
-### Russian - English 
-```bash
-python -m examples.wmt_2020.ru_en.trans_quest
-```
-
-Algo Type   | Transformer Type  | Transformer Name                   | Pearson Correlation | 
-------------| ----------------- |-----------------------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base                   | 0.692               | 
-TransQuest  | XLM-R             | xlm-roberta-large                  | 0.715               | 
-TransQuest  | BERT              | bert-base-multilingual-cased       | 0.642               |
-TransQuest  | DistilBERT        | distilbert-base-multilingual-cased | 0.644               | 
-
-### Estonian - English 
-```bash
-python -m examples.wmt_2020.et_en.trans_quest
-```
-
-Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
-------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base             | 0.672               |
-TransQuest  | XLM-R             | xlm-roberta-large            | 0.741               |  
-TransQuest  | BERT              | bert-base-multilingual-cased | 0.664               | 
-
-### English - Chinese
-```bash
-python -m examples.wmt_2020.en_zh.trans_quest
-```
-
-Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
-------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base             | 0.493               |
-TransQuest  | XLM-R             | xlm-roberta-large            | 0.526               |
-TransQuest  | BERT              | bert-base-multilingual-cased | 0.518               |  
-
-
-### Nepalese - English 
-```bash
-python -m examples.wmt_2020.si_en.trans_quest
-```
-
-Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
-------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base             | 0.699               |
-TransQuest  | XLM-R             | xlm-roberta-large            | 0.761               |  
-TransQuest  | BERT              | bert-base-multilingual-cased | 0.684               | 
-
-
-### English - German 
-```bash
-python -m examples.wmt_2020.en_de.trans_quest
-```
-
-Algo Type   | Transformer Type  | Transformer Name             | Pearson Correlation | 
-------------| ----------------- |-----------------------------:| -------------------:| 
-TransQuest  | XLM               | xlm-mlm-ende-1024            | 0.326               | 
-TransQuest  | XLM-R             | xlm-roberta-large            | 0.475               |
-TransQuest  | BERT              | bert-base-multilingual-cased | 0.449               | 
-
-
-### Sinhala - English 
-```bash
-python -m examples.wmt_2020.si_en.trans_quest
-```
-
-Algo Type   | Transformer Type  | Transformer Name   | Pearson Correlation | 
-------------| ----------------- |-------------------:| -------------------:| 
-TransQuest  | XLM-R             | xlm-roberta-base   | 0.380               | 
-TransQuest  | XLM-R             | xlm-roberta-large  | 0.589               | 
