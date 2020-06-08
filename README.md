@@ -29,7 +29,7 @@ pip install transquest
 ```
 
 ## Minimal Start
-Once TransQuest is properly installed you can train your own models using the following scripts easily.
+Once TransQuest is properly installed you can train your own models using the following scripts. For more information, please refer the "Run the examples" section.
 
 ### TransQuest Model
 ```bash
@@ -55,42 +55,43 @@ Examples are included in the repository but are not shipped with the library.
 ## Pre-trained models
 Following pre-trained models are released. We will be keep releasing new models. Please keep in touch. 
 
-| Language Pair    |  Objective |     Algorithm       |  Model Link                                                                      | Data                                                                 | Pearson | MAE     | RMSE    |
-|:----------------:|----------- |:-------------------:|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------:| ------: | ------: | ------: |  
-| Romanian-English |  Direct    | TransQuest          | [model.zip](https://drive.google.com/open?id=1K4yGlUdZ_q6v_dU8g2hACvvzy8iVTmFt)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.8982 | 0.3121  |  0.4097 |
-|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.8501 | 0.3637  |  0.4932 |
-|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6845 | 0.7596  |  1.0522 |
-| Estonian-English |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.7748 | 0.5904  |  0.7321 |
-|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6804 | 0.7047  |  0.9022 |
-|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4770 | 0.9176  |  1.1382 |
-| Nepalese-English |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.7914 | 0.3975  |  0.5078 |
-|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3860 | 0.7353  |  0.8713 |
-| Sinhala-English  |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6525 | 0.4510  |  0.5570 |
-|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3737 | 0.7517  |  0.8978 |
-| Russian-English  |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-| English-German   |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |  HTER      | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | SiameseTransQuest   |                                                                                   | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |  HTER      | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-| English-Chinese  |  Direct    | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | OpenKiwi            |                                                                                   | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |  HTER      | TransQuest          |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | SiameseTransQuest   |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
-|                  |            | OpenKiwi            |                                                                                  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+| Language Pair    |  Objective |     Algorithm       |  Model Link                          | Data                                                                 | Pearson | MAE     | RMSE    |
+|:----------------:|----------- |:-------------------:|:------------------------------------:|:--------------------------------------------------------------------:| ------: | ------: | ------: |  
+| Romanian-English |  Direct    | TransQuest          | [model.zip](https://bit.ly/2AfuXwb)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.8982 | 0.3121  |  0.4097 |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.8501 | 0.3637  |  0.4932 |
+|                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6845 | 0.7596  |  1.0522 |
+| Estonian-English |  Direct    | TransQuest          | [model.zip](https://bit.ly/2YjXIAa)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.7748 | 0.5904  |  0.7321 |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6804 | 0.7047  |  0.9022 |
+|                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4770 | 0.9176  |  1.1382 |
+| Nepalese-English |  Direct    | TransQuest          | [model.zip](https://bit.ly/2MHnCZc)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.7914 | 0.3975  |  0.5078 |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3860 | 0.7353  |  0.8713 |
+| Sinhala-English  |  Direct    | TransQuest          | [model.zip](https://bit.ly/3dKM3ki)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6525 | 0.4510  |  0.5570 |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3737 | 0.7517  |  0.8978 |
+| Russian-English  |  Direct    | TransQuest          | [model.zip](https://bit.ly/30lMA8c)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+| English-German   |  Direct    | TransQuest          | [model.zip](https://bit.ly/2UpFiwF)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |  HTER      | TransQuest          |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |  HTER      | TransQuest          |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+| English-Chinese  |  Direct    | TransQuest          | [model.zip](https://bit.ly/2XGAx3Q)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |  HTER      | TransQuest          |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
   
  
 
 ## Citation
+Please consider citing us if you use the library. 
 ```bash
 Coming soon!
 Please keep in touch
