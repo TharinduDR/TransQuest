@@ -7,7 +7,7 @@ TransQuest provides state-of-the-art models for translation quality estimation.
 ### Features
 - Sentence-level translation quality estimation on both aspects: predicting post editing efforts and direct assessment.
 - Perform significantly better than current state-of-the-art quality estimation methods like DeepQuest and OpenKiwi in all the languages experimented. 
-- Pre-trained quality estimation models for seven languages.  
+- Pre-trained quality estimation models for seven language-pairs.  
 
 ## Installation
 You first need to install PyTorch. The recommended PyTorch version is 1.5.
@@ -47,7 +47,7 @@ Following pre-trained models are released. We will be keep releasing new models.
 |                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/30mO5mW)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6804 | 0.7047  |  0.9022 |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4770 | 0.9176  |  1.1382 |
 | Nepalese-English |  Direct    | TransQuest          | [model.zip](https://bit.ly/2MHnCZc)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.7914 | 0.3975  |  0.5078 |
-|                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/3h674bc)                                     | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6081 | 0.6531  |  0.7950 |
+|                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/3h674bc)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6081 | 0.6531  |  0.7950 |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3860 | 0.7353  |  0.8713 |
 | Sinhala-English  |  Direct    | TransQuest          | [model.zip](https://bit.ly/3dKM3ki)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6525 | 0.4510  |  0.5570 |
 |                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
