@@ -39,28 +39,26 @@ def extend_file(input_file, sentence_column, quality_column, reference_file=None
     similar_sentences = []
     similarities = []
     similar_sentence_qualities = []
-    for input_embedding, input_sentence, input_quality in tqdm(zip(input_embeddings, input_sentences, input_qualities), total=len(input_embeddings)):
-        if reference_file is not None:
-            reference_embeddings = reference_file["embedding"]
-            reference_sentences = reference_file[sentence_column]
-            reference_qualities = reference_file[quality_column]
 
-        else:
-            reference_embeddings = input_embeddings
-            reference_sentences = input_sentences
-            reference_qualities = input_qualities
+    if reference_file is not None:
+        reference_embeddings = reference_file["embedding"]
+        reference_sentences = reference_file[sentence_column]
+        reference_qualities = reference_file[quality_column]
 
-            related_index = reference_sentences.index(input_sentence)
-            reference_embeddings.pop(related_index)
-            reference_sentences.pop(related_index)
-            reference_qualities.pop(related_index)
+    else:
+        reference_embeddings = input_embeddings
+        reference_sentences = input_sentences
+        reference_qualities = input_qualities
+
+    for input_embedding, input_sentence, input_quality in tqdm(zip(input_embeddings, input_sentences, input_qualities),
+                                                               total=len(input_embeddings)):
 
         maximum_similarity = 0.0
         similar_sentence = None
         similar_sentence_quality = None
         for reference_embedding, reference_sentence, reference_quality in zip(reference_embeddings, reference_sentences, reference_qualities):
             cos_sim = dot(input_embedding, reference_embedding) / (norm(input_embedding) * norm(reference_embedding))
-            if cos_sim > maximum_similarity:
+            if cos_sim > maximum_similarity and input_sentence != reference_sentence:
                 maximum_similarity = cos_sim
                 similar_sentence = reference_sentence
                 similar_sentence_quality = reference_quality
