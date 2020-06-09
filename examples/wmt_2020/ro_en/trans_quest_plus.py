@@ -15,6 +15,7 @@ from examples.wmt_2020.ro_en.transformer_plus_config import TEMP_DIRECTORY, MODE
     RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from transquest.algo.transformers.run_model import QuestModel
+from transquest.algo.transformers_plus.preprocess import prepare_file
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
@@ -29,6 +30,10 @@ TEST_FILE = "examples/ro_en/data/ro-en/test20.roen.df.short.tsv"
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
 test = read_test_file(TEST_FILE)
+
+train_embedding = prepare_file(train, "translation")
+dev_embedding = prepare_file(dev, "translation")
+test_embedding = prepare_file(test, "translation")
 
 # train = train[['original', 'translation', 'z_mean']]
 # dev = dev[['original', 'translation', 'z_mean']]
