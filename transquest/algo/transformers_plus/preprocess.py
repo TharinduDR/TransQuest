@@ -31,27 +31,19 @@ def prepare_file(input_file, sentence_column):
     return input_file
 
 
-def extend_file(input_file, sentence_column, quality_column, reference_file=None):
+def extend_file(input_file, sentence_column, quality_column, reference_file):
     input_embeddings = input_file["embedding"].tolist()
     input_sentences = input_file[sentence_column].tolist()
-    input_qualities = input_file[quality_column].tolist()
 
     similar_sentences = []
     similarities = []
     similar_sentence_qualities = []
 
-    if reference_file is not None:
-        reference_embeddings = reference_file["embedding"]
-        reference_sentences = reference_file[sentence_column]
-        reference_qualities = reference_file[quality_column]
+    reference_embeddings = reference_file["embedding"]
+    reference_sentences = reference_file[sentence_column]
+    reference_qualities = reference_file[quality_column]
 
-    else:
-        reference_embeddings = input_embeddings
-        reference_sentences = input_sentences
-        reference_qualities = input_qualities
-
-    for input_embedding, input_sentence, input_quality in tqdm(zip(input_embeddings, input_sentences, input_qualities),
-                                                               total=len(input_embeddings)):
+    for input_embedding, input_sentence in tqdm(zip(input_embeddings, input_sentences),  total=len(input_embeddings)):
 
         maximum_similarity = 0.0
         similar_sentence = None

@@ -36,7 +36,7 @@ train_embedding = prepare_file(train, "translation")
 dev_embedding = prepare_file(dev, "translation")
 test_embedding = prepare_file(test, "translation")
 
-train_extended = extend_file(train_embedding, "translation", 'z_mean')
+train_extended = extend_file(train_embedding, "translation", 'z_mean', train_embedding)
 dev_extended = extend_file(dev_embedding, "translation", 'z_mean', train_embedding)
 test_extended = extend_file(test_embedding, "translation", 'z_mean', train_embedding)
 
