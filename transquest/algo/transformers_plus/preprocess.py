@@ -63,5 +63,5 @@ def extend_file(input_file, sentence_column, quality_column, reference_file):
     input_file["similarity"] = similarities
     input_file["similar_sentence_quality"] = similar_sentence_qualities
 
-    return input_file
+    return input_file.drop('embedding', 1)
 
