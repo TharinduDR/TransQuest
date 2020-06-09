@@ -32,14 +32,14 @@ def prepare_file(input_file, sentence_column):
 
 
 def extend_file(input_file, sentence_column, quality_column, reference_file=None):
-    input_embeddings = input_file["embedding"]
-    input_sentences = input_file[sentence_column]
-    input_qualities = input_file[quality_column]
+    input_embeddings = input_file["embedding"].tolist()
+    input_sentences = input_file[sentence_column].tolist()
+    input_qualities = input_file[quality_column].tolist()
 
     similar_sentences = []
     similarities = []
     similar_sentence_qualities = []
-    for input_embedding, input_sentence, input_quality in tqdm(zip(input_embeddings,input_sentences, input_qualities), total=len(input_embeddings)):
+    for input_embedding, input_sentence, input_quality in tqdm(zip(input_embeddings, input_sentences, input_qualities), total=len(input_embeddings)):
         if reference_file is not None:
             reference_embeddings = reference_file["embedding"]
             reference_sentences = reference_file[sentence_column]
