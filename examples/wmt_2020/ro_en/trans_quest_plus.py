@@ -41,9 +41,9 @@ if transformer_plus_config["reprocess_similarity"]:
     dev_extended = extend_file(dev_embedding, "translation", 'z_mean', train_embedding)
     test_extended = extend_file(test_embedding, "translation", 'z_mean', train_embedding)
 
-    train_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.extend.tsv", sep='\t', quoting=csv.QUOTE_NONE, encoding="utf-8-sig")
-    dev_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.extend.tsv", sep='\t', quoting=csv.QUOTE_NONE, encoding="utf-8-sig")
-    test_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.extend.tsv", sep='\t', quoting=csv.QUOTE_NONE, encoding="utf-8-sig")
+    train_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.extend.tsv", sep='\t', encoding="utf-8-sig")
+    dev_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig")
+    test_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig")
 
 # train = train[['original', 'translation', 'z_mean']]
 # dev = dev[['original', 'translation', 'z_mean']]
