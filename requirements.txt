@@ -10,3 +10,5 @@ tensorboardX==2.0
 wandb==0.8.35
 matplotlib==3.2.1
 googledrivedownloader==0.4
+tensorflow-hub==0.8.0
+tensorflow-text==2.2.1
