@@ -1,3 +1,4 @@
+import csv
 import os
 import shutil
 
@@ -15,7 +16,7 @@ from examples.wmt_2020.ro_en.transformer_plus_config import TEMP_DIRECTORY, MODE
     RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from transquest.algo.transformers.run_model import QuestModel
-from transquest.algo.transformers_plus.preprocess import prepare_file
+from transquest.algo.transformers_plus.preprocess import prepare_file, extend_file
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
@@ -35,7 +36,13 @@ train_embedding = prepare_file(train, "translation")
 dev_embedding = prepare_file(dev, "translation")
 test_embedding = prepare_file(test, "translation")
 
+train_extended = extend_file(train_embedding, "translation", 'z_mean')
+dev_extended = extend_file(dev_embedding, "translation", 'z_mean', train_embedding)
+test_extended = extend_file(test_embedding, "translation", 'z_mean', train_embedding)
 
+train_extended.to_csv("examples/ro_en/data/ro-en/train.roen.df.short.extend.tsv", sep='\t', quoting=csv.QUOTE_NONE, encoding="utf-8-sig")
+train_extended.to_csv("examples/ro_en/data/ro-en/train.roen.df.short.extend.tsv", sep='\t', quoting=csv.QUOTE_NONE, encoding="utf-8-sig")
+train_extended.to_csv("examples/ro_en/data/ro-en/train.roen.df.short.extend.tsv", sep='\t', quoting=csv.QUOTE_NONE, encoding="utf-8-sig")
 
 # train = train[['original', 'translation', 'z_mean']]
 # dev = dev[['original', 'translation', 'z_mean']]
