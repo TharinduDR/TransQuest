@@ -12,7 +12,7 @@ from examples.wmt_2020.common.util.draw import draw_scatterplot, print_stat
 from examples.wmt_2020.common.util.normalizer import fit, un_fit
 from examples.wmt_2020.common.util.postprocess import format_submission
 from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
-from examples.wmt_2020.en_de.transformer_plus_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, \
+from examples.wmt_2020.ru_en.transformer_plus_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, \
     transformer_plus_config, SEED, RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from transquest.algo.transformers.run_model import QuestModel
@@ -25,9 +25,9 @@ if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
 if transformer_plus_config["reprocess_similarity"]:
-    TRAIN_FILE = "examples/wmt_2020/en_de/data/en-de/train.ende.df.short.tsv"
-    DEV_FILE = "examples/wmt_2020/en_de/data/en-de/dev.ende.df.short.tsv"
-    TEST_FILE = "examples/wmt_2020/en_de/data/en-de/test20.ende.df.short.tsv"
+    TRAIN_FILE = "examples/wmt_2020/ru_en/data/ru-en/train.ruen.df.short.tsv"
+    DEV_FILE = "examples/wmt_2020/ru_en/data/ru-en/dev.ruen.df.short.tsv"
+    TEST_FILE = "examples/wmt_2020/ru_en/data/ru-en/test20.ruen.df.short.tsv"
 
     train = read_annotated_file(TRAIN_FILE)
     dev = read_annotated_file(DEV_FILE)
@@ -41,9 +41,9 @@ if transformer_plus_config["reprocess_similarity"]:
     dev_extended = extend_file(dev_embedding, "translation", 'z_mean', train_embedding)
     test_extended = extend_file(test_embedding, "translation", 'z_mean', train_embedding)
 
-    train_extended.to_csv("examples/wmt_2020/en_de/data/en-de/train.ende.df.short.extend.tsv", sep='\t', encoding="utf-8-sig", index=False)
-    dev_extended.to_csv("examples/wmt_2020/en_de/data/en-de/dev.ende.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
-    test_extended.to_csv("examples/wmt_2020/en_de/data/en-de/test20.ende.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
+    train_extended.to_csv("examples/wmt_2020/ru_en/data/ru-en/train.ruen.df.short.extend.tsv", sep='\t', encoding="utf-8-sig", index=False)
+    dev_extended.to_csv("examples/wmt_2020/ru_en/data/ru-en/dev.ruen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
+    test_extended.to_csv("examples/wmt_2020/ru_en/data/ru-en/test20.ruen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
 
 # train = train[['original', 'translation', 'z_mean']]
 # dev = dev[['original', 'translation', 'z_mean']]

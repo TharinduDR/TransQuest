@@ -42,8 +42,8 @@ if transformer_plus_config["reprocess_similarity"]:
     test_extended = extend_file(test_embedding, "original", 'z_mean', train_embedding)
 
     train_extended.to_csv("examples/wmt_2020/ne_en/data/ne-en/train.neen.df.short.extend.tsv", sep='\t', encoding="utf-8-sig", index=False)
-    dev_extended.to_csv("examples/wmt_2020/ne_en/data/ne-en/train.neen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
-    test_extended.to_csv("examples/wmt_2020/ne_en/data/ne-en/train.neen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
+    dev_extended.to_csv("examples/wmt_2020/ne_en/data/ne-en/dev.neen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
+    test_extended.to_csv("examples/wmt_2020/ne_en/data/ne-en/test20.neen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
 
 # train = train[['original', 'translation', 'z_mean']]
 # dev = dev[['original', 'translation', 'z_mean']]
