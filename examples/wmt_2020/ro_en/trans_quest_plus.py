@@ -12,8 +12,8 @@ from examples.wmt_2020.common.util.draw import draw_scatterplot, print_stat
 from examples.wmt_2020.common.util.normalizer import fit, un_fit
 from examples.wmt_2020.common.util.postprocess import format_submission
 from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
-from examples.wmt_2020.ro_en.transformer_plus_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_plus_config, SEED, \
-    RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
+from examples.wmt_2020.ro_en.transformer_plus_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, \
+    transformer_plus_config, SEED, RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from transquest.algo.transformers.run_model import QuestModel
 from transquest.algo.transformers_plus.preprocess import prepare_file, extend_file
@@ -41,9 +41,9 @@ if transformer_plus_config["reprocess_similarity"]:
     dev_extended = extend_file(dev_embedding, "translation", 'z_mean', train_embedding)
     test_extended = extend_file(test_embedding, "translation", 'z_mean', train_embedding)
 
-    train_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.extend.tsv", sep='\t', encoding="utf-8-sig")
-    dev_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig")
-    test_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig")
+    train_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.extend.tsv", sep='\t', encoding="utf-8-sig", index=False)
+    dev_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
+    test_extended.to_csv("examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
 
 # train = train[['original', 'translation', 'z_mean']]
 # dev = dev[['original', 'translation', 'z_mean']]
