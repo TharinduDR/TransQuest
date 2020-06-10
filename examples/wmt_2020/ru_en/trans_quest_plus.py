@@ -29,9 +29,9 @@ if transformer_plus_config["reprocess_similarity"]:
     DEV_FILE = "examples/wmt_2020/ru_en/data/ru-en/dev.ruen.df.short.tsv"
     TEST_FILE = "examples/wmt_2020/ru_en/data/ru-en/test20.ruen.df.short.tsv"
 
-    train = read_annotated_file(TRAIN_FILE)
-    dev = read_annotated_file(DEV_FILE)
-    test = read_test_file(TEST_FILE)
+    train = read_annotated_file(TRAIN_FILE, index="segid")
+    dev = read_annotated_file(DEV_FILE, index="segid")
+    test = read_test_file(TEST_FILE, index="segid")
 
     train_embedding = prepare_file(train, "translation")
     dev_embedding = prepare_file(dev, "translation")
