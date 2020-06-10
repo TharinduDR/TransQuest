@@ -18,9 +18,9 @@ from transquest.algo.transformers.run_model import QuestModel
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "examples/et_en/data/et-en/train.eten.df.short.tsv"
-DEV_FILE = "examples/et_en/data/et-en/dev.eten.df.short.tsv"
-TEST_FILE = "examples/et_en/data/et-en/test20.eten.df.short.tsv"
+TRAIN_FILE = "examples/wmt_2020/et_en/data/et-en/train.eten.df.short.tsv"
+DEV_FILE = "examples/wmt_2020/et_en/data/et-en/dev.eten.df.short.tsv"
+TEST_FILE = "examples/wmt_2020/et_en/data/et-en/test20.eten.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
