@@ -33,13 +33,13 @@ if transformer_plus_config["reprocess_similarity"]:
     dev = read_annotated_file(DEV_FILE)
     test = read_test_file(TEST_FILE)
 
-    train_embedding = prepare_file(train, "translation")
-    dev_embedding = prepare_file(dev, "translation")
-    test_embedding = prepare_file(test, "translation")
+    train_embedding = prepare_file(train, "original")
+    dev_embedding = prepare_file(dev, "original")
+    test_embedding = prepare_file(test, "original")
 
-    train_extended = extend_file(train_embedding, "translation", 'z_mean', train_embedding)
-    dev_extended = extend_file(dev_embedding, "translation", 'z_mean', train_embedding)
-    test_extended = extend_file(test_embedding, "translation", 'z_mean', train_embedding)
+    train_extended = extend_file(train_embedding, "original", 'z_mean', train_embedding)
+    dev_extended = extend_file(dev_embedding, "original", 'z_mean', train_embedding)
+    test_extended = extend_file(test_embedding, "original", 'z_mean', train_embedding)
 
     train_extended.to_csv("examples/wmt_2020/en_de/data/en-de/train.ende.df.short.extend.tsv", sep='\t', encoding="utf-8-sig", index=False)
     dev_extended.to_csv("examples/wmt_2020/en_de/data/en-de/dev.ende.df.short.extend.tsv", sep='\t',  encoding="utf-8-sig", index=False)
