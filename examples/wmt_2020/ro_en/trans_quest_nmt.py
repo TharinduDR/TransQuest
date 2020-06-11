@@ -26,7 +26,7 @@ with open('train.roen.ro') as f:
 with open('train.roen.en') as f:
     english_lines = f.read().splitlines()
 
-nmt_sentence_pairs = list(map(list, zip(romanian_lines, english_lines)))
+nmt_sentence_pairs = list(map(list, zip(romanian_lines[0:1000000], english_lines[0:1000000])))
 predictions, raw_outputs = model.predict(nmt_sentence_pairs)
 
 with open(os.path.join(TEMP_DIRECTORY, RESULT_FILE), "w") as f:
