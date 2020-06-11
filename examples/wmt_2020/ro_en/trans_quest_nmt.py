@@ -7,6 +7,10 @@ import tarfile
 import urllib.request
 import os
 
+
+if not os.path.exists(TEMP_DIRECTORY):
+    os.makedirs(TEMP_DIRECTORY)
+
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
