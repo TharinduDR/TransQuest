@@ -79,6 +79,7 @@ class QuestModel:
             use_cuda (optional): Use GPU if available. Setting to False will force model to use CPU only.
             cuda_device (optional): Specific GPU that should be used. Will use the first available GPU by default.
             **kwargs (optional): For providing proxies, force_download, resume_download, cache_dir and other options specific to the 'from_pretrained' implementation where this will be supplied.
+            :rtype: 
         """  # noqa: ignore flake8"
 
         MODEL_CLASSES = {
