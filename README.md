@@ -50,7 +50,7 @@ Following pre-trained models are released. We will be keep releasing new models.
 |                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/3h674bc)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6081 | 0.6531  |  0.7950 |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3860 | 0.7353  |  0.8713 |
 | Sinhala-English  |  Direct    | TransQuest          | [model.zip](https://bit.ly/3dKM3ki)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.6525 | 0.4510  |  0.5570 |
-|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.5957 | 0.5078  |  0.6466 |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3737 | 0.7517  |  0.8978 |
 | Russian-English  |  Direct    | TransQuest          | [model.zip](https://bit.ly/30lMA8c)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.7734 | 0.5076  |  0.6856 |
 |                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
