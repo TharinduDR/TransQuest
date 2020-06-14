@@ -56,6 +56,7 @@ dev['labels'] = -dev[['labels']]
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
+test["labels"] = 0
 assert(len(index) == 1000)
 if siamese_transformer_config["evaluate_during_training"]:
     if siamese_transformer_config["n_fold"] > 0:

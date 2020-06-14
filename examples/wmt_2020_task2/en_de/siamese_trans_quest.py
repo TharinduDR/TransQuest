@@ -48,14 +48,13 @@ train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'ht
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
 
-test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
-
 train['labels'] = -train[['labels']]
 dev['labels'] = -dev[['labels']]
 
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
+test["labels"] = 0
 assert(len(index) == 1000)
 if siamese_transformer_config["evaluate_during_training"]:
     if siamese_transformer_config["n_fold"] > 0:
