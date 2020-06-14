@@ -39,12 +39,11 @@ train = read_annotated_file(TRAIN_FILE, index="segid")
 dev = read_annotated_file(DEV_FILE, index="segid")
 test = read_test_file(TEST_FILE, index="segid")
 
+index = test['index'].to_list()
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
-test = test[['index', 'original', 'translation']]
-
-index = test['index'].to_list()
+test = test[['original', 'translation']]
 
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()

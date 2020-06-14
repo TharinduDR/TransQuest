@@ -39,11 +39,13 @@ train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", transl
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.src", translation_file="dev.mt", hter_file="dev.hter")
 test = read_test_file(path=TEST_FOLDER, original_file="test.src", translation_file="test.mt")
 
+index = test['index'].to_list()
+
 train = train[['original', 'translation', 'hter']]
 dev = dev[['original', 'translation', 'hter']]
-test = test[['index', 'original', 'translation']]
+test = test[['original', 'translation']]
 
-index = test['index'].to_list()
+
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()

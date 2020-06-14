@@ -44,6 +44,7 @@ dev = dev[['original', 'translation', 'hter']]
 test = test[['index', 'original', 'translation']]
 
 index = test['index'].to_list()
+
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
