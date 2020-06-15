@@ -12,7 +12,7 @@ from examples.wmt_2018.common.util.draw import draw_scatterplot, print_stat
 from examples.wmt_2018.common.util.normalizer import fit, un_fit
 from examples.wmt_2018.common.util.postprocess import format_submission
 from examples.wmt_2018.common.util.reader import read_annotated_file, read_test_file
-from examples.wmt_2018.en_de.transformer_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
+from examples.wmt_2018.en_de.transformer_config_nmt import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
     transformer_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from transquest.algo.transformers.run_model import QuestModel
