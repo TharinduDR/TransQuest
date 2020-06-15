@@ -58,7 +58,7 @@ Following pre-trained models are released. We will be keep releasing new models.
 | English-German   |  Direct    | TransQuest          | [model.zip](https://bit.ly/2UpFiwF)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4669 | 0.6474  |  0.7762 |
 |                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/3d8gT5n)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.1455 | 0.6791  |  0.9670 |
-|                  |  HTER      | TransQuest          |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4994 | 0.1486  |  0.1842 |
+|                  |  HTER      | TransQuest          | [model.zip](https://bit.ly/37tkTvZ)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4994 | 0.1486  |  0.1842 |
 |                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3916 | 0.1500  |  0.1896 |
 |                  |  HTER      | TransQuest          |                                      | [WMT 2019](http://www.statmt.org/wmt19/qe-task.html)                 |         |         |         |
