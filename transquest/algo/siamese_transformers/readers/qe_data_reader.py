@@ -1,7 +1,7 @@
 import csv
 import gzip
 import os
-from random import random
+import random
 
 from transquest.algo.siamese_transformers.readers.input_example import InputExample
 
