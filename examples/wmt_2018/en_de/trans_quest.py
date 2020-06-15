@@ -23,9 +23,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FOLDER = "examples/wmt_2018/en_de/data/en-de/"
-DEV_FOLDER = "examples/wmt_2018/en_de/data/en-de/"
-TEST_FOLDER = "examples/wmt_2018/en_de/data/en-de/"
+TRAIN_FOLDER = "examples/wmt_2018/en_de/data/en_de/"
+DEV_FOLDER = "examples/wmt_2018/en_de/data/en_de/"
+TEST_FOLDER = "examples/wmt_2018/en_de/data/en_de/"
 
 train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.nmt.src", translation_file="train.nmt.mt", hter_file="train.nmt.hter")
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.nmt.src", translation_file="dev.nmt.mt", hter_file="dev.nmt.hter")
