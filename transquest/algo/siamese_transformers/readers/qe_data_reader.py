@@ -1,6 +1,7 @@
 import csv
 import gzip
 import os
+from random import random
 
 from transquest.algo.siamese_transformers.readers.input_example import InputExample
 
@@ -25,7 +26,7 @@ class QEDataReader:
         self.max_score = max_score
         self.header = header
 
-    def get_examples(self, filename, max_examples=0):
+    def get_examples(self, filename, max_examples=0, test_file=False):
         """
         filename specified which data split to use (train.csv, dev.csv, test.csv).
         """
@@ -37,7 +38,10 @@ class QEDataReader:
                 next(data, None)
             examples = []
             for id, row in enumerate(data):
-                score = float(row[self.score_col_idx])
+                if test_file:
+                    score = random.uniform(0, 1)
+                else:
+                    score = float(row[self.score_col_idx])
                 if self.normalize_scores:  # Normalize to a 0...1 value
                     score = (score - self.min_score) / (self.max_score - self.min_score)
 
