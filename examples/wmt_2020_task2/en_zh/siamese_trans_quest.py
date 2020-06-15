@@ -52,8 +52,6 @@ test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).drop
 
 test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
 
-train['labels'] = -train[['labels']]
-dev['labels'] = -dev[['labels']]
 
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
@@ -143,8 +141,8 @@ if siamese_transformer_config["evaluate_during_training"]:
             with open(os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt")) as f:
                 test_preds[:, i] = list(map(float, f.read().splitlines()))
 
-        dev['predictions'] = -dev_preds.mean(axis=1)
-        test['predictions'] = -test_preds.mean(axis=1)
+        dev['predictions'] = dev_preds.mean(axis=1)
+        test['predictions'] = test_preds.mean(axis=1)
 
 dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
