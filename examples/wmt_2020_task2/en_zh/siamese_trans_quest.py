@@ -39,19 +39,19 @@ train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", transl
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.src", translation_file="dev.mt", hter_file="dev.hter")
 test = read_test_file(path=TEST_FOLDER, original_file="test.src", translation_file="test.mt")
 
+index = test['index'].to_list()
+
 train = train[['original', 'translation', 'hter']]
 dev = dev[['original', 'translation', 'hter']]
-test = test[['index', 'original', 'translation']]
+test = test[['original', 'translation']]
 
-index = test['index'].to_list()
+
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
 
 test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
 
-train['labels'] = -train[['labels']]
-dev['labels'] = -dev[['labels']]
 
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
@@ -128,7 +128,7 @@ if siamese_transformer_config["evaluate_during_training"]:
             model.evaluate(evaluator,
                            result_path=os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt"))
 
-            test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv"), model=model)
+            test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv", test_file=True), model=model)
             test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
             evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
             model.evaluate(evaluator,
@@ -141,8 +141,8 @@ if siamese_transformer_config["evaluate_during_training"]:
             with open(os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt")) as f:
                 test_preds[:, i] = list(map(float, f.read().splitlines()))
 
-        dev['predictions'] = -dev_preds.mean(axis=1)
-        test['predictions'] = -test_preds.mean(axis=1)
+        dev['predictions'] = dev_preds.mean(axis=1)
+        test['predictions'] = test_preds.mean(axis=1)
 
 dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
