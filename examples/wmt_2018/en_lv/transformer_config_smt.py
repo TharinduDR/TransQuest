@@ -30,8 +30,8 @@ transformer_config = {
     'max_grad_norm': 1.0,
     'do_lower_case': False,
 
-    'logging_steps': 1200,
-    'save_steps': 1200,
+    'logging_steps': 600,
+    'save_steps': 600,
     "no_cache": False,
     'save_model_every_epoch': True,
     'n_fold': 3,
