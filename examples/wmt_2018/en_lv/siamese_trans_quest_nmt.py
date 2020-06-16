@@ -13,7 +13,7 @@ from examples.wmt_2018.common.util.draw import draw_scatterplot, print_stat
 from examples.wmt_2018.common.util.normalizer import fit, un_fit
 from examples.wmt_2018.common.util.postprocess import format_submission
 from examples.wmt_2018.common.util.reader import read_annotated_file, read_test_file
-from examples.wmt_2018.en_de.siamese_transformer_config_nmt import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
+from examples.wmt_2018.en_lv.siamese_transformer_config_nmt import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
     MODEL_NAME, siamese_transformer_config, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
 from transquest.algo.siamese_transformers import losses, models, LoggingHandler, SentencesDataset, \
     SiameseTransQuestModel
@@ -31,9 +31,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FOLDER = "examples/wmt_2018/en_de/data/en_de"
-DEV_FOLDER = "examples/wmt_2018/en_de/data/en_de"
-TEST_FOLDER = "examples/wmt_2018/en_de/data/en_de"
+TRAIN_FOLDER = "examples/wmt_2018/en_lv/data/en_lv"
+DEV_FOLDER = "examples/wmt_2018/en_lv/data/en_lv"
+TEST_FOLDER = "examples/wmt_2018/en_lv/data/en_lv"
 
 train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.nmt.src", translation_file="train.nmt.mt", hter_file="train.nmt.hter")
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.nmt.src", translation_file="dev.nmt.mt", hter_file="dev.nmt.hter")

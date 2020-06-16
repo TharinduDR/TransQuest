@@ -13,7 +13,7 @@ from examples.wmt_2018.common.util.draw import draw_scatterplot, print_stat
 from examples.wmt_2018.common.util.normalizer import fit, un_fit
 from examples.wmt_2018.common.util.postprocess import format_submission
 from examples.wmt_2018.common.util.reader import read_annotated_file, read_test_file
-from examples.wmt_2018.de_en.siamese_transformer_config_smt import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
+from examples.wmt_2018.en_de.siamese_transformer_config_smt import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
     MODEL_NAME, siamese_transformer_config, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
 from transquest.algo.siamese_transformers import losses, models, LoggingHandler, SentencesDataset, \
     SiameseTransQuestModel
