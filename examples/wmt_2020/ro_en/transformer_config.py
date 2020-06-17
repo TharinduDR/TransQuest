@@ -25,7 +25,7 @@ transformer_config = {
     'weight_decay': 0,
     'learning_rate': 2e-5,
     'adam_epsilon': 1e-8,
-    'warmup_ratio': 0.06,
+    'warmup_ratio': 0.1,
     'warmup_steps': 0,
     'max_grad_norm': 1.0,
     'do_lower_case': False,
