@@ -73,6 +73,8 @@ if siamese_transformer_config["evaluate_during_training"]:
                             index=False, quoting=csv.QUOTE_NONE)
             eval_df.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "eval_df.tsv"), header=True, sep='\t',
                            index=False, quoting=csv.QUOTE_NONE)
+
+
             dev.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "dev.tsv"), header=True, sep='\t',
                        index=False, quoting=csv.QUOTE_NONE)
             test.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "test.tsv"), header=True, sep='\t',
