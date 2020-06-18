@@ -5,6 +5,7 @@ import os
 import shutil
 
 import numpy as np
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
@@ -31,33 +32,84 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FILE = "examples/wmt_2020/en_de/data/en-de/train.ende.df.short.tsv"
-DEV_FILE = "examples/wmt_2020/en_de/data/en-de/dev.ende.df.short.tsv"
-TEST_FILE = "examples/wmt_2020/en_de/data/en-de/test20.ende.df.short.tsv"
+languages = {
+    "EN-DE": ["examples/wmt_2020/en_de/data/en-de/train.ende.df.short.tsv",
+              "examples/wmt_2020/en_de/data/en-de/dev.ende.df.short.tsv",
+              "examples/wmt_2020/en_de/data/en-de/test20.ende.df.short.tsv"],
 
-train = read_annotated_file(TRAIN_FILE)
-dev = read_annotated_file(DEV_FILE)
-test = read_test_file(TEST_FILE)
-index = test['index'].to_list()
+    "EN-ZH": ["examples/wmt_2020/en_zh/data/en-zh/train.enzh.df.short.tsv",
+              "examples/wmt_2020/en_zh/data/en-zh/dev.enzh.df.short.tsv",
+              "examples/wmt_2020/en_zh/data/en-zh/test20.enzh.df.short.tsv"],
 
-train = train[['original', 'translation', 'z_mean']]
-dev = dev[['original', 'translation', 'z_mean']]
-test = test[['original', 'translation']]
+    "ET-EN": ["examples/wmt_2020/et_en/data/et-en/train.eten.df.short.tsv",
+              "examples/wmt_2020/et_en/data/et-en/dev.eten.df.short.tsv",
+              "examples/wmt_2020/et_en/data/et-en/test20.eten.df.short.tsv"],
 
-train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
-dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
-test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
+    "NE-EN": ["examples/wmt_2020/ne_en/data/ne-en/train.neen.df.short.tsv",
+              "examples/wmt_2020/ne_en/data/ne-en/dev.neen.df.short.tsv",
+              "examples/wmt_2020/ne_en/data/ne-en/test20.neen.df.short.tsv"],
 
-train = fit(train, 'labels')
-dev = fit(dev, 'labels')
+    "RO-EN": ["examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.tsv",
+              "examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv",
+              "examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"],
 
-assert (len(index) == 1000)
+    "RU-EN": ["examples/wmt_2020/ru_en/data/ru-en/train.ruen.df.short.tsv",
+              "examples/wmt_2020/ru_en/data/ru-en/dev.ruen.df.short.tsv",
+              "examples/wmt_2020/ru_en/data/ru-en/test20.ruen.df.short.tsv"],
+
+    "SI-EN": ["examples/wmt_2020/si_en/data/si-en/train.sien.df.short.tsv",
+              "examples/wmt_2020/si_en/data/si-en/dev.sien.df.short.tsv",
+              "examples/wmt_2020/si_en/data/si-en/test20.sien.df.short.tsv"],
+
+}
+
+train_list = []
+dev_list = []
+test_list = []
+index_list = []
+test_sentence_pairs_list = []
+
+for key, value in languages.items():
+
+    train_temp = read_annotated_file(value[0])
+    dev_temp = read_annotated_file(value[1])
+    test_temp = read_test_file(value[2])
+
+    train_temp = train_temp[['original', 'translation', 'z_mean']]
+    dev_temp = dev_temp[['original', 'translation', 'z_mean']]
+    test_temp = test_temp[['index', 'original', 'translation']]
+
+    index_temp = test_temp['index'].to_list()
+    train_temp = train_temp.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
+    dev_temp = dev_temp.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
+    test_temp = test_temp.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
+
+    test_sentence_pairs_temp = list(map(list, zip(test_temp['text_a'].to_list(), test_temp['text_b'].to_list())))
+
+    train_temp = fit(train_temp, 'labels')
+    dev_temp = fit(dev_temp, 'labels')
+
+    train_list.append(train_temp)
+    dev_list.append(dev_temp)
+    test_list.append(test_temp)
+    index_list.append(index_temp)
+    test_sentence_pairs_list.append(test_sentence_pairs_temp)
+
+train = pd.concat(train_list)
+
 if siamese_transformer_config["evaluate_during_training"]:
     if siamese_transformer_config["n_fold"] > 0:
-        dev_preds = np.zeros((len(dev), siamese_transformer_config["n_fold"]))
-        test_preds = np.zeros((len(test), siamese_transformer_config["n_fold"]))
-        for i in range(siamese_transformer_config["n_fold"]):
+        dev_preds_list = []
+        test_preds_list = []
 
+        for dev, test in zip(dev_list, test_list):
+            dev_preds = np.zeros((len(dev), siamese_transformer_config["n_fold"]))
+            test_preds = np.zeros((len(test), siamese_transformer_config["n_fold"]))
+
+            dev_preds_list.append(dev_preds)
+            test_preds_list.append(test_preds)
+
+        for i in range(siamese_transformer_config["n_fold"]):
             if os.path.exists(siamese_transformer_config['best_model_dir']) and os.path.isdir(
                     siamese_transformer_config['best_model_dir']):
                 shutil.rmtree(siamese_transformer_config['best_model_dir'])
@@ -73,12 +125,6 @@ if siamese_transformer_config["evaluate_during_training"]:
                             index=False, quoting=csv.QUOTE_NONE)
             eval_df.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "eval_df.tsv"), header=True, sep='\t',
                            index=False, quoting=csv.QUOTE_NONE)
-
-
-            dev.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "dev.tsv"), header=True, sep='\t',
-                       index=False, quoting=csv.QUOTE_NONE)
-            test.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "test.tsv"), header=True, sep='\t',
-                        index=False, quoting=csv.QUOTE_NONE)
 
             sts_reader = QEDataReader(siamese_transformer_config['cache_dir'], s1_col_idx=0, s2_col_idx=1,
                                       score_col_idx=2,
@@ -119,33 +165,43 @@ if siamese_transformer_config["evaluate_during_training"]:
 
             model = SiameseTransQuestModel(siamese_transformer_config['best_model_dir'])
 
-            dev_data = SentencesDataset(examples=sts_reader.get_examples("dev.tsv"), model=model)
-            dev_dataloader = DataLoader(dev_data, shuffle=False, batch_size=8)
-            evaluator = EmbeddingSimilarityEvaluator(dev_dataloader)
-            model.evaluate(evaluator,
-                           result_path=os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt"))
+            for dev, test, dev_preds, test_preds in zip(dev_list, test_list, dev_preds_list, test_preds_list):
 
-            test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv", test_file=True), model=model)
-            test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
-            evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
-            model.evaluate(evaluator,
-                           result_path=os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt"),
-                           verbose=False)
+                dev.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "dev.tsv"), header=True, sep='\t',
+                           index=False, quoting=csv.QUOTE_NONE)
+                test.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "test.tsv"), header=True, sep='\t',
+                            index=False, quoting=csv.QUOTE_NONE)
 
-            with open(os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt")) as f:
-                dev_preds[:, i] = list(map(float, f.read().splitlines()))
+                dev_data = SentencesDataset(examples=sts_reader.get_examples("dev.tsv"), model=model)
+                dev_dataloader = DataLoader(dev_data, shuffle=False, batch_size=8)
+                evaluator = EmbeddingSimilarityEvaluator(dev_dataloader)
+                model.evaluate(evaluator,
+                               result_path=os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt"))
 
-            with open(os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt")) as f:
-                test_preds[:, i] = list(map(float, f.read().splitlines()))
+                test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv", test_file=True), model=model)
+                test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
+                evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
+                model.evaluate(evaluator,
+                               result_path=os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt"),
+                               verbose=False)
 
-        dev['predictions'] = dev_preds.mean(axis=1)
-        test['predictions'] = test_preds.mean(axis=1)
+                with open(os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt")) as f:
+                    dev_preds[:, i] = list(map(float, f.read().splitlines()))
 
-dev = un_fit(dev, 'labels')
-dev = un_fit(dev, 'predictions')
-test = un_fit(test, 'predictions')
-dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
-draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "English-German")
-print_stat(dev, 'labels', 'predictions')
-format_submission(df=test, index=index, language_pair="en-de", method="SiameseTransQuest",
-                  path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
+                with open(os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt")) as f:
+                    test_preds[:, i] = list(map(float, f.read().splitlines()))
+
+        for dev, test, dev_preds, test_preds in zip(dev_list, test_list, dev_preds_list, test_preds_list):
+            dev['predictions'] = dev_preds.mean(axis=1)
+            test['predictions'] = test_preds.mean(axis=1)
+
+
+for dev, test, index, language in zip(dev_list, test_list, index_list, [*languages]):
+    dev = un_fit(dev, 'labels')
+    dev = un_fit(dev, 'predictions')
+    test = un_fit(test, 'predictions')
+    dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE.split(".")[0] + "_" + language + RESULT_FILE.split(".")[1]), header=True, sep='\t', index=False, encoding='utf-8')
+    draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE.split(".")[0] + "_" + language + RESULT_IMAGE.split(".")[1]), language)
+    print_stat(dev, 'labels', 'predictions')
+    format_submission(df=test, index=index, language_pair=language.lower(), method="TransQuest",
+                  path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE.split(".")[0] + "_" + language + SUBMISSION_FILE.split(".")[1]))
