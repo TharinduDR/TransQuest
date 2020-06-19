@@ -157,8 +157,8 @@ for dev, test, index, language in zip(dev_list, test_list, index_list, [*languag
     dev = un_fit(dev, 'labels')
     dev = un_fit(dev, 'predictions')
     test = un_fit(test, 'predictions')
-    dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE.split(".")[0] + "_" + language + RESULT_FILE.split(".")[1]), header=True, sep='\t', index=False, encoding='utf-8')
-    draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE.split(".")[0] + "_" + language + RESULT_IMAGE.split(".")[1]), language)
+    dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE.split(".")[0] + "_" + language + "." + RESULT_FILE.split(".")[1]), header=True, sep='\t', index=False, encoding='utf-8')
+    draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE.split(".")[0] + "_" + language + "." + RESULT_IMAGE.split(".")[1]), language)
     print_stat(dev, 'labels', 'predictions')
     format_submission(df=test, index=index, language_pair=language.lower(), method="TransQuest",
-                  path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE.split(".")[0] + "_" + language + SUBMISSION_FILE.split(".")[1]))
+                  path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE.split(".")[0] + "_" + language + "." + SUBMISSION_FILE.split(".")[1]))
