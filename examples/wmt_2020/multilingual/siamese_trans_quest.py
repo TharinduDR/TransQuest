@@ -71,9 +71,15 @@ test_sentence_pairs_list = []
 
 for key, value in languages.items():
 
-    train_temp = read_annotated_file(value[0])
-    dev_temp = read_annotated_file(value[1])
-    test_temp = read_test_file(value[2])
+    if key == "RU-EN":
+        train_temp = read_annotated_file(value[0], index="segid" )
+        dev_temp = read_annotated_file(value[1], index="segid")
+        test_temp = read_test_file(value[2], index="segid")
+
+    else:
+        train_temp = read_annotated_file(value[0])
+        dev_temp = read_annotated_file(value[1])
+        test_temp = read_test_file(value[2])
 
     train_temp = train_temp[['original', 'translation', 'z_mean']]
     dev_temp = dev_temp[['original', 'translation', 'z_mean']]
@@ -203,5 +209,13 @@ for dev, test, index, language in zip(dev_list, test_list, index_list, [*languag
     dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE.split(".")[0] + "_" + language + RESULT_FILE.split(".")[1]), header=True, sep='\t', index=False, encoding='utf-8')
     draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE.split(".")[0] + "_" + language + RESULT_IMAGE.split(".")[1]), language)
     print_stat(dev, 'labels', 'predictions')
-    format_submission(df=test, index=index, language_pair=language.lower(), method="TransQuest",
-                  path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE.split(".")[0] + "_" + language + SUBMISSION_FILE.split(".")[1]))
+
+    if language == "RU-EN":
+        format_submission(df=test, index=index, language_pair=language.lower(), method="SiameseTransQuest",
+                          path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE.split(".")[0] + "_" + language + "." +
+                                            SUBMISSION_FILE.split(".")[1]), index_type="Auto")
+
+    else:
+        format_submission(df=test, index=index, language_pair=language.lower(), method="SiameseTransQuest",
+                          path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE.split(".")[0] + "_" + language + "." +
+                                            SUBMISSION_FILE.split(".")[1]))
