@@ -68,9 +68,9 @@ for key, value in languages.items():
         test_temp = read_test_file(value[2], index="segid")
 
     else:
-        train = read_annotated_file(value[0])
-        dev = read_annotated_file(value[1])
-        test = read_test_file(value[2])
+        train_temp = read_annotated_file(value[0])
+        dev_temp = read_annotated_file(value[1])
+        test_temp = read_test_file(value[2])
 
 
     train_temp = train_temp[['original', 'translation', 'z_mean']]
