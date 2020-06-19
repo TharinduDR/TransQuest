@@ -8,7 +8,7 @@ RESULT_IMAGE = "result.jpg"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "xlm-roberta-large"
+MODEL_NAME = "xlm-roberta-small"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
