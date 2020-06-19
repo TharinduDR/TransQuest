@@ -8,7 +8,7 @@ RESULT_IMAGE = "result.jpg"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "xlm-roberta-base"
+MODEL_NAME = "xlm-roberta-large"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
@@ -23,7 +23,7 @@ transformer_config = {
     'eval_batch_size': 8,
     'num_train_epochs': 3,
     'weight_decay': 0,
-    'learning_rate': 1e-4,
+    'learning_rate': 1e-5,
     'adam_epsilon': 1e-8,
     'warmup_ratio': 0.06,
     'warmup_steps': 0,
@@ -34,7 +34,7 @@ transformer_config = {
     'save_steps': 2800,
     "no_cache": False,
     'save_model_every_epoch': True,
-    'n_fold': 2,
+    'n_fold': 3,
     'evaluate_during_training': True,
     'evaluate_during_training_steps': 2000,
     "evaluate_during_training_verbose": True,
