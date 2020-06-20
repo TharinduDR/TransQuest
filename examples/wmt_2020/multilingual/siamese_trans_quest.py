@@ -41,25 +41,25 @@ languages = {
               "examples/wmt_2020/en_zh/data/en-zh/dev.enzh.df.short.tsv",
               "examples/wmt_2020/en_zh/data/en-zh/test20.enzh.df.short.tsv"],
 
-    # "ET-EN": ["examples/wmt_2020/et_en/data/et-en/train.eten.df.short.tsv",
-    #           "examples/wmt_2020/et_en/data/et-en/dev.eten.df.short.tsv",
-    #           "examples/wmt_2020/et_en/data/et-en/test20.eten.df.short.tsv"],
-    #
-    # "NE-EN": ["examples/wmt_2020/ne_en/data/ne-en/train.neen.df.short.tsv",
-    #           "examples/wmt_2020/ne_en/data/ne-en/dev.neen.df.short.tsv",
-    #           "examples/wmt_2020/ne_en/data/ne-en/test20.neen.df.short.tsv"],
-    #
-    # "RO-EN": ["examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.tsv",
-    #           "examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv",
-    #           "examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"],
-    #
-    # "RU-EN": ["examples/wmt_2020/ru_en/data/ru-en/train.ruen.df.short.tsv",
-    #           "examples/wmt_2020/ru_en/data/ru-en/dev.ruen.df.short.tsv",
-    #           "examples/wmt_2020/ru_en/data/ru-en/test20.ruen.df.short.tsv"],
-    #
-    # "SI-EN": ["examples/wmt_2020/si_en/data/si-en/train.sien.df.short.tsv",
-    #           "examples/wmt_2020/si_en/data/si-en/dev.sien.df.short.tsv",
-    #           "examples/wmt_2020/si_en/data/si-en/test20.sien.df.short.tsv"],
+    "ET-EN": ["examples/wmt_2020/et_en/data/et-en/train.eten.df.short.tsv",
+              "examples/wmt_2020/et_en/data/et-en/dev.eten.df.short.tsv",
+              "examples/wmt_2020/et_en/data/et-en/test20.eten.df.short.tsv"],
+
+    "NE-EN": ["examples/wmt_2020/ne_en/data/ne-en/train.neen.df.short.tsv",
+              "examples/wmt_2020/ne_en/data/ne-en/dev.neen.df.short.tsv",
+              "examples/wmt_2020/ne_en/data/ne-en/test20.neen.df.short.tsv"],
+
+    "RO-EN": ["examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.tsv",
+              "examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv",
+              "examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"],
+
+    "RU-EN": ["examples/wmt_2020/ru_en/data/ru-en/train.ruen.df.short.tsv",
+              "examples/wmt_2020/ru_en/data/ru-en/dev.ruen.df.short.tsv",
+              "examples/wmt_2020/ru_en/data/ru-en/test20.ruen.df.short.tsv"],
+
+    "SI-EN": ["examples/wmt_2020/si_en/data/si-en/train.sien.df.short.tsv",
+              "examples/wmt_2020/si_en/data/si-en/dev.sien.df.short.tsv",
+              "examples/wmt_2020/si_en/data/si-en/test20.sien.df.short.tsv"],
 
 }
 
