@@ -3,12 +3,12 @@ from multiprocessing import cpu_count
 SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
-RESULT_IMAGE = "result.jpg"
+RESULT_IMAGE = "result.png"
 SUBMISSION_FILE = "predictions.txt"
-GOOGLE_DRIVE = True
-DRIVE_FILE_ID = "1-U0C1qc7elkpMRbQzDBAAekqor7Mbn7X"
+GOOGLE_DRIVE = False
+DRIVE_FILE_ID = None
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "transquest/ne-en"
+MODEL_NAME = "xlm-roberta-large"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
@@ -30,13 +30,13 @@ transformer_config = {
     'max_grad_norm': 1.0,
     'do_lower_case': False,
 
-    'logging_steps': 50,
-    'save_steps': 50,
+    'logging_steps': 900,
+    'save_steps': 900,
     "no_cache": False,
     'save_model_every_epoch': True,
-    'n_fold': 3,
+    'n_fold': 1,
     'evaluate_during_training': True,
-    'evaluate_during_training_steps': 50,
+    'evaluate_during_training_steps': 900,
     "evaluate_during_training_verbose": True,
     'use_cached_eval_features': False,
     'save_eval_checkpoints': True,
