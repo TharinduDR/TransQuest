@@ -6,17 +6,21 @@ import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
+from examples.wmt_2020.common.util.download import download_from_google_drive
 from examples.wmt_2020.common.util.draw import draw_scatterplot, print_stat
 from examples.wmt_2020.common.util.normalizer import fit, un_fit
 from examples.wmt_2020.common.util.postprocess import format_submission
 from examples.wmt_2020.common.util.reader import read_test_file, read_annotated_file
 from examples.wmt_2020.ne_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
-    RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
+    RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE, GOOGLE_DRIVE, DRIVE_FILE_ID
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from transquest.algo.transformers.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
+
+if GOOGLE_DRIVE:
+    download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
 TRAIN_FILE = "examples/wmt_2020/ne_en/data/ne-en/train.neen.df.short.tsv"
 DEV_FILE = "examples/wmt_2020/ne_en/data/ne-en/dev.neen.df.short.tsv"
