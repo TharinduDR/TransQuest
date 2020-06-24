@@ -5,13 +5,13 @@ import os
 
 def read_annotated_file(path, original_file, translation_file, hter_file):
 
-    with open(os.path.join(path,original_file)) as f:
+    with open(os.path.join(path,original_file), encoding="utf-8") as f:
         originals = f.read().splitlines()
 
-    with open(os.path.join(path, translation_file)) as f:
+    with open(os.path.join(path, translation_file), encoding="utf-8") as f:
         translations = f.read().splitlines()
 
-    with open(os.path.join(path, hter_file)) as f:
+    with open(os.path.join(path, hter_file), encoding="utf-8") as f:
         hters = list(map(float, f.read().splitlines()))
 
     assert(len(originals) == len(translations))
