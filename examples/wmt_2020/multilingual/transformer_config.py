@@ -3,7 +3,7 @@ from multiprocessing import cpu_count
 SEED = 777
 TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
-RESULT_IMAGE = "result.jpg"
+RESULT_IMAGE = "result.png"
 SUBMISSION_FILE = "predictions.txt"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
