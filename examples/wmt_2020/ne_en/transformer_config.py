@@ -8,7 +8,7 @@ SUBMISSION_FILE = "predictions.txt"
 GOOGLE_DRIVE = True
 DRIVE_FILE_ID = "1uH4I1Oy6wiWMYrA0gw0E2eOe3ekfZHuZ"
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "transquest-mid"
+MODEL_NAME = "transquest/mid"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
