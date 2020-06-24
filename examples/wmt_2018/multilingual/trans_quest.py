@@ -24,33 +24,45 @@ if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
 languages = {
-    "EN-DE": ["examples/wmt_2020/en_de/data/en-de/train.ende.df.short.tsv",
-              "examples/wmt_2020/en_de/data/en-de/dev.ende.df.short.tsv",
-              "examples/wmt_2020/en_de/data/en-de/test20.ende.df.short.tsv"],
+    "DE-EN": ["examples/wmt_2018/de_en/data/de_en/",
+              "examples/wmt_2018/de_en/data/de_en/",
+              "examples/wmt_2018/de_en/data/de_en/",
+              "smt"],
 
-    "EN-ZH": ["examples/wmt_2020/en_zh/data/en-zh/train.enzh.df.short.tsv",
-              "examples/wmt_2020/en_zh/data/en-zh/dev.enzh.df.short.tsv",
-              "examples/wmt_2020/en_zh/data/en-zh/test20.enzh.df.short.tsv"],
+    "EN-ZH": ["examples/wmt_2020_task2/en_zh/data/en-zh/train",
+              "examples/wmt_2020_task2/en_zh/data/en-zh/dev",
+              "examples/wmt_2020_task2/en_zh/data/en-zh/test-blind",
+              ""],
 
-    "ET-EN": ["examples/wmt_2020/et_en/data/et-en/train.eten.df.short.tsv",
-              "examples/wmt_2020/et_en/data/et-en/dev.eten.df.short.tsv",
-              "examples/wmt_2020/et_en/data/et-en/test20.eten.df.short.tsv"],
+    "EN-CS": ["examples/wmt_2018/en_cs/data/en_cs/",
+              "examples/wmt_2018/en_cs/data/en_cs/",
+              "examples/wmt_2018/en_cs/data/en_cs/",
+              "smt"],
 
-    "NE-EN": ["examples/wmt_2020/ne_en/data/ne-en/train.neen.df.short.tsv",
-              "examples/wmt_2020/ne_en/data/ne-en/dev.neen.df.short.tsv",
-              "examples/wmt_2020/ne_en/data/ne-en/test20.neen.df.short.tsv"],
+    "EN-DE-NMT": ["examples/wmt_2020_task2/en_de/data/en-de/train",
+              "examples/wmt_2020_task2/en_de/data/en-de/dev",
+              "examples/wmt_2020_task2/en_de/data/en-de/test-blind",
+               ""],
 
-    "RO-EN": ["examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.tsv",
-              "examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv",
-              "examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"],
+    "EN-DE-SMT": ["examples/wmt_2018/en_de/data/en_de",
+              "examples/wmt_2018/en_de/data/en_de",
+              "examples/wmt_2018/en_de/data/en_de",
+                  "smt"],
 
-    "RU-EN": ["examples/wmt_2020/ru_en/data/ru-en/train.ruen.df.short.tsv",
-              "examples/wmt_2020/ru_en/data/ru-en/dev.ruen.df.short.tsv",
-              "examples/wmt_2020/ru_en/data/ru-en/test20.ruen.df.short.tsv"],
+    "EN-RU": ["examples/wmt_2019/en_ru/data/en-ru/train",
+              "examples/wmt_2019/en_ru/data/en-ru/dev",
+              "examples/wmt_2019/en_ru/data/en-ru/test-blind",
+              ""],
 
-    "SI-EN": ["examples/wmt_2020/si_en/data/si-en/train.sien.df.short.tsv",
-              "examples/wmt_2020/si_en/data/si-en/dev.sien.df.short.tsv",
-              "examples/wmt_2020/si_en/data/si-en/test20.sien.df.short.tsv"],
+    "EN-LV-NMT": ["examples/wmt_2018/en_lv/data/en_lv",
+              "examples/wmt_2018/en_lv/data/en_lv",
+              "examples/wmt_2018/en_lv/data/en_lv",
+                  "nmt"],
+
+    "EN-LV-SMT": ["examples/wmt_2018/en_lv/data/en_lv",
+                  "examples/wmt_2018/en_lv/data/en_lv",
+                  "examples/wmt_2018/en_lv/data/en_lv",
+                  "smt"],
 
 }
 
@@ -62,24 +74,35 @@ test_sentence_pairs_list = []
 
 for key, value in languages.items():
 
-    if key == "RU-EN":
-        train_temp = read_annotated_file(value[0], index="segid" )
-        dev_temp = read_annotated_file(value[1], index="segid")
-        test_temp = read_test_file(value[2], index="segid")
+    if value[3] == "nmt":
+        train_temp = read_annotated_file(path=value[0], original_file="train.nmt.src", translation_file="train.nmt.mt",
+                                    hter_file="train.nmt.hter")
+        dev_temp = read_annotated_file(path=value[1], original_file="dev.nmt.src", translation_file="dev.nmt.mt",
+                                  hter_file="dev.nmt.hter")
+        test_temp = read_test_file(path=value[2], original_file="test.nmt.src", translation_file="test.nmt.mt")
+
+    elif value[3] == "smt":
+        train_temp = read_annotated_file(path=value[0], original_file="train.smt.src", translation_file="train.smt.mt",
+                                         hter_file="train.smt.hter")
+        dev_temp = read_annotated_file(path=value[1], original_file="dev.smt.src", translation_file="dev.smt.mt",
+                                       hter_file="dev.smt.hter")
+        test_temp = read_test_file(path=value[2], original_file="test.smt.src", translation_file="test.smt.mt")
 
     else:
-        train_temp = read_annotated_file(value[0])
-        dev_temp = read_annotated_file(value[1])
-        test_temp = read_test_file(value[2])
+        train_temp = read_annotated_file(path=value[0], original_file="train.src", translation_file="train.mt",
+                                         hter_file="train.hter")
+        dev_temp = read_annotated_file(path=value[1], original_file="dev.src", translation_file="dev.mt",
+                                       hter_file="dev.hter")
+        test_temp = read_test_file(path=value[2], original_file="test.src", translation_file="test.mt")
 
-
-    train_temp = train_temp[['original', 'translation', 'z_mean']]
-    dev_temp = dev_temp[['original', 'translation', 'z_mean']]
+    train_temp = train_temp[['original', 'translation', 'hter']]
+    dev_temp = dev_temp[['original', 'translation', 'hter']]
     test_temp = test_temp[['index', 'original', 'translation']]
 
+
     index_temp = test_temp['index'].to_list()
-    train_temp = train_temp.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
-    dev_temp = dev_temp.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
+    train_temp = train_temp.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
+    dev_temp = dev_temp.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
     test_temp = test_temp.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
 
     test_sentence_pairs_temp = list(map(list, zip(test_temp['text_a'].to_list(), test_temp['text_b'].to_list())))
@@ -165,14 +188,10 @@ for dev, test, index, language in zip(dev_list, test_list, index_list, [*languag
     dev = un_fit(dev, 'predictions')
     test = un_fit(test, 'predictions')
     dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE.split(".")[0] + "_" + language + "." + RESULT_FILE.split(".")[1]), header=True, sep='\t', index=False, encoding='utf-8')
-    draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE.split(".")[0] + "_" + language + "." + RESULT_IMAGE.split(".")[1]), language)
+    print(language)
     print_stat(dev, 'labels', 'predictions')
 
-    if language == "RU-EN":
-        format_submission(df=test, index=index, language_pair=language.lower(), method="TransQuest",
+    format_submission(df=test, index=index, method="TransQuest",
                           path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE.split(".")[0] + "_" + language + "." +
-                                            SUBMISSION_FILE.split(".")[1]), index_type="Auto")
+                                            SUBMISSION_FILE.split(".")[1]))
 
-    else:
-        format_submission(df=test, index=index, language_pair=language.lower(), method="TransQuest",
-                  path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE.split(".")[0] + "_" + language + "." + SUBMISSION_FILE.split(".")[1]))
