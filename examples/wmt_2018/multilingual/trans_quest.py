@@ -24,10 +24,10 @@ if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
 languages = {
-    "DE-EN": ["examples/wmt_2018/de_en/data/de_en/",
-              "examples/wmt_2018/de_en/data/de_en/",
-              "examples/wmt_2018/de_en/data/de_en/",
-              "smt"],
+    # "DE-EN": ["examples/wmt_2018/de_en/data/de_en/",
+    #           "examples/wmt_2018/de_en/data/de_en/",
+    #           "examples/wmt_2018/de_en/data/de_en/",
+    #           "smt"],
 
     "EN-ZH": ["examples/wmt_2020_task2/en_zh/data/en-zh/train",
               "examples/wmt_2020_task2/en_zh/data/en-zh/dev",
