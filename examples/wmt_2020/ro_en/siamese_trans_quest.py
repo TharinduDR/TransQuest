@@ -106,7 +106,7 @@ if siamese_transformer_config["evaluate_during_training"]:
                 len(train_data) * siamese_transformer_config["num_train_epochs"] / siamese_transformer_config[
                     'train_batch_size'] * 0.1)
 
-            start = time.start()
+            start = time.time()
             model.fit(train_objectives=[(train_dataloader, train_loss)],
                       evaluator=evaluator,
                       epochs=siamese_transformer_config['num_train_epochs'],
@@ -116,7 +116,7 @@ if siamese_transformer_config["evaluate_during_training"]:
                                         'correct_bias': False},
                       warmup_steps=warmup_steps,
                       output_path=siamese_transformer_config['best_model_dir'])
-            end = time.end()
+            end = time.time()
             print("Training time")
             print(end - start)
 
@@ -125,11 +125,11 @@ if siamese_transformer_config["evaluate_during_training"]:
             dev_data = SentencesDataset(examples=sts_reader.get_examples("dev.tsv"), model=model)
             dev_dataloader = DataLoader(dev_data, shuffle=False, batch_size=8)
             evaluator = EmbeddingSimilarityEvaluator(dev_dataloader)
-            start = time.start()
+            start = time.time()
             model.evaluate(evaluator,
                            result_path=os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt"))
 
-            end = time.end()
+            end = time.time()
             print("Testing time")
             print(end - start)
 
