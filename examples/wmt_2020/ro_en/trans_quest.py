@@ -1,5 +1,6 @@
 import os
 import shutil
+import time
 
 import numpy as np
 import pandas as pd
@@ -60,13 +61,17 @@ if transformer_config["evaluate_during_training"]:
             model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                                args=transformer_config)
             train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
+
             model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
+
             model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
                                use_cuda=torch.cuda.is_available(), args=transformer_config)
+
             result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                         spearman_corr=spearman_corr,
                                                                         mae=mean_absolute_error)
+
             predictions, raw_outputs = model.predict(test_sentence_pairs)
             dev_preds[:, i] = model_outputs
             test_preds[:, i] = predictions
@@ -78,14 +83,24 @@ if transformer_config["evaluate_during_training"]:
         model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                            args=transformer_config)
         train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED)
+
+        start = time.time()
         model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                           mae=mean_absolute_error)
+        end = time.time()
+        print("Training time")
+        print(end - start)
+
         model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
                            use_cuda=torch.cuda.is_available(), args=transformer_config)
         result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                     spearman_corr=spearman_corr,
                                                                     mae=mean_absolute_error)
+        start = time.time()
         predictions, raw_outputs = model.predict(test_sentence_pairs)
+        end = time.time()
+        print("Testing time")
+        print(end - start)
         dev['predictions'] = model_outputs
         test['predictions'] = predictions
 
