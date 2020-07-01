@@ -34,6 +34,7 @@ Examples are included in the repository but are not shipped with the library.
 1. [WMT 2020 Sentence-level Direct Assessment QE Shared Task](examples/wmt_2020)
 2. [WMT 2020 Sentence-level Post-Editing Effort QE Shared Task](examples/wmt_2020_task2)
 3. [WMT 2019 Sentence-level Post-Editing Effort QE Shared Task](examples/wmt_2019)
+3. [WMT 2018 Sentence-level Post-Editing Effort QE Shared Task](examples/wmt_2018)
 
 ## TransQuest Model Zoo
 Following pre-trained models are released. We will be keep releasing new models. Please keep in touch. 
