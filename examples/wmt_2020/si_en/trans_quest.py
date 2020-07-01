@@ -44,7 +44,6 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
-train = train[:1000]
 
 assert (len(index) == 1000)
 if transformer_config["evaluate_during_training"]:
