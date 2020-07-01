@@ -55,20 +55,17 @@ Following pre-trained models are released. We will be keep releasing new models.
 | Russian-English  |  Direct    | TransQuest          | [model.zip](https://bit.ly/30lMA8c)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.7734 | 0.5076  |  0.6856 |
 |                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/2B3UM2D)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.5479 | 0.8253  |  1.1930 |
-| English-German   |  Direct    | TransQuest          | [model.zip](https://bit.ly/2UpFiwF)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4669 | 0.6474  |  0.7762 |
+| English-German (NMT)  |  Direct    | TransQuest          | [model.zip](https://bit.ly/2UpFiwF)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4669 | 0.6474  |  0.7762 |
 |                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/3d8gT5n)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.1455 | 0.6791  |  0.9670 |
 |                  |  HTER      | TransQuest          | [model.zip](https://bit.ly/37tkTvZ)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4994 | 0.1486  |  0.1842 |
-|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/3icI5Dw)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.3916 | 0.1500  |  0.1896 |
-|                  |  HTER      | TransQuest          |                                      | [WMT 2019](http://www.statmt.org/wmt19/qe-task.html)                 |         |         |         |
-|                  |            | SiameseTransQuest   |                                      | [WMT 2019](http://www.statmt.org/wmt19/qe-task.html)                 |         |         |         |
-|                  |            | OpenKiwi            |                                      | [WMT 2019](http://www.statmt.org/wmt19/qe-task.html)                 |         |         |         |
 | English-Chinese  |  Direct    | TransQuest          | [model.zip](https://bit.ly/2XGAx3Q)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4779 | 0.9865  | 1.1338  |
 |                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/3h4WSQ8)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.4067 | 1.0389  | 1.1973  |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.1676 | 0.6559  | 0.8503  |
-|                  |  HTER      | TransQuest          |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.5910 | 0.1400  | 0.1717  |
-|                  |            | SiameseTransQuest   |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
+|                  |  HTER      | TransQuest          | [model.zip](https://bit.ly/3ge3wSN)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.5910 | 0.1400  | 0.1717  |
+|                  |            | SiameseTransQuest   | [model.zip](https://bit.ly/2YLIvJw)  | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |         |         |         |
 |                  |            | OpenKiwi            |                                      | [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html) |  0.5058 | 0.1470  | 0.1814  |
   
 Once downloading them and unzipping it, they can be loaded easily
