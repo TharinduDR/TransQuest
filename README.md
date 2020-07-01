@@ -74,7 +74,7 @@ Following pre-trained models are released. We will be keep releasing new models.
 Once downloading them and unzipping it, they can be loaded easily
 
 ```bash
-model = QuestModel("xlmroberta", "path, num_labels=1,
+model = QuestModel("xlmroberta", "path", num_labels=1,
                                use_cuda=torch.cuda.is_available(), args=transformer_config)
 ```
 

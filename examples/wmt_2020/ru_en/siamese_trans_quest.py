@@ -39,12 +39,11 @@ train = read_annotated_file(TRAIN_FILE, index="segid")
 dev = read_annotated_file(DEV_FILE, index="segid")
 test = read_test_file(TEST_FILE, index="segid")
 
+index = test['index'].to_list()
 
 train = train[['original', 'translation', 'z_mean']]
 dev = dev[['original', 'translation', 'z_mean']]
-test = test[['index', 'original', 'translation']]
-
-index = test['index'].to_list()
+test = test[['original', 'translation']]
 
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
@@ -52,7 +51,6 @@ test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).drop
 
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
-test["labels"] = 0
 
 assert (len(index) == 1000)
 if siamese_transformer_config["evaluate_during_training"]:
@@ -126,7 +124,7 @@ if siamese_transformer_config["evaluate_during_training"]:
             model.evaluate(evaluator,
                            result_path=os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt"))
 
-            test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv"), model=model)
+            test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv", test_file=True), model=model)
             test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
             evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
             model.evaluate(evaluator,

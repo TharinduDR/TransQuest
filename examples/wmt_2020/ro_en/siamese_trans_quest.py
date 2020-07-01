@@ -3,6 +3,7 @@ import logging
 import math
 import os
 import shutil
+import time
 
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -50,7 +51,6 @@ test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).drop
 
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
-test["labels"] = 0
 
 assert (len(index) == 1000)
 if siamese_transformer_config["evaluate_during_training"]:
@@ -106,6 +106,7 @@ if siamese_transformer_config["evaluate_during_training"]:
                 len(train_data) * siamese_transformer_config["num_train_epochs"] / siamese_transformer_config[
                     'train_batch_size'] * 0.1)
 
+            start = time.time()
             model.fit(train_objectives=[(train_dataloader, train_loss)],
                       evaluator=evaluator,
                       epochs=siamese_transformer_config['num_train_epochs'],
@@ -115,18 +116,27 @@ if siamese_transformer_config["evaluate_during_training"]:
                                         'correct_bias': False},
                       warmup_steps=warmup_steps,
                       output_path=siamese_transformer_config['best_model_dir'])
+            end = time.time()
+            print("Training time")
+            print(end - start)
 
             model = SiameseTransQuestModel(siamese_transformer_config['best_model_dir'])
 
             dev_data = SentencesDataset(examples=sts_reader.get_examples("dev.tsv"), model=model)
             dev_dataloader = DataLoader(dev_data, shuffle=False, batch_size=8)
             evaluator = EmbeddingSimilarityEvaluator(dev_dataloader)
+            start = time.time()
             model.evaluate(evaluator,
                            result_path=os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt"))
 
-            test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv"), model=model)
+            end = time.time()
+            print("Testing time")
+            print(end - start)
+
+            test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv", test_file=True), model=model)
             test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
             evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
+
             model.evaluate(evaluator,
                            result_path=os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt"),
                            verbose=False)

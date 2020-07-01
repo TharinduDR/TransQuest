@@ -1,7 +1,9 @@
 import os
 import shutil
+import time
 
 import numpy as np
+import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
@@ -22,9 +24,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FILE = "examples/ro_en/data/ro-en/train.roen.df.short.tsv"
-DEV_FILE = "examples/ro_en/data/ro-en/dev.roen.df.short.tsv"
-TEST_FILE = "examples/ro_en/data/ro-en/test20.roen.df.short.tsv"
+TRAIN_FILE = "examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.tsv"
+DEV_FILE = "examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv"
+TEST_FILE = "examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
@@ -44,6 +46,7 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
+
 assert (len(index) == 1000)
 if transformer_config["evaluate_during_training"]:
     if transformer_config["n_fold"] > 1:
@@ -56,14 +59,18 @@ if transformer_config["evaluate_during_training"]:
 
             model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                                args=transformer_config)
-            train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
-            model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
+            train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
+
+            model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
+
             model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
                                use_cuda=torch.cuda.is_available(), args=transformer_config)
+
             result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                         spearman_corr=spearman_corr,
                                                                         mae=mean_absolute_error)
+
             predictions, raw_outputs = model.predict(test_sentence_pairs)
             dev_preds[:, i] = model_outputs
             test_preds[:, i] = predictions
@@ -74,15 +81,25 @@ if transformer_config["evaluate_during_training"]:
     else:
         model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                            args=transformer_config)
-        train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED)
-        model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
+        train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED)
+
+        start = time.time()
+        model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                           mae=mean_absolute_error)
+        end = time.time()
+        print("Training time")
+        print(end - start)
+
         model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
                            use_cuda=torch.cuda.is_available(), args=transformer_config)
         result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                     spearman_corr=spearman_corr,
                                                                     mae=mean_absolute_error)
+        start = time.time()
         predictions, raw_outputs = model.predict(test_sentence_pairs)
+        end = time.time()
+        print("Testing time")
+        print(end - start)
         dev['predictions'] = model_outputs
         test['predictions'] = predictions
 

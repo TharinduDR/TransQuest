@@ -22,9 +22,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FILE = "examples/en_de/data/en-de/train.ende.df.short.tsv"
-DEV_FILE = "examples/en_de/data/en-de/dev.ende.df.short.tsv"
-TEST_FILE = "examples/en_de/data/en-de/test20.ende.df.short.tsv"
+TRAIN_FILE = "examples/wmt_2020/en_de/data/en-de/train.ende.df.short.tsv"
+DEV_FILE = "examples/wmt_2020/en_de/data/en-de/dev.ende.df.short.tsv"
+TEST_FILE = "examples/wmt_2020/en_de/data/en-de/test20.ende.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
@@ -56,8 +56,8 @@ if transformer_config["evaluate_during_training"]:
 
             model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                                args=transformer_config)
-            train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
-            model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
+            train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
+            model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
             model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
                                use_cuda=torch.cuda.is_available(), args=transformer_config)
@@ -74,8 +74,8 @@ if transformer_config["evaluate_during_training"]:
     else:
         model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                            args=transformer_config)
-        train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED)
-        model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
+        train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED)
+        model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                           mae=mean_absolute_error)
         model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
                            use_cuda=torch.cuda.is_available(), args=transformer_config)
