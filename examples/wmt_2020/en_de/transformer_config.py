@@ -15,7 +15,7 @@ transformer_config = {
     "best_model_dir": "temp/outputs/best_model",
     'cache_dir': 'temp/cache_dir/',
 
-    'fp16': True,
+    'fp16': False,
     'fp16_opt_level': 'O1',
     'max_seq_length': 128,
     'train_batch_size': 8,
