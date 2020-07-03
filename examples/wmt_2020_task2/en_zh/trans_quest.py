@@ -45,6 +45,8 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
+train = pd.concat([train, dev])
+
 assert(len(index) == 1000)
 if transformer_config["evaluate_during_training"]:
     if transformer_config["n_fold"] > 1:
