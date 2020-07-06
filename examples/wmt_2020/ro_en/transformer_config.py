@@ -33,14 +33,18 @@ transformer_config = {
     'logging_steps': 300,
     'save_steps': 300,
     "no_cache": False,
+    "no_save": False,
     'save_model_every_epoch': True,
     'n_fold': 1,
     'evaluate_during_training': True,
+    "evaluate_during_training_silent": False,
     'evaluate_during_training_steps': 300,
     "evaluate_during_training_verbose": True,
     'use_cached_eval_features': False,
+    "save_best_model": True,
     'save_eval_checkpoints': True,
     'tensorboard_dir': None,
+    "save_optimizer_and_scheduler": True,
 
     'regression': True,
 
@@ -50,6 +54,7 @@ transformer_config = {
     'process_count': cpu_count() - 2 if cpu_count() > 2 else 1,
     'n_gpu': 1,
     'use_multiprocessing': True,
+    "multiprocessing_chunksize": 500,
     'silent': False,
 
     'wandb_project': None,
@@ -60,8 +65,11 @@ transformer_config = {
     "early_stopping_delta": 0,
     "early_stopping_metric": "eval_loss",
     "early_stopping_metric_minimize": True,
+    "early_stopping_consider_epochs": False,
 
     "manual_seed": 777,
 
+    "config": {},
+    "local_rank": -1,
     "encoding": None,
 }

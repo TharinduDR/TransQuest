@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright 2018 The Google AI Language Team Authors and The HuggingFace Inc. team.
 # Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
 #
@@ -13,13 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 from __future__ import absolute_import, division, print_function
 
 import csv
-import logging
+import linecache
+from io import open
 from multiprocessing import Pool, cpu_count
 
+import torch
+from torch.utils.data import Dataset
 from tqdm.auto import tqdm
 
 csv.field_size_limit(2147483647)
@@ -66,15 +69,37 @@ def convert_example_to_feature(
         cls_token_segment_id=1,
         pad_token_segment_id=0,
         mask_padding_with_zero=True,
-        sep_token_extra=False
+        sep_token_extra=False,
 ):
-    example, max_seq_length, tokenizer, output_mode, cls_token_at_end, cls_token, sep_token, cls_token_segment_id, pad_on_left, pad_token_segment_id, sep_token_extra, multi_label, stride = example_row
+    (
+        example,
+        max_seq_length,
+        tokenizer,
+        output_mode,
+        cls_token_at_end,
+        cls_token,
+        sep_token,
+        cls_token_segment_id,
+        pad_on_left,
+        pad_token_segment_id,
+        sep_token_extra,
+        multi_label,
+        stride,
+        pad_token,
+        add_prefix_space,
+    ) = example_row
 
-    tokens_a = tokenizer.tokenize(example.text_a)
+    if add_prefix_space and not example.text_a.startswith(" "):
+        tokens_a = tokenizer.tokenize(" " + example.text_a)
+    else:
+        tokens_a = tokenizer.tokenize(example.text_a)
 
     tokens_b = None
     if example.text_b:
-        tokens_b = tokenizer.tokenize(example.text_b)
+        if add_prefix_space and not example.text_b.startswith(" "):
+            tokens_b = tokenizer.tokenize(" " + example.text_b)
+        else:
+            tokens_b = tokenizer.tokenize(example.text_b)
         # Modifies `tokens_a` and `tokens_b` in place so that the total
         # length is less than the specified length.
         # Account for [CLS], [SEP], [SEP] with "- 3". " -4" for RoBERTa.
@@ -84,7 +109,7 @@ def convert_example_to_feature(
         # Account for [CLS] and [SEP] with "- 2" and with "- 3" for RoBERTa.
         special_tokens_count = 3 if sep_token_extra else 2
         if len(tokens_a) > max_seq_length - special_tokens_count:
-            tokens_a = tokens_a[:(max_seq_length - special_tokens_count)]
+            tokens_a = tokens_a[: (max_seq_length - special_tokens_count)]
 
     # The convention in BERT is:
     # (a) For sequence pairs:
@@ -108,7 +133,12 @@ def convert_example_to_feature(
     segment_ids = [sequence_a_segment_id] * len(tokens)
 
     if tokens_b:
+        if sep_token_extra:
+            tokens += [sep_token]
+            segment_ids += [sequence_b_segment_id]
+
         tokens += tokens_b + [sep_token]
+
         segment_ids += [sequence_b_segment_id] * (len(tokens_b) + 1)
 
     if cls_token_at_end:
@@ -146,12 +176,10 @@ def convert_example_to_feature(
     # else:
     #     raise KeyError(output_mode)
 
-    return InputFeatures(
-        input_ids=input_ids,
-        input_mask=input_mask,
-        segment_ids=segment_ids,
-        label_id=example.label
-    )
+    # if output_mode == "regression":
+    #     label_id = float(example.label)
+
+    return InputFeatures(input_ids=input_ids, input_mask=input_mask, segment_ids=segment_ids, label_id=example.label, )
 
 
 def convert_example_to_feature_sliding_window(
@@ -164,7 +192,23 @@ def convert_example_to_feature_sliding_window(
         mask_padding_with_zero=True,
         sep_token_extra=False,
 ):
-    example, max_seq_length, tokenizer, output_mode, cls_token_at_end, cls_token, sep_token, cls_token_segment_id, pad_on_left, pad_token_segment_id, sep_token_extra, multi_label, stride = example_row
+    (
+        example,
+        max_seq_length,
+        tokenizer,
+        output_mode,
+        cls_token_at_end,
+        cls_token,
+        sep_token,
+        cls_token_segment_id,
+        pad_on_left,
+        pad_token_segment_id,
+        sep_token_extra,
+        multi_label,
+        stride,
+        pad_token,
+        add_prefix_space,
+    ) = example_row
 
     if stride < 1:
         stride = int(max_seq_length * stride)
@@ -172,11 +216,13 @@ def convert_example_to_feature_sliding_window(
     bucket_size = max_seq_length - (3 if sep_token_extra else 2)
     token_sets = []
 
-    tokens_a = tokenizer.tokenize(example.text_a)
+    if add_prefix_space and not example.text_a.startswith(" "):
+        tokens_a = tokenizer.tokenize(" " + example.text_a)
+    else:
+        tokens_a = tokenizer.tokenize(example.text_a)
 
-    special_tokens_count = 3 if sep_token_extra else 2
     if len(tokens_a) > bucket_size:
-        token_sets = [tokens_a[i:i + bucket_size] for i in range(0, len(tokens_a), stride)]
+        token_sets = [tokens_a[i: i + bucket_size] for i in range(0, len(tokens_a), stride)]
     else:
         token_sets.append(tokens_a)
 
@@ -243,12 +289,7 @@ def convert_example_to_feature_sliding_window(
         #     raise KeyError(output_mode)
 
         input_features.append(
-            InputFeatures(
-                input_ids=input_ids,
-                input_mask=input_mask,
-                segment_ids=segment_ids,
-                label_id=example.label
-            )
+            InputFeatures(input_ids=input_ids, input_mask=input_mask, segment_ids=segment_ids, label_id=example.label, )
         )
 
     return input_features
@@ -276,7 +317,9 @@ def convert_examples_to_features(
         use_multiprocessing=True,
         sliding_window=False,
         flatten=False,
-        stride=None
+        stride=None,
+        add_prefix_space=False,
+        args=None,
 ):
     """ Loads a data file into a list of `InputBatch`s
         `cls_token_at_end` define the location of the CLS token:
@@ -285,31 +328,59 @@ def convert_examples_to_features(
         `cls_token_segment_id` define the segment id associated to the CLS token (0 for BERT, 2 for XLNet)
     """
 
-    examples = [(example, max_seq_length, tokenizer, output_mode, cls_token_at_end, cls_token, sep_token,
-                 cls_token_segment_id, pad_on_left, pad_token_segment_id, sep_token_extra, multi_label, stride) for
-                example in examples]
+    examples = [
+        (
+            example,
+            max_seq_length,
+            tokenizer,
+            output_mode,
+            cls_token_at_end,
+            cls_token,
+            sep_token,
+            cls_token_segment_id,
+            pad_on_left,
+            pad_token_segment_id,
+            sep_token_extra,
+            multi_label,
+            stride,
+            pad_token,
+            add_prefix_space,
+        )
+        for example in examples
+    ]
 
     if use_multiprocessing:
         if sliding_window:
-            logging.info('sliding_window enabled')
             with Pool(process_count) as p:
-                features = list(tqdm(p.imap(convert_example_to_feature_sliding_window, examples, chunksize=500),
-                                     total=len(examples), disable=silent))
+                features = list(
+                    tqdm(
+                        p.imap(
+                            convert_example_to_feature_sliding_window,
+                            examples,
+                            chunksize=args.multiprocessing_chunksize,
+                        ),
+                        total=len(examples),
+                        disable=silent,
+                    )
+                )
             if flatten:
                 features = [feature for feature_set in features for feature in feature_set]
-            logging.info(f'{len(features)} features created from {len(examples)} samples.')
         else:
             with Pool(process_count) as p:
-                features = list(tqdm(p.imap(convert_example_to_feature, examples, chunksize=500), total=len(examples),
-                                     disable=silent))
+                features = list(
+                    tqdm(
+                        p.imap(convert_example_to_feature, examples, chunksize=args.multiprocessing_chunksize),
+                        total=len(examples),
+                        disable=silent,
+                    )
+                )
     else:
         if sliding_window:
-            logging.info('sliding_window enabled')
-            features = [convert_example_to_feature_sliding_window(example) for example in
-                        tqdm(examples, disable=silent)]
+            features = [
+                convert_example_to_feature_sliding_window(example) for example in tqdm(examples, disable=silent)
+            ]
             if flatten:
                 features = [feature for feature_set in features for feature in feature_set]
-            logging.info(f'{len(features)} features created from {len(examples)} samples.')
         else:
             features = [convert_example_to_feature(example) for example in tqdm(examples, disable=silent)]
 
@@ -332,3 +403,78 @@ def _truncate_seq_pair(tokens_a, tokens_b, max_length):
             tokens_a.pop()
         else:
             tokens_b.pop()
+
+
+POOLING_BREAKDOWN = {1: (1, 1), 2: (2, 1), 3: (3, 1), 4: (2, 2), 5: (5, 1), 6: (3, 2), 7: (7, 1), 8: (4, 2), 9: (3, 3)}
+
+
+class LazyClassificationDataset(Dataset):
+    def __init__(self, data_file, tokenizer, args):
+        self.data_file = data_file
+        self.start_row = args.lazy_loading_start_line
+        self.num_entries = self._get_n_lines(self.data_file, self.start_row)
+        self.tokenizer = tokenizer
+        self.args = args
+        self.delimiter = args.lazy_delimiter
+        if args.lazy_text_a_column is not None and args.lazy_text_b_column is not None:
+            self.text_a_column = args.lazy_text_a_column
+            self.text_b_column = args.lazy_text_b_column
+            self.text_column = None
+        else:
+            self.text_column = args.lazy_text_column
+        self.labels_column = args.lazy_labels_column
+
+    @staticmethod
+    def _get_n_lines(data_file, start_row):
+        with open(data_file, encoding="utf-8") as f:
+            for line_idx, _ in enumerate(f, 1):
+                pass
+
+        return line_idx - start_row
+
+    def __getitem__(self, idx):
+        line = linecache.getline(self.data_file, idx + 1 + self.start_row).rstrip("\n").split(self.delimiter)
+
+        if self.text_column:
+            text = line[self.text_column]
+            label = line[self.labels_column]
+
+            # If labels_map is defined, then labels need to be replaced with ints
+            if self.args.labels_map:
+                label = self.args.labels_map[label]
+            if self.args.regression:
+                label = torch.tensor(float(label), dtype=torch.float)
+            else:
+                label = torch.tensor(int(label), dtype=torch.long)
+
+            return (
+                self.tokenizer.encode_plus(
+                    text,
+                    max_length=self.args.max_seq_length,
+                    pad_to_max_length=self.args.max_seq_length,
+                    return_tensors="pt",
+                ),
+                label,
+            )
+        else:
+            text_a = line[self.text_a_column]
+            text_b = line[self.text_b_column]
+            label = line[self.labels_column]
+            if self.args.regression:
+                label = torch.tensor(float(label), dtype=torch.float)
+            else:
+                label = torch.tensor(int(label), dtype=torch.long)
+
+            return (
+                self.tokenizer.encode_plus(
+                    text_a,
+                    text_pair=text_b,
+                    max_length=self.args.max_seq_length,
+                    pad_to_max_length=self.args.max_seq_length,
+                    return_tensors="pt",
+                ),
+                label,
+            )
+
+    def __len__(self):
+        return self.num_entries
