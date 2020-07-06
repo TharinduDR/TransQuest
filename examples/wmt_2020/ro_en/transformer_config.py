@@ -67,7 +67,7 @@ transformer_config = {
     "early_stopping_metric_minimize": True,
     "early_stopping_consider_epochs": False,
 
-    "manual_seed": 777,
+    "manual_seed": SEED,
 
     "config": {},
     "local_rank": -1,
