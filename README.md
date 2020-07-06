@@ -7,7 +7,7 @@ TransQuest provides state-of-the-art models for translation quality estimation.
 ### Features
 - Sentence-level translation quality estimation on both aspects: predicting post editing efforts and direct assessment.
 - Perform significantly better than current state-of-the-art quality estimation methods like DeepQuest and OpenKiwi in all the languages experimented. 
-- Pre-trained quality estimation models for seven languages.  
+- Pre-trained quality estimation models for 15 language pairs. The largest quality estimation model zoo available. 
 
 ## Installation
 You first need to install PyTorch. The recommended PyTorch version is 1.5.
