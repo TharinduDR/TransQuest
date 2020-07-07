@@ -59,6 +59,7 @@ class ModelArgs:
     save_best_model: bool = True
     save_eval_checkpoints: bool = True
     save_model_every_epoch: bool = True
+    save_recent_only: bool = False
     save_steps: int = 2000
     save_optimizer_and_scheduler: bool = True
     silent: bool = False

@@ -4,10 +4,12 @@
 
 from __future__ import absolute_import, division, print_function
 
+import glob
 import logging
 import math
 import os
 import random
+import shutil
 import warnings
 from dataclasses import asdict
 
@@ -493,6 +495,10 @@ class QuestModel:
                             )
 
                     if args.save_steps > 0 and global_step % args.save_steps == 0:
+                        if args.save_recent_only:
+                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint*'))
+                            for del_path in del_paths:
+                                shutil.rmtree(del_path)
                         # Save model checkpoint
                         output_dir_current = os.path.join(output_dir, "checkpoint-{}".format(global_step))
 
@@ -512,6 +518,11 @@ class QuestModel:
                         )
                         for key, value in results.items():
                             tb_writer.add_scalar("eval_{}".format(key), value, global_step)
+
+                        if args.save_recent_only:
+                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint*'))
+                            for del_path in del_paths:
+                                shutil.rmtree(del_path)
 
                         output_dir_current = os.path.join(output_dir, "checkpoint-{}".format(global_step))
 
