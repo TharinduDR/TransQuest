@@ -4,9 +4,11 @@
 
 from __future__ import absolute_import, division, print_function
 
+import glob
 import math
 import os
 import random
+import shutil
 import warnings
 
 import numpy as np
@@ -382,8 +384,12 @@ class QuestModel:
 
                     if args["save_steps"] > 0 and global_step % args["save_steps"] == 0:
                         # Save model checkpoint
-                        output_dir_current = os.path.join(output_dir, "checkpoint-{}".format(global_step))
+                        if args["save_recent_only"]:
+                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                            for del_path in del_paths:
+                                shutil.rmtree(del_path)
 
+                        output_dir_current = os.path.join(output_dir, "checkpoint-{}".format(global_step))
                         self._save_model(output_dir_current, model=model)
 
                     if args["evaluate_during_training"] and (
@@ -397,8 +403,11 @@ class QuestModel:
                         for key, value in results.items():
                             tb_writer.add_scalar("eval_{}".format(key), value, global_step)
 
+                        if args["save_recent_only"]:
+                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                            for del_path in del_paths:
+                                shutil.rmtree(del_path)
                         output_dir_current = os.path.join(output_dir, "checkpoint-{}".format(global_step))
-
                         if args["save_eval_checkpoints"]:
                             self._save_model(output_dir_current, model=model, results=results)
 
@@ -439,6 +448,10 @@ class QuestModel:
                                     return global_step, tr_loss / global_step
 
             epoch_number += 1
+            if args["save_recent_only"]:
+                del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                for del_path in del_paths:
+                    shutil.rmtree(del_path)
             output_dir_current = os.path.join(output_dir, "checkpoint-{}-epoch-{}".format(global_step, epoch_number))
 
             if args["save_model_every_epoch"] or args["evaluate_during_training"]:
