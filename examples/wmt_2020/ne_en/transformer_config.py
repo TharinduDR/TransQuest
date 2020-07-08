@@ -5,10 +5,10 @@ TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
 SUBMISSION_FILE = "predictions.txt"
-GOOGLE_DRIVE = False
-DRIVE_FILE_ID = None
+GOOGLE_DRIVE = True
+DRIVE_FILE_ID = "1-VvMh_Pto0idpSm18yfoBfxUT3Orl3DJ"
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "xlm-roberta-large"
+MODEL_NAME = "transquest/mid"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
