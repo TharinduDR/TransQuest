@@ -5,10 +5,10 @@ TEMP_DIRECTORY = "temp/data"
 RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
 SUBMISSION_FILE = "predictions.txt"
-GOOGLE_DRIVE = True
+GOOGLE_DRIVE = False
 DRIVE_FILE_ID = "1uH4I1Oy6wiWMYrA0gw0E2eOe3ekfZHuZ"
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "transquest/mid"
+MODEL_NAME = "xlm-roberta-large"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
@@ -30,14 +30,14 @@ transformer_config = {
     'max_grad_norm': 1.0,
     'do_lower_case': False,
 
-    'logging_steps': 300,
-    'save_steps': 300,
+    'logging_steps': 100,
+    'save_steps': 100,
     "no_cache": False,
     'save_model_every_epoch': True,
     'save_recent_only': True,
     'n_fold': 3,
     'evaluate_during_training': True,
-    'evaluate_during_training_steps': 300,
+    'evaluate_during_training_steps': 100,
     "evaluate_during_training_verbose": True,
     'use_cached_eval_features': False,
     'save_eval_checkpoints': True,
