@@ -17,13 +17,13 @@ transformer_config = {
 
     'fp16': False,
     'fp16_opt_level': 'O1',
-    'max_seq_length': 80,
+    'max_seq_length': 128,
     'train_batch_size': 8,
     'gradient_accumulation_steps': 1,
     'eval_batch_size': 8,
     'num_train_epochs': 6,
     'weight_decay': 0,
-    'learning_rate': 1e-5,
+    'learning_rate': 2e-5,
     'adam_epsilon': 1e-8,
     'warmup_ratio': 0.06,
     'warmup_steps': 0,
@@ -57,10 +57,10 @@ transformer_config = {
     'wandb_kwargs': {},
 
     "use_early_stopping": True,
-    "early_stopping_patience": 10,
+    "early_stopping_patience": 30,
     "early_stopping_delta": 0,
-    "early_stopping_metric": "eval_loss",
-    "early_stopping_metric_minimize": True,
+    "early_stopping_metric": "pearson_corr",
+    "early_stopping_metric_minimize": False,
 
     "manual_seed": 777,
 
