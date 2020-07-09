@@ -6,9 +6,9 @@ RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
 SUBMISSION_FILE = "predictions.txt"
 GOOGLE_DRIVE = False
-DRIVE_FILE_ID = "1uH4I1Oy6wiWMYrA0gw0E2eOe3ekfZHuZ"
-MODEL_TYPE = "xlm"
-MODEL_NAME = "xlm-mlm-ende-1024"
+DRIVE_FILE_ID = None
+MODEL_TYPE = "xlmroberta"
+MODEL_NAME = "xlm-roberta-large"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
@@ -59,8 +59,8 @@ transformer_config = {
     "use_early_stopping": True,
     "early_stopping_patience": 30,
     "early_stopping_delta": 0,
-    "early_stopping_metric": "eval_loss",
-    "early_stopping_metric_minimize": True,
+    "early_stopping_metric": "pearson_corr",
+    "early_stopping_metric_minimize": False,
 
     "manual_seed": 777,
 
