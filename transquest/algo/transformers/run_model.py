@@ -312,7 +312,7 @@ class QuestModel:
         model.zero_grad()
         train_iterator = trange(int(args["num_train_epochs"]), desc="Epoch", disable=args["silent"])
         epoch_number = 0
-        best_eval_loss = None
+        best_eval_metric = None
         early_stopping_counter = 0
 
         if args["evaluate_during_training"]:
@@ -423,11 +423,17 @@ class QuestModel:
                         if args["wandb_project"]:
                             wandb.log(self._get_last_metrics(training_progress_scores))
 
-                        if not best_eval_loss:
-                            best_eval_loss = results["eval_loss"]
+                        if not best_eval_metric:
+                            best_eval_metric = results[args["early_stopping_metric"]]
                             self._save_model(args["best_model_dir"], model=model, results=results)
-                        elif results["eval_loss"] - best_eval_loss < args["early_stopping_delta"]:
-                            best_eval_loss = results["eval_loss"]
+                        elif results[args["early_stopping_metric"]] - best_eval_metric < args["early_stopping_delta"] \
+                                and args[ "early_stopping_metric_minimize"]:
+                            best_eval_metric = results[args["early_stopping_metric"]]
+                            self._save_model(args["best_model_dir"], model=model, results=results)
+                            early_stopping_counter = 0
+                        elif best_eval_metric - results[args["early_stopping_metric"]] < args["early_stopping_delta"] \
+                                and not args[ "early_stopping_metric_minimize"]:
+                            best_eval_metric = results[args["early_stopping_metric"]]
                             self._save_model(args["best_model_dir"], model=model, results=results)
                             early_stopping_counter = 0
                         else:
@@ -474,11 +480,17 @@ class QuestModel:
                 report = pd.DataFrame(training_progress_scores)
                 report.to_csv(os.path.join(args["output_dir"], "training_progress_scores.csv"), index=False)
 
-                if not best_eval_loss:
-                    best_eval_loss = results["eval_loss"]
+                if not best_eval_metric:
+                    best_eval_metric = results[args["early_stopping_metric"]]
                     self._save_model(args["best_model_dir"], model=model, results=results)
-                elif results["eval_loss"] - best_eval_loss < args["early_stopping_delta"]:
-                    best_eval_loss = results["eval_loss"]
+                elif results[args["early_stopping_metric"]] - best_eval_metric < args["early_stopping_delta"] \
+                        and args["early_stopping_metric_minimize"]:
+                    best_eval_metric = results[args["early_stopping_metric"]]
+                    self._save_model(args["best_model_dir"], model=model, results=results)
+                    early_stopping_counter = 0
+                elif best_eval_metric - results[args["early_stopping_metric"]] < args["early_stopping_delta"] \
+                        and not args["early_stopping_metric_minimize"]:
+                    best_eval_metric = results[args["early_stopping_metric"]]
                     self._save_model(args["best_model_dir"], model=model, results=results)
                     early_stopping_counter = 0
                 else:
