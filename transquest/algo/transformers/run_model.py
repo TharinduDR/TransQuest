@@ -438,11 +438,12 @@ class QuestModel:
                             early_stopping_counter = 0
                         else:
                             if args["use_early_stopping"]:
+                                loss_name = args["early_stopping_metric"]
                                 if early_stopping_counter < args["early_stopping_patience"]:
                                     early_stopping_counter += 1
                                     if verbose:
                                         print()
-                                        print(f"No improvement in eval_loss for {early_stopping_counter} steps.")
+                                        print(f"No improvement in {loss_name} for {early_stopping_counter} steps.")
                                         print(f"Training will stop at {args['early_stopping_patience']} steps.")
                                         print()
                                 else:
