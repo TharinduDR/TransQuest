@@ -7,8 +7,8 @@ RESULT_IMAGE = "result.jpg"
 SUBMISSION_FILE = "predictions.txt"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = "1uH4I1Oy6wiWMYrA0gw0E2eOe3ekfZHuZ"
-MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "xlm-roberta-large"
+MODEL_TYPE = "xlm"
+MODEL_NAME = "xlm-mlm-ende-1024"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
