@@ -59,8 +59,8 @@ transformer_config = {
     "use_early_stopping": True,
     "early_stopping_patience": 30,
     "early_stopping_delta": 0,
-    "early_stopping_metric": "pearson_corr",
-    "early_stopping_metric_minimize": False,
+    "early_stopping_metric": "eval_loss",
+    "early_stopping_metric_minimize": True,
 
     "manual_seed": 777,
 
