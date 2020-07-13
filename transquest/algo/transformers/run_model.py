@@ -728,6 +728,9 @@ class QuestModel:
         args = self.args
         eval_output_dir = output_dir
 
+        if args.regression:
+            args.labels_map = {}
+
         results = {}
         if isinstance(eval_df, str) and self.args.lazy_loading:
             eval_dataset = LazyClassificationDataset(eval_df, self.tokenizer, self.args)
