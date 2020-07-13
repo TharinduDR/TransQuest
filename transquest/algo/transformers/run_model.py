@@ -1034,10 +1034,11 @@ class QuestModel:
         args = self.args
 
         self._move_model_to_device()
-        dummy_label = 0 if not self.args.labels_map else next(iter(self.args.labels_map.keys()))
 
         if args.regression:
             args.labels_map = {}
+
+        dummy_label = 0 if not self.args.labels_map else next(iter(self.args.labels_map.keys()))
 
         if multi_label:
             eval_examples = [
