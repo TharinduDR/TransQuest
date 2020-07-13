@@ -81,7 +81,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class ClassificationModel:
+class QuestModel:
     def __init__(
         self, model_type, model_name, num_labels=None, weight=None, args=None, use_cuda=True, cuda_device=-1, **kwargs,
     ):
