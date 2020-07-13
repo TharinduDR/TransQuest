@@ -5,27 +5,35 @@
 from __future__ import absolute_import, division, print_function
 
 import glob
+import json
 import logging
 import math
 import os
 import random
 import shutil
 import warnings
+from multiprocessing import cpu_count
 from dataclasses import asdict
 
 import numpy as np
-import pandas as pd
-import torch
-from scipy.stats import mode
+from scipy.stats import mode, pearsonr
 from sklearn.metrics import (
     confusion_matrix,
     label_ranking_average_precision_score,
     matthews_corrcoef,
+    mean_squared_error,
 )
+from tqdm.auto import tqdm, trange
+from tqdm.contrib import tenumerate
+
+import pandas as pd
+import torch
+
 from tensorboardX import SummaryWriter
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, TensorDataset
-from tqdm.auto import tqdm, trange
+from torch.utils.data.distributed import DistributedSampler
 from transformers import (
+    WEIGHTS_NAME,
     AdamW,
     AlbertConfig,
     AlbertTokenizer,
@@ -35,6 +43,12 @@ from transformers import (
     CamembertTokenizer,
     DistilBertConfig,
     DistilBertTokenizer,
+    LongformerConfig,
+    LongformerForSequenceClassification,
+    LongformerTokenizer,
+    MobileBertConfig,
+    MobileBertTokenizer,
+    MobileBertForSequenceClassification,
     RobertaConfig,
     RobertaTokenizer,
     XLMConfig,
@@ -43,7 +57,7 @@ from transformers import (
     XLMTokenizer,
     XLNetConfig,
     XLNetTokenizer,
-    get_linear_schedule_with_warmup,
+    get_linear_schedule_with_warmup
 )
 
 from transquest.algo.transformers.model_args import ClassificationArgs
@@ -67,10 +81,9 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class QuestModel:
+class ClassificationModel:
     def __init__(
-            self, model_type, model_name, args, num_labels=None, weight=None, use_cuda=True, cuda_device=-1,
-            **kwargs,
+        self, model_type, model_name, num_labels=None, weight=None, args=None, use_cuda=True, cuda_device=-1, **kwargs,
     ):
 
         """
@@ -92,6 +105,8 @@ class QuestModel:
             "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
             "camembert": (CamembertConfig, CamembertForSequenceClassification, CamembertTokenizer),
             "distilbert": (DistilBertConfig, DistilBertForSequenceClassification, DistilBertTokenizer),
+            "longformer": (LongformerConfig, LongformerForSequenceClassification, LongformerTokenizer),
+            "mobilebert": (MobileBertConfig, MobileBertForSequenceClassification, MobileBertTokenizer),
             "roberta": (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer),
             "xlnet": (XLNetConfig, XLNetForSequenceClassification, XLNetTokenizer),
             "xlm": (XLMConfig, XLMForSequenceClassification, XLMTokenizer),
@@ -120,8 +135,6 @@ class QuestModel:
         if self.args.labels_list:
             if num_labels:
                 assert num_labels == len(self.args.labels_list)
-            else:
-                assert len(self.args.labels_list) == 2
             if self.args.labels_map:
                 assert list(self.args.labels_map.keys()) == self.args.labels_list
             else:
@@ -182,15 +195,15 @@ class QuestModel:
             self.args.wandb_project = None
 
     def train_model(
-            self,
-            train_df,
-            multi_label=False,
-            output_dir=None,
-            show_running_loss=True,
-            args=None,
-            eval_df=None,
-            verbose=True,
-            **kwargs,
+        self,
+        train_df,
+        multi_label=False,
+        output_dir=None,
+        show_running_loss=True,
+        args=None,
+        eval_df=None,
+        verbose=True,
+        **kwargs,
     ):
         """
         Trains the model using 'train_df'
@@ -287,14 +300,14 @@ class QuestModel:
             logger.info(" Training of {} model complete. Saved to {}.".format(self.args.model_type, output_dir))
 
     def train(
-            self,
-            train_dataloader,
-            output_dir,
-            multi_label=False,
-            show_running_loss=True,
-            eval_df=None,
-            verbose=True,
-            **kwargs,
+        self,
+        train_dataloader,
+        output_dir,
+        multi_label=False,
+        show_running_loss=True,
+        eval_df=None,
+        verbose=True,
+        **kwargs,
     ):
         """
         Trains the model on train_dataset.
@@ -404,7 +417,7 @@ class QuestModel:
                 global_step = int(checkpoint_suffix)
                 epochs_trained = global_step // (len(train_dataloader) // args.gradient_accumulation_steps)
                 steps_trained_in_current_epoch = global_step % (
-                        len(train_dataloader) // args.gradient_accumulation_steps
+                    len(train_dataloader) // args.gradient_accumulation_steps
                 )
 
                 logger.info("   Continuing training from checkpoint, will skip to saved global_step")
@@ -495,18 +508,18 @@ class QuestModel:
                             )
 
                     if args.save_steps > 0 and global_step % args.save_steps == 0:
+                        # Save model checkpoint
                         if args.save_recent_only:
-                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint*'))
+                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
                             for del_path in del_paths:
                                 shutil.rmtree(del_path)
-                        # Save model checkpoint
                         output_dir_current = os.path.join(output_dir, "checkpoint-{}".format(global_step))
 
                         self._save_model(output_dir_current, optimizer, scheduler, model=model)
 
                     if args.evaluate_during_training and (
-                            args.evaluate_during_training_steps > 0
-                            and global_step % args.evaluate_during_training_steps == 0
+                        args.evaluate_during_training_steps > 0
+                        and global_step % args.evaluate_during_training_steps == 0
                     ):
                         # Only evaluate when single GPU otherwise metrics may not average well
                         results, _, _ = self.eval_model(
@@ -520,7 +533,7 @@ class QuestModel:
                             tb_writer.add_scalar("eval_{}".format(key), value, global_step)
 
                         if args.save_recent_only:
-                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint*'))
+                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
                             for del_path in del_paths:
                                 shutil.rmtree(del_path)
 
@@ -588,6 +601,10 @@ class QuestModel:
                                         return global_step, tr_loss / global_step
 
             epoch_number += 1
+            if args.save_recent_only:
+                del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                for del_path in del_paths:
+                    shutil.rmtree(del_path)
             output_dir_current = os.path.join(output_dir, "checkpoint-{}-epoch-{}".format(global_step, epoch_number))
 
             if args.save_model_every_epoch or args.evaluate_during_training:
@@ -662,7 +679,7 @@ class QuestModel:
         return global_step, tr_loss / global_step
 
     def eval_model(
-            self, eval_df, multi_label=False, output_dir=None, verbose=True, silent=False, wandb_log=True, **kwargs
+        self, eval_df, multi_label=False, output_dir=None, verbose=True, silent=False, wandb_log=True, **kwargs
     ):
         """
         Evaluates the model on eval_df. Saves results to output_dir.
@@ -699,8 +716,7 @@ class QuestModel:
         return result, model_outputs, wrong_preds
 
     def evaluate(
-            self, eval_df, output_dir, multi_label=False, prefix="", verbose=True, silent=False, wandb_log=True,
-            **kwargs
+        self, eval_df, output_dir, multi_label=False, prefix="", verbose=True, silent=False, wandb_log=True, **kwargs
     ):
         """
         Evaluates the model on eval_df.
@@ -790,7 +806,7 @@ class QuestModel:
                 window_ranges.append([count, count + n_windows])
                 count += n_windows
 
-            preds = [preds[window_range[0]: window_range[1]] for window_range in window_ranges]
+            preds = [preds[window_range[0] : window_range[1]] for window_range in window_ranges]
             out_label_ids = [
                 out_label_ids[i] for i in range(len(out_label_ids)) if i in [window[0] for window in window_ranges]
             ]
@@ -824,7 +840,7 @@ class QuestModel:
             for key in sorted(result.keys()):
                 writer.write("{} = {}\n".format(key, str(result[key])))
 
-        if self.args.wandb_project and wandb_log and not multi_label:
+        if self.args.wandb_project and wandb_log and not multi_label and not self.args.regression:
             wandb.init(project=args.wandb_project, config={**asdict(args)}, **args.wandb_kwargs)
             if not args.labels_map:
                 self.args.labels_map = {i: i for i in range(self.num_labels)}
@@ -847,7 +863,7 @@ class QuestModel:
         return results, model_outputs, wrong
 
     def load_and_cache_examples(
-            self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False
+        self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False
     ):
         """
         Converts a list of InputExample objects to a TensorDataset containing InputFeatures. Caches the InputFeatures.
@@ -880,8 +896,8 @@ class QuestModel:
         )
 
         if os.path.exists(cached_features_file) and (
-                (not args.reprocess_input_data and not no_cache)
-                or (mode == "dev" and args.use_cached_eval_features and not no_cache)
+            (not args.reprocess_input_data and not no_cache)
+            or (mode == "dev" and args.use_cached_eval_features and not no_cache)
         ):
             features = torch.load(cached_features_file)
             if verbose:
@@ -1112,7 +1128,7 @@ class QuestModel:
                 window_ranges.append([count, count + n_windows])
                 count += n_windows
 
-            preds = [preds[window_range[0]: window_range[1]] for window_range in window_ranges]
+            preds = [preds[window_range[0] : window_range[1]] for window_range in window_ranges]
 
             model_outputs = preds
 
@@ -1142,7 +1158,7 @@ class QuestModel:
             else:
                 preds = np.argmax(preds, axis=1)
 
-        if self.args.labels_map:
+        if self.args.labels_map and not self.args.regression:
             inverse_labels_map = {value: key for key, value in self.args.labels_map.items()}
             preds = [inverse_labels_map[pred] for pred in preds]
 
