@@ -1036,6 +1036,9 @@ class QuestModel:
         self._move_model_to_device()
         dummy_label = 0 if not self.args.labels_map else next(iter(self.args.labels_map.keys()))
 
+        if args.regression:
+            args.labels_map = {}
+
         if multi_label:
             eval_examples = [
                 InputExample(i, text, None, [dummy_label for i in range(self.num_labels)])
