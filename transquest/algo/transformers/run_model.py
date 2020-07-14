@@ -228,6 +228,9 @@ class QuestModel:
         if self.args.silent:
             show_running_loss = False
 
+        if args.regression:
+            args.labels_map = {}
+
         if self.args.evaluate_during_training and eval_df is None:
             raise ValueError(
                 "evaluate_during_training is enabled but eval_df is not specified."
