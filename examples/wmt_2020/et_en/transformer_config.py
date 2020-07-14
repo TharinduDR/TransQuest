@@ -6,7 +6,7 @@ RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
 SUBMISSION_FILE = "predictions.txt"
 GOOGLE_DRIVE = True
-DRIVE_FILE_ID = "1-VvMh_Pto0idpSm18yfoBfxUT3Orl3DJ"
+DRIVE_FILE_ID = "1F-hknKCY0spD8H1gfhE9EcxusEze2si2"
 MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "transquest/ro-en"
 
