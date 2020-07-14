@@ -6,9 +6,9 @@ RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
 SUBMISSION_FILE = "predictions.txt"
 GOOGLE_DRIVE = True
-DRIVE_FILE_ID = "1uH4I1Oy6wiWMYrA0gw0E2eOe3ekfZHuZ"
+DRIVE_FILE_ID = "1F-hknKCY0spD8H1gfhE9EcxusEze2si2"
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "transquest/mid"
+MODEL_NAME = "transquest/ro-en"
 
 transformer_config = {
     'output_dir': 'temp/outputs/',
