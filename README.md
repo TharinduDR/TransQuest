@@ -4,6 +4,8 @@
 
 TransQuest provides state-of-the-art models for translation quality estimation.
 
+We are the winning solution in WMT 2020 Quality Estimation Shared Task -  Sentence-Level Direct Assessment
+
 ### Features
 - Sentence-level translation quality estimation on both aspects: predicting post editing efforts and direct assessment.
 - Perform significantly better than current state-of-the-art quality estimation methods like DeepQuest and OpenKiwi in all the languages experimented. 
