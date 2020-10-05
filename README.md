@@ -89,7 +89,7 @@ Following pre-trained models are released. We will be keep releasing new models.
 Once downloading them and unzipping it, they can be loaded easily
 
 ```bash
-model = QuestModel("xlmroberta", "path, num_labels=1,
+model = QuestModel("xlmroberta", "path", num_labels=1,
                                use_cuda=torch.cuda.is_available(), args=transformer_config)
 ```
 
@@ -97,9 +97,23 @@ model = QuestModel("xlmroberta", "path, num_labels=1,
 model = SiameseTransQuestModel("path")
 ``` 
 
-## Citation
+## Citations
 Please consider citing us if you use the library. 
 ```bash
-Coming soon!
-Please keep in touch
+@InProceedings{transquest:2020,
+author = {Ranasinghe, Tharindu and Orasan, Constantin and Mitkov, Ruslan},
+title = {TransQuest: Translation Quality Estimation with Cross-lingual Transformers},
+booktitle = {Proceedings of the 28th International Conference on Computational Linguistics},
+year = {2020}
+}
+```
+
+The task specific paper on 2020 WMT sentence-level DA that won the first place in the competition. 
+```bash
+@InProceedings{transquest:2020,
+author = {Ranasinghe, Tharindu and Orasan, Constantin and Mitkov, Ruslan},
+title = {TransQuest at WMT2020: Sentence-Level Direct Assessment},
+booktitle = {Proceedings of the Fifth Conference on Machine Translation},
+year = {2020}
+}
 ```
