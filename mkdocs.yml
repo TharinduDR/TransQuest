@@ -1,1 +1,5 @@
 site_name: TransQuest
+
+nav:
+    - Home: index.md
+theme: readthedocs
