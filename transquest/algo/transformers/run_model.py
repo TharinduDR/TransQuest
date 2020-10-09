@@ -24,7 +24,6 @@ from sklearn.metrics import (
     mean_squared_error,
 )
 from tqdm.auto import tqdm, trange
-from tqdm.contrib import tenumerate
 
 import pandas as pd
 import torch
