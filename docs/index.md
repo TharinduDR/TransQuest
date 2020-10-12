@@ -26,7 +26,7 @@ pip install -r requirements.txt
 ```
 
 !!! warning 
-We recommend installing TransQuest with pip since it will be more stable.
+We recommend installing TransQuest with pip since it will be more stable. Also make sure that you are working with the latest version available in pip. 
 
 ## Resources
 - [Research Seminar](https://youtu.be/xbsbHUVVF3s) done on 1st of October 2020 in [RGCL](http://rgcl.wlv.ac.uk/2020/09/24/research-seminar/) and the [slides](https://www.slideshare.net/TharinduRanasinghe1/transquest-238713809).
