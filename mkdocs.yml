@@ -1,7 +1,7 @@
 site_name: TransQuest
 
 nav:
-    - TransQuest: index.md
+    - Home: index.md
     - TransQuest Architectures: architectures.md
     - Contact: contact.md
 theme: material
