@@ -4,6 +4,6 @@ nav:
     - TransQuest: index.md
     - TransQuest Architectures: architectures.md
     - Contact: contact.md
-theme: readthedocs
+theme: material
 markdown_extensions:
   - admonition
