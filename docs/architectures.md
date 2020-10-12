@@ -3,7 +3,7 @@ We have introduced two architectures in the TransQuest framework, both relies on
 
 ##MonoTransQuest
 
-The first architecture proposed uses a single XLM-R transformer model. The input of this model is a concatenation of the original sentence and its translation, separated by the *[SEP]* token. 
+The first architecture proposed uses a single XLM-R transformer model. The input of this model is a concatenation of the original sentence and its translation, separated by the *[SEP]* token. Then the output of the 
 
 ![MonoTransQuest Architecture](images/TransQuest.png)
 
