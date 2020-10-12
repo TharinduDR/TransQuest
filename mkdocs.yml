@@ -2,6 +2,6 @@ site_name: TransQuest
 
 nav:
     - TransQuest: index.md
-    - Architectures: architectures.md
+    - TransQuest Architectures: architectures.md
     - Contact: contact.md
 theme: readthedocs
