@@ -2,5 +2,6 @@ site_name: TransQuest
 
 nav:
     - Home: index.md
+    - Architectures: architectures.md
     - Citation: citation.md
 theme: readthedocs
