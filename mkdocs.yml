@@ -2,5 +2,5 @@ site_name: TransQuest
 
 nav:
     - Home: index.md
-    - About: index.md
+    - Citation: index.md
 theme: readthedocs
