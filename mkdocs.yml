@@ -7,9 +7,21 @@ nav:
     - Examples: examples.md
     - Contact: contact.md
 theme: material
-  icon:
+
+icon:
     repo: fontawesome/brands/github
 repo_url: https://github.com/TharinduDR/TransQuest
 repo_name: tharindudr/TransQuest
 markdown_extensions:
   - admonition
+  - pymdownx.highlight:
+      linenums: true
+      linenums_style: pymdownx.inline
+  - pymdownx.superfences
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.betterem:
+        smart_enable: all
+extra:
+  generator: false
