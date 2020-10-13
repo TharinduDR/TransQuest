@@ -86,3 +86,4 @@ Both architectures in TransQuest outperforms OpenKiwi in all the language pairs.
 | English-Chinese         |**MonoTransQuest**    |**0.6119**|**0.1351**|**0.1681** |
 |                         |  SiameseTransQuest   |          |          |           |
 |                         |  OpenKiwi            |  0.5058  | 0.1470   | 0.1814    |
+
