@@ -56,3 +56,24 @@ Both architectures in TransQuest outperforms OpenKiwi in all the language pairs.
 |                         |  OpenKiwi            |  0.1676  | 0.6559   | 0.8503    |
 
 
+## [WMT 2020 QE Task 2: Sentence-Level Post-editing Effort](http://www.statmt.org/wmt20/quality-estimation-task.html)
+This task consists predicting Sentence-level HTER (Human Translation Error Rate) scores for a given source and a target. 
+
+To run the experiments for each language please run this command from the root directory of TransQuest.  
+
+```bash
+python -m examples.wmt_2020_task2.<language-pair>.<architecture>
+```
+
+Language Pair options :  en_zh (English-Chinese), en_de (English-German)
+
+Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (SiameseTransQuest).
+
+As an example to run the experiments on English-Chinese with MonoTransQuest architecture, run the following command. 
+
+```bash
+python -m examples.wmt_2020_task2.en_zh.trans_quest
+```
+
+### Results
+Both architectures in TransQuest outperforms OpenKiwi in all the language pairs. Furthermore, TransQuest won this task in all the language pairs. 
