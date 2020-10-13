@@ -29,7 +29,8 @@ We have released several quality estimation models for this aspect. We have also
 | \*-\*           | Any            | Any          | MonoTransQuest      |                                      | 
 |                 |                |              | SiameseTransQuest   |                                      | 
 
-
+!!! note
+\* denotes any language. (\*-\* means any language to any language)
 
 ## Predicting Direct Assessment
 The current practice in MT evaluation is the so-called Direct Assessment (DA) of MT quality, where raters evaluate the machine translation on a continuous 1-100 scale. This method has been shown to improve the reproducibility of manual evaluation and to provide a more reliable gold standard for automatic evaluation metrics
@@ -61,4 +62,5 @@ We have released several quality estimation models for this aspect. We have also
 | \*-\*           | Any            | Any          | MonoTransQuest      |                                      | 
 |                 |                |              | SiameseTransQuest   |                                      | 
 
-
+!!! note
+\* denotes any language. (\*-\* means any language to any language)
