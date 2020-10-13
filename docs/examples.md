@@ -77,3 +77,12 @@ python -m examples.wmt_2020_task2.en_zh.trans_quest
 
 ### Results
 Both architectures in TransQuest outperforms OpenKiwi in all the language pairs. Furthermore, TransQuest won this task in all the language pairs. 
+
+| Language Pair           |     Algorithm        |  Pearson | MAE      | RMSE      |
+|:-----------------------:|--------------------- | -------: | --------:| --------: |  
+| English-German          |**MonoTransQuest**    |**0.4994**|**0.1486**|  0.1842   |
+|                         |  SiameseTransQuest   |          |          |           |
+|                         |  OpenKiwi            |  0.3916  | 0.1500   |  0.1896   |
+| English-Chinese         |**MonoTransQuest**    |**0.6119**|**0.1351**|**0.1681** |
+|                         |  SiameseTransQuest   |          |          |           |
+|                         |  OpenKiwi            |  0.5058  | 0.1470   | 0.1814    |
