@@ -87,3 +87,34 @@ Both architectures in TransQuest outperforms OpenKiwi in all the language pairs.
 |                         |  SiameseTransQuest   |          |          |           |
 |                         |  OpenKiwi            |  0.5058  | 0.1470   | 0.1814    |
 
+## [WMT 2019 QE Task 1: Sentence-Level QE](http://www.statmt.org/wmt20/quality-estimation-task.html)
+TThe participating systems are expected to predict the sentence-level HTER score (the percentage of edits needed to fix the translation)
+
+To run the experiments for each language, please run this command from the root directory of TransQuest.  
+
+```bash
+python -m examples.wmt_2019.<language-pair>.<architecture>
+```
+
+Language Pair options :  en_ru (English-Russian), en_de (English-German)
+
+Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (SiameseTransQuest).
+
+As an example to run the experiments on English-Russian with MonoTransQuest architecture, run the following command. 
+
+```bash
+python -m examples.wmt_2019.en_ru.trans_quest
+```
+
+### Results
+Both architectures in TransQuest outperforms OpenKiwi in all the language pairs. Furthermore, TransQuest won this task in all the language pairs. 
+
+| Language Pair           |     Algorithm        |  Pearson | MAE      | RMSE      |
+|:-----------------------:|--------------------- | -------: | --------:| --------: |  
+| English-German          |**MonoTransQuest**    |**0.4994**|**0.1486**|  0.1842   |
+|                         |  SiameseTransQuest   |          |          |           |
+|                         |  OpenKiwi            |  0.3916  | 0.1500   |  0.1896   |
+| English-Russian         |**MonoTransQuest**    |**0.6119**|**0.1351**|**0.1681** |
+|                         |  SiameseTransQuest   |          |          |           |
+|                         |  OpenKiwi            |  0.5058  | 0.1470   | 0.1814    |
+
