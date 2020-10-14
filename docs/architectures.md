@@ -28,8 +28,16 @@ An example transformer_config is available [here.](https://github.com/TharinduDR
 model = QuestModel("xlmroberta", transformer_config["best_model_dir"], num_labels=1,
                                use_cuda=torch.cuda.is_available(), args=transformer_config)
 
+predictions, raw_outputs = model.predict([[source, target]])
+print(predictions)
+
 ```
+Predictions are the predicted quality scores. You will find more examples in [here.](https://tharindudr.github.io/TransQuest/examples/)
+
 ##SiameseTransQuest 
+The second approach proposed in this framework relies on a Siamese architecture where we feed the original text and the translation into two separate XLM-R transformer models. 
+
+Then the output of all the word embeddings goes through a mean pooling layer. After that we calculate the cosine similarity between the output of the pooling layers which reflects the quality of the translation.
 
 ![SiameseTransQuest Architecture](images/SiameseTransQuest.png)
 
