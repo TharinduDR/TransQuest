@@ -46,10 +46,10 @@ Both architectures in TransQuest outperforms OpenKiwi in all the language pairs.
 |                         |  SiameseTransQuest   |  0.5957  | 0.5078   |  0.6466   |
 |                         |  OpenKiwi            |  0.3737  | 0.7517   |  0.8978   |
 | Russian-English         |**MonoTransQuest**    |**0.7734**|**0.5076**|**0.6856** |
-|                         |  SiameseTransQuest   |          |          |           |
+|                         |  SiameseTransQuest   |  0.7126  | 0.6132   |  0.8531   |
 |                         |  OpenKiwi            |  0.5479  | 0.8253   |  1.1930   |
-| English-German          |**MonoTransQuest**    |**0.4669**|**0.6474**|  0.7762   |
-|                         |  SiameseTransQuest   |          |          |           |
+| English-German          |**MonoTransQuest**    |**0.4669**|**0.6474**|**0.7762** |
+|                         |  SiameseTransQuest   |  0.3992  |  0.6651  |  0.8497   |
 |                         |  OpenKiwi            |  0.1455  | 0.6791   |  0.9670   |
 | English-Chinese         |**MonoTransQuest**    |**0.4779**|**0.9865**|**1.1338** |
 |                         |  SiameseTransQuest   |  0.4067  | 1.0389   | 1.1973    |
@@ -80,14 +80,14 @@ Both architectures in TransQuest outperforms OpenKiwi in all the language pairs.
 
 | Language Pair           |     Algorithm        |  Pearson | MAE      | RMSE      |
 |:-----------------------:|--------------------- | -------: | --------:| --------: |  
-| English-German          |**MonoTransQuest**    |**0.4994**|**0.1486**|  0.1842   |
-|                         |  SiameseTransQuest   |          |          |           |
+| English-German          |**MonoTransQuest**    |**0.4994**|**0.1486**|**0.1842** |
+|                         |  SiameseTransQuest   |  0.4875  | 0.1501   |  0.1886   |
 |                         |  OpenKiwi            |  0.3916  | 0.1500   |  0.1896   |
-| English-Chinese         |**MonoTransQuest**    |**0.6119**|**0.1351**|**0.1681** |
-|                         |  SiameseTransQuest   |          |          |           |
+| English-Chinese         |**MonoTransQuest**    |**0.5910**|**0.1351**|**0.1681** |
+|                         |  SiameseTransQuest   |  0.5621  | 0.1411   | 0.1723    |
 |                         |  OpenKiwi            |  0.5058  | 0.1470   | 0.1814    |
 
-## [WMT 2019 QE Task 1: Sentence-Level QE](http://www.statmt.org/wmt20/quality-estimation-task.html)
+## [WMT 2019 QE Task 1: Sentence-Level QE](http://www.statmt.org/wmt19/qe-task.html)
 TThe participating systems are expected to predict the sentence-level HTER score (the percentage of edits needed to fix the translation)
 
 To run the experiments for each language, please run this command from the root directory of TransQuest.  
@@ -118,3 +118,33 @@ Both architectures in TransQuest outperforms OpenKiwi in all the language pairs.
 |                         |  SiameseTransQuest   |          |          |           |
 |                         |  OpenKiwi            |  0.5058  | 0.1470   | 0.1814    |
 
+## [WMT 2019 QE Task 1: Sentence-Level QE](http://www.statmt.org/wmt19/qe-task.html)
+The participating systems are expected to predict the sentence-level HTER score (the percentage of edits needed to fix the translation)
+
+To run the experiments for each language, please run this command from the root directory of TransQuest.  
+
+```bash
+python -m examples.wmt_2019.<language-pair>.<architecture>
+```
+
+Language Pair options :  en_ru (English-Russian), en_de (English-German)
+
+Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (SiameseTransQuest).
+
+As an example to run the experiments on English-Russian with MonoTransQuest architecture, run the following command. 
+
+```bash
+python -m examples.wmt_2019.en_ru.trans_quest
+```
+
+### Results
+Both architectures in TransQuest outperforms OpenKiwi in all the language pairs. Furthermore, TransQuest won this task in all the language pairs. 
+
+| Language Pair           |     Algorithm        |  Pearson | MAE      | RMSE      |
+|:-----------------------:|--------------------- | -------: | --------:| --------: |  
+| English-German          |**MonoTransQuest**    |**0.4994**|**0.1486**|  0.1842   |
+|                         |  SiameseTransQuest   |          |          |           |
+|                         |  OpenKiwi            |  0.3916  | 0.1500   |  0.1896   |
+| English-Russian         |**MonoTransQuest**    |**0.6119**|**0.1351**|**0.1681** |
+|                         |  SiameseTransQuest   |          |          |           |
+|                         |  OpenKiwi            |  0.5058  | 0.1470   | 0.1814    |
