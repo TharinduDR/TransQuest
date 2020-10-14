@@ -1,7 +1,7 @@
 # Contact
 If you have any trouble using TransQuest or want to contribute to the project, please open a GitHub issue, or drop an email to [Tharindu Ranasinghe](https://tharindudr.github.io/).
 
-# Citation
+# Citations
 If you are using the package, please consider citing this paper which is accepted to [COLING 2020](https://coling2020.org/)
 
 ```bash
