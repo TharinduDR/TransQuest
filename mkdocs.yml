@@ -3,7 +3,7 @@ site_name: TransQuest
 nav:
     - Home: index.md
     - TransQuest Architectures: architectures.md
-    - Pretrained Models: pretrained.md
+    - Pre-trained Models: pretrained.md
     - Examples: examples.md
     - Contact: contact.md
 theme: material
