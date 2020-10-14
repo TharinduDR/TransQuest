@@ -1,11 +1,5 @@
 # Contact
-If you have any trouble using TransQuest, please open a GitHub issue, or drop an email to [Tharindu Ranasinghe](https://tharindudr.github.io/).
-
-# Contribution
-If you would like to contribute to the project with coding or pre-trained models please open a GitHub pull request or drop and email to [Tharindu Ranasinghe](https://tharindudr.github.io/).
-
-# License
-TransQuest is available under Apache License 2.0.
+If you have any trouble using TransQuest or want to contribute to the project, please open a GitHub issue, or drop an email to [Tharindu Ranasinghe](https://tharindudr.github.io/).
 
 # Citation
 If you are using the package, please consider citing this paper which is accepted to [COLING 2020](https://coling2020.org/)
