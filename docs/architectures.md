@@ -41,4 +41,70 @@ Then the output of all the word embeddings goes through a mean pooling layer. Af
 
 ![SiameseTransQuest Architecture](images/SiameseTransQuest.png)
 
+
 ### Minimal Start for a SiameseTransQuest Model
+
+First save your train/dev csv files in a single folder. We refer the path to that folder as path in the code below. You have to provide the indices of source, target and quality labels when reading with the QEDataReader class. 
+
+```python
+from transquest.algo.siamese_transformers import losses, models, LoggingHandler, SentencesDataset, \
+    SiameseTransQuestModel
+from transquest.algo.siamese_transformers.evaluation.embedding_similarity_evaluator import EmbeddingSimilarityEvaluator
+from transquest.algo.siamese_transformers.readers import QEDataReader
+from torch.utils.data import DataLoader
+import math
+
+qe_reader = QEDataReader(path, s1_col_idx=0, s2_col_idx=1,
+                                      score_col_idx=2,
+                                      normalize_scores=False, min_score=0, max_score=1, header=True)
+
+word_embedding_model = models.Transformer("xlm-roberta-large", max_seq_length=siamese_transformer_config[
+                'max_seq_length'])
+
+pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
+                                           pooling_mode_mean_tokens=True,
+                                           pooling_mode_cls_token=False,
+                                           pooling_mode_max_tokens=False)
+
+model = SiameseTransQuestModel(modules=[word_embedding_model, pooling_model])
+train_data = SentencesDataset(qe_reader.get_examples('train.tsv'), model)
+train_dataloader = DataLoader(train_data, shuffle=True,
+                                          batch_size=siamese_transformer_config['train_batch_size'])
+train_loss = losses.CosineSimilarityLoss(model=model)
+
+eval_data = SentencesDataset(examples=sts_reader.get_examples('eval_df.tsv'), model=model)
+eval_dataloader = DataLoader(eval_data, shuffle=False,
+                                         batch_size=siamese_transformer_config['train_batch_size'])
+evaluator = EmbeddingSimilarityEvaluator(eval_dataloader)
+
+warmup_steps = math.ceil(
+                len(train_data) * siamese_transformer_config["num_train_epochs"] / siamese_transformer_config[
+                    'train_batch_size'] * 0.1)
+
+
+model.fit(train_objectives=[(train_dataloader, train_loss)],
+                evaluator=evaluator,
+                epochs=siamese_transformer_config['num_train_epochs'],
+                evaluation_steps=100,
+                optimizer_params={'lr': siamese_transformer_config["learning_rate"],
+                                        'eps': siamese_transformer_config["adam_epsilon"],
+                                        'correct_bias': False},
+                warmup_steps=warmup_steps,
+                output_path=siamese_transformer_config['best_model_dir'])
+
+
+
+```
+An example siamese_transformer_config is available [here.](https://github.com/TharinduDR/TransQuest/blob/master/examples/wmt_2020/ro_en/siamese_transformer_config.py). The best model will be saved to the path specified in the "best_model_dir" in siames_transfomer_config. Then you can load it and do the predictions like this. 
+
+```python
+test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv", test_file=True), model=model)
+            test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
+            evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
+
+            model.evaluate(evaluator,
+                           result_path=os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt"),
+                           verbose=False)
+```
+
+You will find the predictions in the test_result.txt file in the siamese_transformer_config['cache_dir'] folder. You will find more examples in [here.](https://tharindudr.github.io/TransQuest/examples/)
