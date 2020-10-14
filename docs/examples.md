@@ -118,7 +118,7 @@ Both architectures in TransQuest outperforms QuEst++  in all the language pairs.
 |                         |  SiameseTransQuest   |  0.6432  |
 |                         |  QuEst++             |  0.2601  |
 
-## [WMT 2019 QE Task 1: Sentence-Level QE](https://www.statmt.org/wmt18/quality-estimation-task.html)
+## [WMT 2018 QE Task 1: Sentence-Level QE](https://www.statmt.org/wmt18/quality-estimation-task.html)
 The participating systems are expected to predict the sentence-level HTER score (the percentage of edits needed to fix the translation)
 
 To run the experiments for each language, please run this command from the root directory of TransQuest. If both NMT and SMT is available for a certain language pair, specify that too.  
