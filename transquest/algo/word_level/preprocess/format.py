@@ -1,19 +1,7 @@
 import pandas as pd
 
 
-def prepare_dat(source_file, source_tags_file, target_file, target_tags_file):
-
-    with open(source_file) as f:
-        source_sentences = f.read().splitlines()
-
-    with open(source_tags_file) as f:
-        source_tags = f.read().splitlines()
-
-    with open(target_file) as f:
-        target_sentences = f.read().splitlines()
-
-    with open(target_tags_file) as f:
-        target_tags = f.read().splitlines()
+def prepare_data(source_sentences, source_tags, target_sentences, target_tags):
 
     sentence_id = 0
     data = []
