@@ -37,7 +37,7 @@ transformer_config = {
     "save_recent_only": True,
     'save_model_every_epoch': False,
     'n_fold': 3,
-    'evaluate_during_training': False,
+    'evaluate_during_training': True,
     "evaluate_during_training_silent": True,
     'evaluate_during_training_steps': 300,
     "evaluate_during_training_verbose": True,
