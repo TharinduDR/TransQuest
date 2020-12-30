@@ -8,14 +8,14 @@ import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.wmt_2020.common.util.download import download_from_google_drive
-from examples.wmt_2020.common.util.draw import draw_scatterplot, print_stat
-from examples.wmt_2020.common.util.normalizer import fit, un_fit
-from examples.wmt_2020.common.util.postprocess import format_submission
-from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
-from examples.wmt_2020.ro_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
+from examples.sentence_level.wmt_2020.common.util.download import download_from_google_drive
+from examples.sentence_level.wmt_2020.common.util.draw import draw_scatterplot, print_stat
+from examples.sentence_level.wmt_2020.common.util.normalizer import fit, un_fit
+from examples.sentence_level.wmt_2020.common.util.postprocess import format_submission
+from examples.sentence_level.wmt_2020.common.util.reader import read_annotated_file, read_test_file
+from examples.sentence_level.wmt_2020.ro_en.monotransquest_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, monotransquest_config, SEED, \
     RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
-from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
+from transquest.algo.sentence_level.monotransquest.evaluation import pearson_corr, spearman_corr
 from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
@@ -24,9 +24,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FILE = "examples/wmt_2020/ro_en/data/ro-en/train.roen.df.short.tsv"
-DEV_FILE = "examples/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv"
-TEST_FILE = "examples/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"
+TRAIN_FILE = "examples/sentence_level/wmt_2020/ro_en/data/ro-en/train.roen.df.short.tsv"
+DEV_FILE = "examples/sentence_level/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv"
+TEST_FILE = "examples/sentence_level/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
@@ -48,24 +48,24 @@ dev = fit(dev, 'labels')
 
 
 assert (len(index) == 1000)
-if transformer_config["evaluate_during_training"]:
-    if transformer_config["n_fold"] > 1:
-        dev_preds = np.zeros((len(dev), transformer_config["n_fold"]))
-        test_preds = np.zeros((len(test), transformer_config["n_fold"]))
-        for i in range(transformer_config["n_fold"]):
+if monotransquest_config["evaluate_during_training"]:
+    if monotransquest_config["n_fold"] > 1:
+        dev_preds = np.zeros((len(dev), monotransquest_config["n_fold"]))
+        test_preds = np.zeros((len(test), monotransquest_config["n_fold"]))
+        for i in range(monotransquest_config["n_fold"]):
 
-            if os.path.exists(transformer_config['output_dir']) and os.path.isdir(transformer_config['output_dir']):
-                shutil.rmtree(transformer_config['output_dir'])
+            if os.path.exists(monotransquest_config['output_dir']) and os.path.isdir(monotransquest_config['output_dir']):
+                shutil.rmtree(monotransquest_config['output_dir'])
 
             model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                               args=transformer_config)
+                               args=monotransquest_config)
             train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
 
             model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
 
-            model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
-                               use_cuda=torch.cuda.is_available(), args=transformer_config)
+            model = QuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1,
+                               use_cuda=torch.cuda.is_available(), args=monotransquest_config)
 
             result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                         spearman_corr=spearman_corr,
@@ -80,7 +80,7 @@ if transformer_config["evaluate_during_training"]:
 
     else:
         model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                           args=transformer_config)
+                           args=monotransquest_config)
         train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED)
 
         start = time.time()
@@ -90,8 +90,8 @@ if transformer_config["evaluate_during_training"]:
         print("Training time")
         print(end - start)
 
-        model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
-                           use_cuda=torch.cuda.is_available(), args=transformer_config)
+        model = QuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1,
+                           use_cuda=torch.cuda.is_available(), args=monotransquest_config)
         result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                     spearman_corr=spearman_corr,
                                                                     mae=mean_absolute_error)
@@ -105,7 +105,7 @@ if transformer_config["evaluate_during_training"]:
 
 else:
     model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                       args=transformer_config)
+                       args=monotransquest_config)
     model.train_model(train, pearson_corr=pearson_corr, spearman_corr=spearman_corr, mae=mean_absolute_error)
     result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                 spearman_corr=spearman_corr, mae=mean_absolute_error)
