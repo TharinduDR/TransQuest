@@ -14,7 +14,7 @@ Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (Siames
 As an example to run the experiments on Romanian-English with MonoTransQuest architecture, run the following command. 
 
 ```bash
-python -m examples.wmt_2020.ro_en.trans_quest
+python -m examples.wmt_2020.ro_en.monotransquest
 ```
 
 ### Results
