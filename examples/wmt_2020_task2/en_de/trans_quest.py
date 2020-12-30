@@ -2,7 +2,6 @@ import os
 import shutil
 
 import numpy as np
-import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
@@ -14,8 +13,8 @@ from examples.wmt_2020_task2.common.util.postprocess import format_submission
 from examples.wmt_2020_task2.common.util.reader import read_annotated_file, read_test_file
 from examples.wmt_2020_task2.en_de.transformer_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
     transformer_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
-from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
-from transquest.algo.transformers.run_model import QuestModel
+from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
+from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)

@@ -12,9 +12,9 @@ The first architecture proposed uses a single XLM-R transformer model. The input
 First read your data in to a pandas dataframe and format it so that it has three columns with headers text_a, text_b and labels. text_a is the source text, text_b is the target text and labels are the quality scores. Then initiate and train the model like in the following code. train_df and eval_df are the pandas dataframes prepared with the above instructions.
 
 ```python
-from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
+from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
 from sklearn.metrics import mean_absolute_error
-from transquest.algo.transformers.run_model import QuestModel
+from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
 import torch
 
 model = QuestModel("xlmroberta", "xlm-roberta-large", num_labels=1, use_cuda=torch.cuda.is_available(),
@@ -47,10 +47,11 @@ Then the output of all the word embeddings goes through a mean pooling layer. Af
 First save your train/dev csv files in a single folder. We refer the path to that folder as path in the code below. You have to provide the indices of source, target and quality labels when reading with the QEDataReader class. 
 
 ```python
-from transquest.algo.siamese_transformers import losses, models, LoggingHandler, SentencesDataset, \
+from transquest.algo.sentence_level.siamesetransquest import  LoggingHandler, SentencesDataset, \
     SiameseTransQuestModel
-from transquest.algo.siamese_transformers.evaluation.embedding_similarity_evaluator import EmbeddingSimilarityEvaluator
-from transquest.algo.siamese_transformers.readers import QEDataReader
+from transquest.algo.sentence_level.siamesetransquest import models, losses
+from transquest.algo.sentence_level.siamesetransquest.evaluation import EmbeddingSimilarityEvaluator
+from transquest.algo.sentence_level.siamesetransquest.readers import QEDataReader
 from torch.utils.data import DataLoader
 import math
 

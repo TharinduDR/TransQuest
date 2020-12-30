@@ -14,8 +14,8 @@ from examples.wmt_2020.common.util.postprocess import format_submission
 from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
 from examples.wmt_2020.en_de.transformer_plus_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, \
     transformer_plus_config, SEED, RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SUBMISSION_FILE
-from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
-from transquest.algo.transformers.run_model import QuestModel
+from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
+from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
 from transquest.algo.transformers_plus.preprocess import prepare_file, extend_file
 
 if not os.path.exists(TEMP_DIRECTORY):

@@ -1,7 +1,7 @@
 from examples.wmt_2020.common.util.download import download_from_google_drive
 from examples.wmt_2020.ro_en.transformer_nmt_config import MODEL_TYPE, transformer_nmt_config, DRIVE_FILE_ID, \
     MODEL_NAME, GOOGLE_DRIVE, TEMP_DIRECTORY, RESULT_FILE
-from transquest.algo.transformers.run_model import QuestModel
+from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
 import torch
 import tarfile
 import urllib.request

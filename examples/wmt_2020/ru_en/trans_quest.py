@@ -13,8 +13,8 @@ from examples.wmt_2020.common.util.postprocess import format_submission
 from examples.wmt_2020.common.util.reader import read_annotated_file, read_test_file
 from examples.wmt_2020.ru_en.transformer_config import TEMP_DIRECTORY, DRIVE_FILE_ID, GOOGLE_DRIVE, MODEL_NAME, \
     transformer_config, MODEL_TYPE, SEED, RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
-from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
-from transquest.algo.transformers.run_model import QuestModel
+from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
+from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)

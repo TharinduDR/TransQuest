@@ -449,11 +449,11 @@ class MiniTransQuestModel:
                 if self.args.fp16:
                     with amp.autocast():
                         outputs = model(**inputs)
-                        # model outputs are always tuple in pytorch-transformers (see doc)
+                        # model outputs are always tuple in pytorch-monotransquest (see doc)
                         loss = outputs[0]
                 else:
                     outputs = model(**inputs)
-                    # model outputs are always tuple in pytorch-transformers (see doc)
+                    # model outputs are always tuple in pytorch-monotransquest (see doc)
                     loss = outputs[0]
 
                 if args.n_gpu > 1:

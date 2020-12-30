@@ -15,10 +15,11 @@ from examples.wmt_2018.common.util.postprocess import format_submission
 from examples.wmt_2018.common.util.reader import read_annotated_file, read_test_file
 from examples.wmt_2018.en_de.siamese_transformer_config_smt import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
     MODEL_NAME, siamese_transformer_config, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
-from transquest.algo.siamese_transformers import losses, models, LoggingHandler, SentencesDataset, \
+from transquest.algo.sentence_level.siamesetransquest import LoggingHandler, SentencesDataset, \
     SiameseTransQuestModel
-from transquest.algo.siamese_transformers.evaluation.embedding_similarity_evaluator import EmbeddingSimilarityEvaluator
-from transquest.algo.siamese_transformers.readers import QEDataReader
+from transquest.algo.sentence_level.siamesetransquest import models, losses
+from transquest.algo.sentence_level.siamesetransquest.evaluation import EmbeddingSimilarityEvaluator
+from transquest.algo.sentence_level.siamesetransquest.readers import QEDataReader
 
 logging.basicConfig(format='%(asctime)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
