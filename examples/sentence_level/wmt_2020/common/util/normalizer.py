@@ -1,5 +1,4 @@
 from sklearn import preprocessing
-
 min_max_scaler = preprocessing.MinMaxScaler()
 
 
