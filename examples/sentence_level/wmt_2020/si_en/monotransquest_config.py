@@ -10,7 +10,7 @@ DRIVE_FILE_ID = "1F-hknKCY0spD8H1gfhE9EcxusEze2si2"
 MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "xlm-roberta-large"
 
-transformer_config = {
+monotransquest_config = {
     'output_dir': 'temp/outputs/',
     "best_model_dir": "temp/outputs/best_model",
     'cache_dir': 'temp/cache_dir/',
