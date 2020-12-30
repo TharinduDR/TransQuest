@@ -10,12 +10,10 @@ DRIVE_FILE_ID = None
 MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "xlm-roberta-large"
 
-transformer_plus_config = {
+siamesetransquest_config = {
     'output_dir': 'temp/outputs/',
     "best_model_dir": "temp/outputs/best_model",
     'cache_dir': 'temp/cache_dir/',
-
-    'reprocess_similarity': True,
 
     'fp16': False,
     'fp16_opt_level': 'O1',
@@ -23,9 +21,9 @@ transformer_plus_config = {
     'train_batch_size': 8,
     'gradient_accumulation_steps': 1,
     'eval_batch_size': 8,
-    'num_train_epochs': 3,
+    'num_train_epochs': 6,
     'weight_decay': 0,
-    'learning_rate': 2e-5,
+    'learning_rate': 1e-5,
     'adam_epsilon': 1e-8,
     'warmup_ratio': 0.06,
     'warmup_steps': 0,
@@ -36,7 +34,7 @@ transformer_plus_config = {
     'save_steps': 300,
     "no_cache": False,
     'save_model_every_epoch': True,
-    'n_fold': 3,
+    'n_fold': 1,
     'evaluate_during_training': True,
     'evaluate_during_training_steps': 300,
     "evaluate_during_training_verbose": True,
