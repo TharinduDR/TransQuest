@@ -7,14 +7,14 @@ import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.sentence_level.wmt_2018 import download_from_google_drive
-from examples.sentence_level.wmt_2018 import print_stat
-from examples.sentence_level.wmt_2018 import fit, un_fit
-from examples.sentence_level.wmt_2018 import format_submission
-from examples.sentence_level.wmt_2018 import read_annotated_file, read_test_file
-from examples.sentence_level.wmt_2018 import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
-    transformer_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE
-from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
+from examples.sentence_level.wmt_2018.common.util.download import download_from_google_drive
+from examples.sentence_level.wmt_2018.common.util.draw import draw_scatterplot, print_stat
+from examples.sentence_level.wmt_2018.common.util.normalizer import fit, un_fit
+from examples.sentence_level.wmt_2018.common.util.postprocess import format_submission
+from examples.sentence_level.wmt_2018.common.util.reader import read_annotated_file, read_test_file
+from examples.sentence_level.wmt_2018.multilingual.monotransquest_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
+    monotransquest_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE
+from transquest.algo.sentence_level.monotransquest.evaluation import pearson_corr, spearman_corr
 from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
@@ -24,44 +24,44 @@ if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
 languages = {
-    # "DE-EN": ["examples/wmt_2018/de_en/data/de_en/",
-    #           "examples/wmt_2018/de_en/data/de_en/",
-    #           "examples/wmt_2018/de_en/data/de_en/",
+    # "DE-EN": ["examples/sentence_level/wmt_2018/de_en/data/de_en/",
+    #           "examples/sentence_level/wmt_2018/de_en/data/de_en/",
+    #           "examples/sentence_level/wmt_2018/de_en/data/de_en/",
     #           "smt"],
 
-    "EN-ZH": ["examples/wmt_2020_task2/en_zh/data/en-zh/train",
-              "examples/wmt_2020_task2/en_zh/data/en-zh/dev",
-              "examples/wmt_2020_task2/en_zh/data/en-zh/test-blind",
+    "EN-ZH": ["examples/sentence_level/wmt_2020_task2/en_zh/data/en-zh/train",
+              "examples/sentence_level/wmt_2020_task2/en_zh/data/en-zh/dev",
+              "examples/sentence_level/wmt_2020_task2/en_zh/data/en-zh/test-blind",
               ""],
 
-    "EN-CS": ["examples/wmt_2018/en_cs/data/en_cs/",
-              "examples/wmt_2018/en_cs/data/en_cs/",
-              "examples/wmt_2018/en_cs/data/en_cs/",
+    "EN-CS": ["examples/sentence_level/wmt_2018/en_cs/data/en_cs/",
+              "examples/sentence_level/wmt_2018/en_cs/data/en_cs/",
+              "examples/sentence_level/wmt_2018/en_cs/data/en_cs/",
               "smt"],
 
-    "EN-DE-NMT": ["examples/wmt_2020_task2/en_de/data/en-de/train",
-              "examples/wmt_2020_task2/en_de/data/en-de/dev",
-              "examples/wmt_2020_task2/en_de/data/en-de/test-blind",
+    "EN-DE-NMT": ["examples/sentence_level/wmt_2020_task2/en_de/data/en-de/train",
+              "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/dev",
+              "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/test-blind",
                ""],
 
-    "EN-DE-SMT": ["examples/wmt_2018/en_de/data/en_de",
-              "examples/wmt_2018/en_de/data/en_de",
-              "examples/wmt_2018/en_de/data/en_de",
+    "EN-DE-SMT": ["examples/sentence_level/wmt_2018/en_de/data/en_de",
+              "examples/sentence_level/wmt_2018/en_de/data/en_de",
+              "examples/sentence_level/wmt_2018/en_de/data/en_de",
                   "smt"],
 
-    "EN-RU": ["examples/wmt_2019/en_ru/data/en-ru/train",
-              "examples/wmt_2019/en_ru/data/en-ru/dev",
-              "examples/wmt_2019/en_ru/data/en-ru/test-blind",
+    "EN-RU": ["examples/sentence_level/wmt_2019/en_ru/data/en-ru/train",
+              "examples/sentence_level/wmt_2019/en_ru/data/en-ru/dev",
+              "examples/sentence_level/wmt_2019/en_ru/data/en-ru/test-blind",
               ""],
 
-    "EN-LV-NMT": ["examples/wmt_2018/en_lv/data/en_lv",
-              "examples/wmt_2018/en_lv/data/en_lv",
-              "examples/wmt_2018/en_lv/data/en_lv",
+    "EN-LV-NMT": ["examples/sentence_level/wmt_2018/en_lv/data/en_lv",
+              "examples/sentence_level/wmt_2018/en_lv/data/en_lv",
+              "examples/sentence_level/wmt_2018/en_lv/data/en_lv",
                   "nmt"],
 
-    "EN-LV-SMT": ["examples/wmt_2018/en_lv/data/en_lv",
-                  "examples/wmt_2018/en_lv/data/en_lv",
-                  "examples/wmt_2018/en_lv/data/en_lv",
+    "EN-LV-SMT": ["examples/sentence_level/wmt_2018/en_lv/data/en_lv",
+                  "examples/sentence_level/wmt_2018/en_lv/data/en_lv",
+                  "examples/sentence_level/wmt_2018/en_lv/data/en_lv",
                   "smt"],
 
 }
@@ -118,29 +118,29 @@ for key, value in languages.items():
 
 train = pd.concat(train_list)
 
-if transformer_config["evaluate_during_training"]:
-    if transformer_config["n_fold"] > 1:
+if monotransquest_config["evaluate_during_training"]:
+    if monotransquest_config["n_fold"] > 1:
         dev_preds_list = []
         test_preds_list = []
 
         for dev, test in zip(dev_list, test_list):
-            dev_preds = np.zeros((len(dev), transformer_config["n_fold"]))
-            test_preds = np.zeros((len(test), transformer_config["n_fold"]))
+            dev_preds = np.zeros((len(dev), monotransquest_config["n_fold"]))
+            test_preds = np.zeros((len(test), monotransquest_config["n_fold"]))
 
             dev_preds_list.append(dev_preds)
             test_preds_list.append(test_preds)
 
-        for i in range(transformer_config["n_fold"]):
-            if os.path.exists(transformer_config['output_dir']) and os.path.isdir(transformer_config['output_dir']):
-                shutil.rmtree(transformer_config['output_dir'])
+        for i in range(monotransquest_config["n_fold"]):
+            if os.path.exists(monotransquest_config['output_dir']) and os.path.isdir(monotransquest_config['output_dir']):
+                shutil.rmtree(monotransquest_config['output_dir'])
 
             model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                               args=transformer_config)
+                               args=monotransquest_config)
             train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
             model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
-            model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
-                               use_cuda=torch.cuda.is_available(), args=transformer_config)
+            model = QuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1,
+                               use_cuda=torch.cuda.is_available(), args=monotransquest_config)
 
             for dev, test_sentence_pairs, dev_preds, test_preds in zip(dev_list, test_sentence_pairs_list, dev_preds_list, test_preds_list):
                 result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
@@ -156,12 +156,12 @@ if transformer_config["evaluate_during_training"]:
 
     else:
         model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                           args=transformer_config)
+                           args=monotransquest_config)
         train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED)
         model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                           mae=mean_absolute_error)
-        model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
-                           use_cuda=torch.cuda.is_available(), args=transformer_config)
+        model = QuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1,
+                           use_cuda=torch.cuda.is_available(), args=monotransquest_config)
 
         for dev, test, test_sentence_pairs in zip(dev_list, test_list, test_sentence_pairs_list):
             result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
@@ -173,7 +173,7 @@ if transformer_config["evaluate_during_training"]:
 
 else:
     model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                       args=transformer_config)
+                       args=monotransquest_config)
     model.train_model(train, pearson_corr=pearson_corr, spearman_corr=spearman_corr, mae=mean_absolute_error)
     for dev, test, test_sentence_pairs in zip(dev_list, test_list, test_sentence_pairs_list):
         result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
