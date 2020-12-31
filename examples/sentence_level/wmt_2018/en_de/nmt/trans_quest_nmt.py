@@ -11,7 +11,7 @@ from examples.sentence_level.wmt_2018 import draw_scatterplot, print_stat
 from examples.sentence_level.wmt_2018 import fit, un_fit
 from examples.sentence_level.wmt_2018 import format_submission
 from examples.sentence_level.wmt_2018 import read_annotated_file, read_test_file
-from examples.sentence_level.wmt_2018.en_de.transformer_config_nmt import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
+from examples.sentence_level.wmt_2018.en_de.nmt.transformer_config_nmt import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
     transformer_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
 from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
 from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
