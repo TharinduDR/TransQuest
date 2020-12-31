@@ -40,7 +40,7 @@ We have included several examples on how to use TransQuest on recent WMT QE shar
 1. [WMT 2020 Sentence-level Direct Assessment QE Shared Task](examples/sentence_level/wmt_2020)
 2. [WMT 2020 Sentence-level Post-Editing Effort QE Shared Task](examples/wmt_2020_task2)
 3. [WMT 2019 Sentence-level Post-Editing Effort QE Shared Task](examples/wmt_2019)
-3. [WMT 2018 Sentence-level Post-Editing Effort QE Shared Task](examples/wmt_2018)
+3. [WMT 2018 Sentence-level Post-Editing Effort QE Shared Task](examples/sentence_level/wmt_2018)
 
 More details of the examples can be found in https://tharindudr.github.io/TransQuest/examples/.
 

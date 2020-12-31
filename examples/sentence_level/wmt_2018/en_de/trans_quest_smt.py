@@ -2,17 +2,16 @@ import os
 import shutil
 
 import numpy as np
-import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.wmt_2018.common.util.download import download_from_google_drive
-from examples.wmt_2018.common.util.draw import draw_scatterplot, print_stat
-from examples.wmt_2018.common.util.normalizer import fit, un_fit
-from examples.wmt_2018.common.util.postprocess import format_submission
-from examples.wmt_2018.common.util.reader import read_annotated_file, read_test_file
-from examples.wmt_2018.en_lv.transformer_config_smt import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
+from examples.sentence_level.wmt_2018 import download_from_google_drive
+from examples.sentence_level.wmt_2018 import draw_scatterplot, print_stat
+from examples.sentence_level.wmt_2018 import fit, un_fit
+from examples.sentence_level.wmt_2018 import format_submission
+from examples.sentence_level.wmt_2018 import read_annotated_file, read_test_file
+from examples.sentence_level.wmt_2018 import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
     transformer_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
 from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
 from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
@@ -23,9 +22,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FOLDER = "examples/wmt_2018/en_lv/data/en_lv/"
-DEV_FOLDER = "examples/wmt_2018/en_lv/data/en_lv/"
-TEST_FOLDER = "examples/wmt_2018/en_lv/data/en_lv/"
+TRAIN_FOLDER = "examples/wmt_2018/en_de/data/en_de/"
+DEV_FOLDER = "examples/wmt_2018/en_de/data/en_de/"
+TEST_FOLDER = "examples/wmt_2018/en_de/data/en_de/"
 
 train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.smt.src", translation_file="train.smt.mt", hter_file="train.smt.hter")
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.smt.src", translation_file="dev.smt.mt", hter_file="dev.smt.hter")
@@ -99,6 +98,6 @@ dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
 test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
-draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "English-Latvian-SMT")
+draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "English-German-SMT")
 print_stat(dev, 'labels', 'predictions')
 format_submission(df=test, index=index, method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))

@@ -7,13 +7,13 @@ import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.wmt_2018.common.util.download import download_from_google_drive
-from examples.wmt_2018.common.util.draw import draw_scatterplot, print_stat
-from examples.wmt_2018.common.util.normalizer import fit, un_fit
-from examples.wmt_2018.common.util.postprocess import format_submission
-from examples.wmt_2018.common.util.reader import read_annotated_file, read_test_file
-from examples.wmt_2018.multilingual.transformer_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
-    transformer_config, MODEL_TYPE, SEED, RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
+from examples.sentence_level.wmt_2018 import download_from_google_drive
+from examples.sentence_level.wmt_2018 import print_stat
+from examples.sentence_level.wmt_2018 import fit, un_fit
+from examples.sentence_level.wmt_2018 import format_submission
+from examples.sentence_level.wmt_2018 import read_annotated_file, read_test_file
+from examples.sentence_level.wmt_2018 import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
+    transformer_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE
 from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
 from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
 
