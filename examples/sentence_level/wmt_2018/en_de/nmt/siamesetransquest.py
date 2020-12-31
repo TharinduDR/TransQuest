@@ -8,13 +8,13 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
-from examples.sentence_level.wmt_2018 import download_from_google_drive
-from examples.sentence_level.wmt_2018 import draw_scatterplot, print_stat
-from examples.sentence_level.wmt_2018 import fit, un_fit
-from examples.sentence_level.wmt_2018 import format_submission
-from examples.sentence_level.wmt_2018 import read_annotated_file, read_test_file
-from examples.sentence_level.wmt_2018 import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
-    MODEL_NAME, siamese_transformer_config, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
+from examples.sentence_level.wmt_2018.common.util.download import download_from_google_drive
+from examples.sentence_level.wmt_2018.common.util.draw import draw_scatterplot, print_stat
+from examples.sentence_level.wmt_2018.common.util.normalizer import fit, un_fit
+from examples.sentence_level.wmt_2018.common.util.postprocess import format_submission
+from examples.sentence_level.wmt_2018.common.util.reader import read_annotated_file, read_test_file
+from examples.sentence_level.wmt_2018.en_de.nmt.siamesetransquest_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
+    MODEL_NAME, siamesetransquest_config, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
 from transquest.algo.sentence_level.siamesetransquest import LoggingHandler, SentencesDataset, \
     SiameseTransQuestModel
 from transquest.algo.sentence_level.siamesetransquest import models, losses
@@ -32,9 +32,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FOLDER = "examples/wmt_2018/en_de/data/en_de"
-DEV_FOLDER = "examples/wmt_2018/en_de/data/en_de"
-TEST_FOLDER = "examples/wmt_2018/en_de/data/en_de"
+TRAIN_FOLDER = "examples/sentence_level/wmt_2018/en_de/data/en_de/"
+DEV_FOLDER = "examples/sentence_level/wmt_2018/en_de/data/en_de/"
+TEST_FOLDER = "examples/sentence_level/wmt_2018/en_de/data/en_de/"
 
 train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.nmt.src", translation_file="train.nmt.mt", hter_file="train.nmt.hter")
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.nmt.src", translation_file="dev.nmt.mt", hter_file="dev.nmt.hter")
@@ -54,37 +54,37 @@ train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
 
-if siamese_transformer_config["evaluate_during_training"]:
-    if siamese_transformer_config["n_fold"] > 0:
-        dev_preds = np.zeros((len(dev), siamese_transformer_config["n_fold"]))
-        test_preds = np.zeros((len(test), siamese_transformer_config["n_fold"]))
-        for i in range(siamese_transformer_config["n_fold"]):
+if siamesetransquest_config["evaluate_during_training"]:
+    if siamesetransquest_config["n_fold"] > 0:
+        dev_preds = np.zeros((len(dev), siamesetransquest_config["n_fold"]))
+        test_preds = np.zeros((len(test), siamesetransquest_config["n_fold"]))
+        for i in range(siamesetransquest_config["n_fold"]):
 
-            if os.path.exists(siamese_transformer_config['best_model_dir']) and os.path.isdir(
-                    siamese_transformer_config['best_model_dir']):
-                shutil.rmtree(siamese_transformer_config['best_model_dir'])
+            if os.path.exists(siamesetransquest_config['best_model_dir']) and os.path.isdir(
+                    siamesetransquest_config['best_model_dir']):
+                shutil.rmtree(siamesetransquest_config['best_model_dir'])
 
-            if os.path.exists(siamese_transformer_config['cache_dir']) and os.path.isdir(
-                    siamese_transformer_config['cache_dir']):
-                shutil.rmtree(siamese_transformer_config['cache_dir'])
+            if os.path.exists(siamesetransquest_config['cache_dir']) and os.path.isdir(
+                    siamesetransquest_config['cache_dir']):
+                shutil.rmtree(siamesetransquest_config['cache_dir'])
 
-            os.makedirs(siamese_transformer_config['cache_dir'])
+            os.makedirs(siamesetransquest_config['cache_dir'])
 
             train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
-            train_df.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "train.tsv"), header=True, sep='\t',
+            train_df.to_csv(os.path.join(siamesetransquest_config['cache_dir'], "train.tsv"), header=True, sep='\t',
                             index=False, quoting=csv.QUOTE_NONE)
-            eval_df.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "eval_df.tsv"), header=True, sep='\t',
+            eval_df.to_csv(os.path.join(siamesetransquest_config['cache_dir'], "eval_df.tsv"), header=True, sep='\t',
                            index=False, quoting=csv.QUOTE_NONE)
-            dev.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "dev.tsv"), header=True, sep='\t',
+            dev.to_csv(os.path.join(siamesetransquest_config['cache_dir'], "dev.tsv"), header=True, sep='\t',
                        index=False, quoting=csv.QUOTE_NONE)
-            test.to_csv(os.path.join(siamese_transformer_config['cache_dir'], "test.tsv"), header=True, sep='\t',
+            test.to_csv(os.path.join(siamesetransquest_config['cache_dir'], "test.tsv"), header=True, sep='\t',
                         index=False, quoting=csv.QUOTE_NONE)
 
-            sts_reader = QEDataReader(siamese_transformer_config['cache_dir'], s1_col_idx=0, s2_col_idx=1,
+            sts_reader = QEDataReader(siamesetransquest_config['cache_dir'], s1_col_idx=0, s2_col_idx=1,
                                       score_col_idx=2,
                                       normalize_scores=False, min_score=0, max_score=1, header=True)
 
-            word_embedding_model = models.Transformer(MODEL_NAME, max_seq_length=siamese_transformer_config[
+            word_embedding_model = models.Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
                 'max_seq_length'])
 
             pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
@@ -95,47 +95,47 @@ if siamese_transformer_config["evaluate_during_training"]:
             model = SiameseTransQuestModel(modules=[word_embedding_model, pooling_model])
             train_data = SentencesDataset(sts_reader.get_examples('train.tsv'), model)
             train_dataloader = DataLoader(train_data, shuffle=True,
-                                          batch_size=siamese_transformer_config['train_batch_size'])
+                                          batch_size=siamesetransquest_config['train_batch_size'])
             train_loss = losses.CosineSimilarityLoss(model=model)
 
             eval_data = SentencesDataset(examples=sts_reader.get_examples('eval_df.tsv'), model=model)
             eval_dataloader = DataLoader(eval_data, shuffle=False,
-                                         batch_size=siamese_transformer_config['train_batch_size'])
+                                         batch_size=siamesetransquest_config['train_batch_size'])
             evaluator = EmbeddingSimilarityEvaluator(eval_dataloader)
 
             warmup_steps = math.ceil(
-                len(train_data) * siamese_transformer_config["num_train_epochs"] / siamese_transformer_config[
+                len(train_data) * siamesetransquest_config["num_train_epochs"] / siamesetransquest_config[
                     'train_batch_size'] * 0.1)
 
             model.fit(train_objectives=[(train_dataloader, train_loss)],
                       evaluator=evaluator,
-                      epochs=siamese_transformer_config['num_train_epochs'],
+                      epochs=siamesetransquest_config['num_train_epochs'],
                       evaluation_steps=100,
-                      optimizer_params={'lr': siamese_transformer_config["learning_rate"],
-                                        'eps': siamese_transformer_config["adam_epsilon"],
+                      optimizer_params={'lr': siamesetransquest_config["learning_rate"],
+                                        'eps': siamesetransquest_config["adam_epsilon"],
                                         'correct_bias': False},
                       warmup_steps=warmup_steps,
-                      output_path=siamese_transformer_config['best_model_dir'])
+                      output_path=siamesetransquest_config['best_model_dir'])
 
-            model = SiameseTransQuestModel(siamese_transformer_config['best_model_dir'])
+            model = SiameseTransQuestModel(siamesetransquest_config['best_model_dir'])
 
             dev_data = SentencesDataset(examples=sts_reader.get_examples("dev.tsv"), model=model)
             dev_dataloader = DataLoader(dev_data, shuffle=False, batch_size=8)
             evaluator = EmbeddingSimilarityEvaluator(dev_dataloader)
             model.evaluate(evaluator,
-                           result_path=os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt"))
+                           result_path=os.path.join(siamesetransquest_config['cache_dir'], "dev_result.txt"))
 
             test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv", test_file=True), model=model)
             test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
             evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
             model.evaluate(evaluator,
-                           result_path=os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt"),
+                           result_path=os.path.join(siamesetransquest_config['cache_dir'], "test_result.txt"),
                            verbose=False)
 
-            with open(os.path.join(siamese_transformer_config['cache_dir'], "dev_result.txt")) as f:
+            with open(os.path.join(siamesetransquest_config['cache_dir'], "dev_result.txt")) as f:
                 dev_preds[:, i] = list(map(float, f.read().splitlines()))
 
-            with open(os.path.join(siamese_transformer_config['cache_dir'], "test_result.txt")) as f:
+            with open(os.path.join(siamesetransquest_config['cache_dir'], "test_result.txt")) as f:
                 test_preds[:, i] = list(map(float, f.read().splitlines()))
 
         dev['predictions'] = dev_preds.mean(axis=1)
