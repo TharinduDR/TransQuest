@@ -9,7 +9,7 @@ python -m examples.wmt_2019.<language-pair>.<nmt/smt><architecture>
 
 Language Pair options :  en_de (English-German) (both NMT and SMT), en_lv(English-Latvian) (both NMT and SMT), en_cs(English-Czech), de_en 
 
-Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (SiameseTransQuest).
+Architecture Options : monotransquest (MonoTransQuest), siamesetransquest (SiameseTransQuest).
 
 As an example to run the experiments on English-Latvian NMT with MonoTransQuest architecture, run the following command. 
 

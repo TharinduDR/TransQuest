@@ -9,7 +9,7 @@ python -m examples.sentenceee_level.wmt_2020.<language-pair>.<architecture>
 
 Language Pair options :  ro_en (Romanian-English), ru_en (Russian-English), et_en (Estonian-English), en_zh (English-Chinese), ne_en (Nepalese-English), en_de (English-German), si_en(Sinhala-English)
 
-Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (SiameseTransQuest).
+Architecture Options : monotransquest (MonoTransQuest), siamesetransquest (SiameseTransQuest).
 
 As an example to run the experiments on Romanian-English with MonoTransQuest architecture, run the following command. 
 
