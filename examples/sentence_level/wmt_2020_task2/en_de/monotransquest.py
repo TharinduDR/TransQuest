@@ -6,14 +6,14 @@ import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.sentence_level.wmt_2020_task2.common.util import download_from_google_drive
+from examples.sentence_level.wmt_2020_task2.common.util.download import download_from_google_drive
 from examples.sentence_level.wmt_2020_task2.common.util.draw import draw_scatterplot, print_stat
-from examples.sentence_level.wmt_2020_task2.common.util import fit, un_fit
-from examples.sentence_level.wmt_2020_task2.common.util import format_submission
-from examples.sentence_level.wmt_2020_task2.common.util import read_annotated_file, read_test_file
-from examples.sentence_level.wmt_2020_task2.en_de import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
-    transformer_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
-from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
+from examples.sentence_level.wmt_2020_task2.common.util.normalizer import fit, un_fit
+from examples.sentence_level.wmt_2020_task2.common.util.postprocess import format_submission
+from examples.sentence_level.wmt_2020_task2.common.util.reader import read_annotated_file, read_test_file
+from examples.sentence_level.wmt_2020_task2.en_de.monotransquest_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
+    monotransquest_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
+from transquest.algo.sentence_level.monotransquest.evaluation import pearson_corr, spearman_corr
 from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
@@ -45,21 +45,21 @@ train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
 assert(len(index) == 1000)
-if transformer_config["evaluate_during_training"]:
-    if transformer_config["n_fold"] > 1:
-        dev_preds = np.zeros((len(dev), transformer_config["n_fold"]))
-        test_preds = np.zeros((len(test), transformer_config["n_fold"]))
-        for i in range(transformer_config["n_fold"]):
+if monotransquest_config["evaluate_during_training"]:
+    if monotransquest_config["n_fold"] > 1:
+        dev_preds = np.zeros((len(dev), monotransquest_config["n_fold"]))
+        test_preds = np.zeros((len(test), monotransquest_config["n_fold"]))
+        for i in range(monotransquest_config["n_fold"]):
 
-            if os.path.exists(transformer_config['output_dir']) and os.path.isdir(transformer_config['output_dir']):
-                shutil.rmtree(transformer_config['output_dir'])
+            if os.path.exists(monotransquest_config['output_dir']) and os.path.isdir(monotransquest_config['output_dir']):
+                shutil.rmtree(monotransquest_config['output_dir'])
 
             model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                               args=transformer_config)
+                               args=monotransquest_config)
             train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED*i)
             model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
-            model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1, use_cuda=torch.cuda.is_available(), args=transformer_config)
+            model = QuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1, use_cuda=torch.cuda.is_available(), args=monotransquest_config)
             result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                         spearman_corr=spearman_corr,
                                                                         mae=mean_absolute_error)
@@ -72,12 +72,12 @@ if transformer_config["evaluate_during_training"]:
 
     else:
         model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                           args=transformer_config)
+                           args=monotransquest_config)
         train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED)
         model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                           mae=mean_absolute_error)
-        model = QuestModel(MODEL_TYPE, transformer_config["best_model_dir"], num_labels=1,
-                           use_cuda=torch.cuda.is_available(), args=transformer_config)
+        model = QuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1,
+                           use_cuda=torch.cuda.is_available(), args=monotransquest_config)
         result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                     spearman_corr=spearman_corr,
                                                                     mae=mean_absolute_error)
@@ -87,7 +87,7 @@ if transformer_config["evaluate_during_training"]:
 
 else:
     model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                       args=transformer_config)
+                       args=monotransquest_config)
     model.train_model(train, pearson_corr=pearson_corr, spearman_corr=spearman_corr, mae=mean_absolute_error)
     result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                 spearman_corr=spearman_corr, mae=mean_absolute_error)
