@@ -4,17 +4,17 @@ This task consists predicting Sentence-level HTER (Human Translation Error Rate)
 To run the experiments for each language please run this command from the root directory of TransQuest.  
 
 ```bash
-python -m examples.wmt_2020_task2.<language-pair>.<architecture>
+python -m examples.sentence_level.wmt_2020_task2.<language-pair>.<architecture>
 ```
 
 Language Pair options :  en_zh (English-Chinese), en_de (English-German)
 
-Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (SiameseTransQuest).
+Architecture Options : monotransquest (MonoTransQuest), siamesetransquest (SiameseTransQuest).
 
 As an example to run the experiments on English-Chinese with MonoTransQuest architecture, run the following command. 
 
 ```bash
-python -m examples.wmt_2020_task2.en_zh.trans_quest
+python -m examples.sentence_level.wmt_2020_task2.en_zh.trans_quest
 ```
 
 ### Results

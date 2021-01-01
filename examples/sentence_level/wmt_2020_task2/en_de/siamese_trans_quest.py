@@ -8,12 +8,12 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
-from examples.wmt_2020_task2.common.util.download import download_from_google_drive
-from examples.wmt_2020_task2.common.util.draw import draw_scatterplot, print_stat
-from examples.wmt_2020_task2.common.util.normalizer import fit, un_fit
-from examples.wmt_2020_task2.common.util.postprocess import format_submission
-from examples.wmt_2020_task2.common.util.reader import read_annotated_file, read_test_file
-from examples.wmt_2020_task2.en_de.siamese_transformer_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
+from examples.sentence_level.wmt_2020_task2.common.util import download_from_google_drive
+from examples.sentence_level.wmt_2020_task2.common.util.draw import draw_scatterplot, print_stat
+from examples.sentence_level.wmt_2020_task2.common.util import fit, un_fit
+from examples.sentence_level.wmt_2020_task2.common.util import format_submission
+from examples.sentence_level.wmt_2020_task2.common.util import read_annotated_file, read_test_file
+from examples.sentence_level.wmt_2020_task2.en_de.siamese_transformer_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
     MODEL_NAME, siamese_transformer_config, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
 from transquest.algo.sentence_level.siamesetransquest import LoggingHandler, SentencesDataset, \
     SiameseTransQuestModel
@@ -32,9 +32,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FOLDER = "examples/wmt_2020_task2/en_zh/data/en-zh/train"
-DEV_FOLDER = "examples/wmt_2020_task2/en_zh/data/en-zh/dev"
-TEST_FOLDER = "examples/wmt_2020_task2/en_zh/data/en-zh/test-blind"
+TRAIN_FOLDER = "examples/wmt_2020_task2/en_de/data/en-de/train"
+DEV_FOLDER = "examples/wmt_2020_task2/en_de/data/en-de/dev"
+TEST_FOLDER = "examples/wmt_2020_task2/en_de/data/en-de/test-blind"
 
 train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", translation_file="train.mt", hter_file="train.hter")
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.src", translation_file="dev.mt", hter_file="dev.hter")
@@ -46,13 +46,9 @@ train = train[['original', 'translation', 'hter']]
 dev = dev[['original', 'translation', 'hter']]
 test = test[['original', 'translation']]
 
-
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
-
-test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
-
 
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
