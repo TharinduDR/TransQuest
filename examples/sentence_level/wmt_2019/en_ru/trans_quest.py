@@ -2,17 +2,16 @@ import os
 import shutil
 
 import numpy as np
-import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.wmt_2019.common.util.download import download_from_google_drive
-from examples.wmt_2019.common.util.draw import draw_scatterplot, print_stat
-from examples.wmt_2019.common.util.normalizer import fit, un_fit
-from examples.wmt_2019.common.util.reader import read_annotated_file, read_test_file
-from examples.wmt_2019.en_ru.transformer_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
-    transformer_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
+from examples.sentence_level.wmt_2019.common.util.download import download_from_google_drive
+from examples.sentence_level.wmt_2019.common.util import draw_scatterplot, print_stat
+from examples.sentence_level.wmt_2019.common.util.normalizer import fit, un_fit
+from examples.sentence_level.wmt_2019.common.util import read_annotated_file, read_test_file
+from examples.sentence_level.wmt_2019.en_ru import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
+    transformer_config, MODEL_TYPE, SEED, RESULT_FILE, RESULT_IMAGE
 from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
 from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
 
