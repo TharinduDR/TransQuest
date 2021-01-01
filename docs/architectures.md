@@ -14,7 +14,7 @@ First read your data in to a pandas dataframe and format it so that it has three
 ```python
 from transquest.algo.monotransquest.evaluation import pearson_corr, spearman_corr
 from sklearn.metrics import mean_absolute_error
-from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
+from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
 import torch
 
 model = QuestModel("xlmroberta", "xlm-roberta-large", num_labels=1, use_cuda=torch.cuda.is_available(),

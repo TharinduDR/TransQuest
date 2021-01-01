@@ -14,7 +14,7 @@ from examples.sentence_level.wmt_2020.common.util.reader import read_test_file, 
 from examples.sentence_level.wmt_2020.ne_en.monotransquest_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, monotransquest_config, SEED, \
     RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE, GOOGLE_DRIVE, DRIVE_FILE_ID
 from transquest.algo.sentence_level.monotransquest.evaluation import pearson_corr, spearman_corr
-from transquest.algo.sentence_level.monotransquest.run_model import QuestModel
+from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
@@ -54,13 +54,13 @@ if monotransquest_config["evaluate_during_training"]:
             if os.path.exists(monotransquest_config['output_dir']) and os.path.isdir(monotransquest_config['output_dir']):
                 shutil.rmtree(monotransquest_config['output_dir'])
 
-            model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                               args=monotransquest_config)
+            model = MonoTransQuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
+                                        args=monotransquest_config)
             train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
             model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
-            model = QuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1,
-                               use_cuda=torch.cuda.is_available(), args=monotransquest_config)
+            model = MonoTransQuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1,
+                                        use_cuda=torch.cuda.is_available(), args=monotransquest_config)
             result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                         spearman_corr=spearman_corr,
                                                                         mae=mean_absolute_error)
@@ -72,13 +72,13 @@ if monotransquest_config["evaluate_during_training"]:
         test['predictions'] = test_preds.mean(axis=1)
 
     else:
-        model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                           args=monotransquest_config)
+        model = MonoTransQuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
+                                    args=monotransquest_config)
         train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED)
         model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                           mae=mean_absolute_error)
-        model = QuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1,
-                           use_cuda=torch.cuda.is_available(), args=monotransquest_config)
+        model = MonoTransQuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1,
+                                    use_cuda=torch.cuda.is_available(), args=monotransquest_config)
         result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                     spearman_corr=spearman_corr,
                                                                     mae=mean_absolute_error)
@@ -87,8 +87,8 @@ if monotransquest_config["evaluate_during_training"]:
         test['predictions'] = predictions
 
 else:
-    model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                       args=monotransquest_config)
+    model = MonoTransQuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
+                                args=monotransquest_config)
     model.train_model(train, pearson_corr=pearson_corr, spearman_corr=spearman_corr, mae=mean_absolute_error)
     result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                 spearman_corr=spearman_corr, mae=mean_absolute_error)
