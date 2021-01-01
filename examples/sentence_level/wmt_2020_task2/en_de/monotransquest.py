@@ -22,9 +22,9 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FOLDER = "examples/wmt_2020_task2/en_de/data/en-de/train"
-DEV_FOLDER = "examples/wmt_2020_task2/en_de/data/en-de/dev"
-TEST_FOLDER = "examples/wmt_2020_task2/en_de/data/en-de/test-blind"
+TRAIN_FOLDER = "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/train"
+DEV_FOLDER = "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/dev"
+TEST_FOLDER = "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/test-blind"
 
 train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", translation_file="train.mt", hter_file="train.hter")
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.src", translation_file="dev.mt", hter_file="dev.hter")
