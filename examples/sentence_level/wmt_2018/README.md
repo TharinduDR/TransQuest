@@ -14,13 +14,13 @@ Architecture Options : monotransquest (MonoTransQuest), siamesetransquest (Siame
 As an example to run the experiments on English-Latvian NMT with MonoTransQuest architecture, run the following command. 
 
 ```bash
-python -m examples.wmt_2018.en_lv.nmt.monotransquest
+python -m examples.sentence_level.wmt_2018.en_lv.nmt.monotransquest
 ```
 
 To run the English-Czech experiments with MonoTransQuest architecture,, run the following command
 
 ```bash
-python -m examples.wmt_2018.en_cs.monotransquest
+python -m examples.sentence_level.wmt_2018.en_cs.monotransquest
 ```
 
 
