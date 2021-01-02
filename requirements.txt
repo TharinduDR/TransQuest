@@ -10,3 +10,4 @@ matplotlib
 googledrivedownloader
 onnxruntime
 seqeval
+sentencepiece
