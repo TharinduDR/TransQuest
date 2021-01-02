@@ -1,6 +1,5 @@
-
-from transformers.configuration_xlm_roberta import XLMRobertaConfig
-from transformers.modeling_xlm_roberta import XLM_ROBERTA_PRETRAINED_MODEL_ARCHIVE_LIST
+from transformers.models.xlm_roberta.configuration_xlm_roberta import XLMRobertaConfig
+from transformers.models.xlm_roberta.modeling_xlm_roberta import XLM_ROBERTA_PRETRAINED_MODEL_ARCHIVE_LIST
 
 from transquest.algo.sentence_level.monotransquest.models.roberta_model import RobertaForSequenceClassification
 
@@ -8,4 +7,3 @@ from transquest.algo.sentence_level.monotransquest.models.roberta_model import R
 class XLMRobertaForSequenceClassification(RobertaForSequenceClassification):
     config_class = XLMRobertaConfig
     pretrained_model_archive_map = XLM_ROBERTA_PRETRAINED_MODEL_ARCHIVE_LIST
-

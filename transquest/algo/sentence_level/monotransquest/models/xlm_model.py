@@ -1,5 +1,7 @@
+import torch
+import torch.nn as nn
 from torch.nn import CrossEntropyLoss, MSELoss
-from transformers.modeling_xlm import SequenceSummary, XLMModel, XLMPreTrainedModel
+from transformers.models.xlm.modeling_xlm import SequenceSummary, XLMModel, XLMPreTrainedModel
 
 
 class XLMForSequenceClassification(XLMPreTrainedModel):
@@ -28,7 +30,7 @@ class XLMForSequenceClassification(XLMPreTrainedModel):
         labels = torch.tensor([1]).unsqueeze(0)  # Batch size 1
         outputs = model(input_ids, labels=labels)
         loss, logits = outputs[:2]
-    """
+    """  # noqa: ignore flake8"
 
     def __init__(self, config, weight=None):
         super(XLMForSequenceClassification, self).__init__(config)
@@ -40,16 +42,29 @@ class XLMForSequenceClassification(XLMPreTrainedModel):
 
         self.init_weights()
 
-    def forward(self, input_ids=None, attention_mask=None, langs=None, token_type_ids=None, position_ids=None,
-                lengths=None, cache=None, head_mask=None, inputs_embeds=None, labels=None):
-        transformer_outputs = self.transformer(input_ids,
-                                               attention_mask=attention_mask,
-                                               langs=langs,
-                                               token_type_ids=token_type_ids,
-                                               position_ids=position_ids,
-                                               lengths=lengths,
-                                               cache=cache,
-                                               head_mask=head_mask)
+    def forward(
+        self,
+        input_ids=None,
+        attention_mask=None,
+        langs=None,
+        token_type_ids=None,
+        position_ids=None,
+        lengths=None,
+        cache=None,
+        head_mask=None,
+        inputs_embeds=None,
+        labels=None,
+    ):
+        transformer_outputs = self.transformer(
+            input_ids,
+            attention_mask=attention_mask,
+            langs=langs,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            lengths=lengths,
+            cache=cache,
+            head_mask=head_mask,
+        )
 
         output = transformer_outputs[0]
         logits = self.sequence_summary(output)
@@ -62,7 +77,11 @@ class XLMForSequenceClassification(XLMPreTrainedModel):
                 loss_fct = MSELoss()
                 loss = loss_fct(logits.view(-1), labels.view(-1))
             else:
-                loss_fct = CrossEntropyLoss(weight=self.weight)
+                if self.weight is not None:
+                    weight = self.weight.to(labels.device)
+                else:
+                    weight = None
+                loss_fct = CrossEntropyLoss(weight=weight)
                 loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
             outputs = (loss,) + outputs
 
