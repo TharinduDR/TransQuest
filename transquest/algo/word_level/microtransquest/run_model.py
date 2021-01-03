@@ -58,8 +58,8 @@ from transformers.convert_graph_to_onnx import convert, quantize
 #     get_labels,
 #     read_examples_from_file,
 # )
-from transquest.algo.word_level.minitransquest.model_args import MiniTransQuestArgs
-from transquest.algo.word_level.minitransquest.utils import InputExample, get_examples_from_df, \
+from transquest.algo.word_level.microtransquest.model_args import MicroTransQuestArgs
+from transquest.algo.word_level.microtransquest.utils import InputExample, get_examples_from_df, \
     convert_examples_to_features, \
     read_examples_from_file, LazyQEDataset, sweep_config_to_sweep_values
 
@@ -73,7 +73,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class MiniTransQuestModel:
+class MicroTransQuestModel:
     def __init__(
         self,
         model_type,
@@ -99,12 +99,8 @@ class MiniTransQuestModel:
         """  # noqa: ignore flake8"
 
         MODEL_CLASSES = {
-            "auto": (AutoConfig, AutoTokenizer, AutoModelForTokenClassification),
             "bert": (BertConfig, BertForTokenClassification, BertTokenizer),
-            "camembert": (CamembertConfig, CamembertForTokenClassification, CamembertTokenizer),
             "distilbert": (DistilBertConfig, DistilBertForTokenClassification, DistilBertTokenizer),
-            "electra": (ElectraConfig, ElectraForTokenClassification, ElectraTokenizer),
-            "longformer": (LongformerConfig, LongformerForTokenClassification, LongformerTokenizer),
             "roberta": (RobertaConfig, RobertaForTokenClassification, RobertaTokenizer),
             "xlmroberta": (XLMRobertaConfig, XLMRobertaForTokenClassification, XLMRobertaTokenizer)
         }
@@ -113,7 +109,7 @@ class MiniTransQuestModel:
 
         if isinstance(args, dict):
             self.args.update_from_dict(args)
-        elif isinstance(args, MiniTransQuestArgs):
+        elif isinstance(args, MicroTransQuestArgs):
             self.args = args
 
         if "sweep_config" in kwargs:
