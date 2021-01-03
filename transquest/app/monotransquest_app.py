@@ -53,3 +53,4 @@ class MonoTransQuestApp:
     def predict_quality(self, test_sentence_pairs):
         predictions, raw_outputs = self.model.predict(test_sentence_pairs)
         return predictions
+
