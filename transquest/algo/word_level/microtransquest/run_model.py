@@ -58,6 +58,7 @@ from transformers.convert_graph_to_onnx import convert, quantize
 #     get_labels,
 #     read_examples_from_file,
 # )
+from transquest.algo.sentence_level.monotransquest.model_args import MonoTransQuestArgs
 from transquest.algo.word_level.microtransquest.model_args import MicroTransQuestArgs
 from transquest.algo.word_level.microtransquest.utils import InputExample, get_examples_from_df, \
     convert_examples_to_features, \
@@ -1252,7 +1253,7 @@ class MicroTransQuestModel:
         self.args.save(output_dir)
 
     def _load_model_args(self, input_dir):
-        args = NERArgs()
+        args = MonoTransQuestArgs()
         args.load(input_dir)
         return args
 
