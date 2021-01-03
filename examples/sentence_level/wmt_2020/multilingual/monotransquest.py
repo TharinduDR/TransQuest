@@ -24,13 +24,13 @@ if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
 languages = {
-    # "EN-DE": ["examples/sentence_level/wmt_2020/en_de/data/en-de/train.ende.df.short.tsv",
-    #           "examples/sentence_level/wmt_2020/en_de/data/en-de/dev.ende.df.short.tsv",
-    #           "examples/sentence_level/wmt_2020/en_de/data/en-de/test20.ende.df.short.tsv"],
-    #
-    # "EN-ZH": ["examples/sentence_level/wmt_2020/en_zh/data/en-zh/train.enzh.df.short.tsv",
-    #           "examples/sentence_level/wmt_2020/en_zh/data/en-zh/dev.enzh.df.short.tsv",
-    #           "examples/sentence_level/wmt_2020/en_zh/data/en-zh/test20.enzh.df.short.tsv"],
+    "EN-DE": ["examples/sentence_level/wmt_2020/en_de/data/en-de/train.ende.df.short.tsv",
+              "examples/sentence_level/wmt_2020/en_de/data/en-de/dev.ende.df.short.tsv",
+              "examples/sentence_level/wmt_2020/en_de/data/en-de/test20.ende.df.short.tsv"],
+
+    "EN-ZH": ["examples/sentence_level/wmt_2020/en_zh/data/en-zh/train.enzh.df.short.tsv",
+              "examples/sentence_level/wmt_2020/en_zh/data/en-zh/dev.enzh.df.short.tsv",
+              "examples/sentence_level/wmt_2020/en_zh/data/en-zh/test20.enzh.df.short.tsv"],
 
     "ET-EN": ["examples/sentence_level/wmt_2020/et_en/data/et-en/train.eten.df.short.tsv",
               "examples/sentence_level/wmt_2020/et_en/data/et-en/dev.eten.df.short.tsv",
@@ -44,13 +44,13 @@ languages = {
               "examples/sentence_level/wmt_2020/ro_en/data/ro-en/dev.roen.df.short.tsv",
               "examples/sentence_level/wmt_2020/ro_en/data/ro-en/test20.roen.df.short.tsv"],
 
-    # "RU-EN": ["examples/sentence_level/wmt_2020/ru_en/data/ru-en/train.ruen.df.short.tsv",
-    #           "examples/sentence_level/wmt_2020/ru_en/data/ru-en/dev.ruen.df.short.tsv",
-    #           "examples/sentence_level/wmt_2020/ru_en/data/ru-en/test20.ruen.df.short.tsv"],
-    #
-    # "SI-EN": ["examples/sentence_level/wmt_2020/si_en/data/si-en/train.sien.df.short.tsv",
-    #           "examples/sentence_level/wmt_2020/si_en/data/si-en/dev.sien.df.short.tsv",
-    #           "examples/sentence_level/wmt_2020/si_en/data/si-en/test20.sien.df.short.tsv"],
+    "RU-EN": ["examples/sentence_level/wmt_2020/ru_en/data/ru-en/train.ruen.df.short.tsv",
+              "examples/sentence_level/wmt_2020/ru_en/data/ru-en/dev.ruen.df.short.tsv",
+              "examples/sentence_level/wmt_2020/ru_en/data/ru-en/test20.ruen.df.short.tsv"],
+
+    "SI-EN": ["examples/sentence_level/wmt_2020/si_en/data/si-en/train.sien.df.short.tsv",
+              "examples/sentence_level/wmt_2020/si_en/data/si-en/dev.sien.df.short.tsv",
+              "examples/sentence_level/wmt_2020/si_en/data/si-en/test20.sien.df.short.tsv"],
 
 }
 
