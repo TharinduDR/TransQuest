@@ -1,6 +1,6 @@
 from multiprocessing import cpu_count
 
-TRAIN_PATH = "examples/word_level/wmt_2020/data/en-de/train"
+TRAIN_PATH = "examples/word_level/wmt_2020/en_de/data/en-de/train/"
 SOURCE_FILE = "train.src"
 SOURCE_TAGS_FILE = "train.source_tags"
 TARGET_FILE = "train.mt"
@@ -12,7 +12,7 @@ DRIVE_FILE_ID = None
 MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "xlm-roberta-large"
 
-transformer_config = {
+microtransquest_config = {
     'output_dir': 'temp/outputs/',
     "best_model_dir": "temp/outputs/best_model",
     'cache_dir': 'temp/cache_dir/',
