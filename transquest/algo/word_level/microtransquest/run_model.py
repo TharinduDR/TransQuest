@@ -1,10 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
+import glob
 import json
 import logging
 import math
 import os
 import random
+import shutil
 import warnings
 from dataclasses import asdict
 from multiprocessing import cpu_count
@@ -580,6 +582,11 @@ class MicroTransQuestModel:
 
                     if args.save_steps > 0 and global_step % args.save_steps == 0:
                         # Save model checkpoint
+                        if args.save_recent_only:
+                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                            for del_path in del_paths:
+                                shutil.rmtree(del_path)
+                        # Save model checkpoint
                         output_dir_current = os.path.join(output_dir, "checkpoint-{}".format(global_step))
 
                         self.save_model(output_dir_current, optimizer, scheduler, model=model)
@@ -605,6 +612,11 @@ class MicroTransQuestModel:
                             tb_writer.add_scalar("eval_{}".format(key), value, global_step)
 
                         if args.save_eval_checkpoints:
+                            if args.save_recent_only:
+                                del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                                for del_path in del_paths:
+                                    shutil.rmtree(del_path)
+                            # Save model checkpoint
                             self.save_model(output_dir_current, optimizer, scheduler, model=model, results=results)
 
                         training_progress_scores["global_step"].append(global_step)
@@ -679,6 +691,11 @@ class MicroTransQuestModel:
             output_dir_current = os.path.join(output_dir, "checkpoint-{}-epoch-{}".format(global_step, epoch_number))
 
             if args.save_model_every_epoch or args.evaluate_during_training:
+                if args.save_recent_only:
+                    del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                    for del_path in del_paths:
+                        shutil.rmtree(del_path)
+                # Save model checkpoint
                 os.makedirs(output_dir_current, exist_ok=True)
 
             if args.save_model_every_epoch:
@@ -688,6 +705,12 @@ class MicroTransQuestModel:
                 results, _, _ = self.eval_model(
                     eval_data, verbose=verbose and args.evaluate_during_training_verbose, wandb_log=False, **kwargs
                 )
+
+                if args.save_recent_only:
+                    del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                    for del_path in del_paths:
+                        shutil.rmtree(del_path)
+                # Save model checkpoint
 
                 self.save_model(output_dir_current, optimizer, scheduler, results=results)
 
