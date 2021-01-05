@@ -1,32 +1,43 @@
 from __future__ import absolute_import, division, print_function
 
-import glob
+import json
 import logging
 import math
 import os
 import random
-import shutil
 import warnings
 from dataclasses import asdict
+from multiprocessing import cpu_count
 import tempfile
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import torch
+from scipy.stats import pearsonr
 from seqeval.metrics import classification_report, f1_score, precision_score, recall_score
 from tensorboardX import SummaryWriter
 from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, TensorDataset
 from tqdm.auto import tqdm, trange
+from transformers.optimization import (
+    get_constant_schedule,
+    get_constant_schedule_with_warmup,
+    get_linear_schedule_with_warmup,
+    get_cosine_schedule_with_warmup,
+    get_cosine_with_hard_restarts_schedule_with_warmup,
+    get_polynomial_decay_schedule_with_warmup,
+)
+from transformers.optimization import AdamW, Adafactor
 from transformers import (
-    AdamW,
+    WEIGHTS_NAME,
     AutoConfig,
     AutoModelForTokenClassification,
     AutoTokenizer,
     BertConfig,
     BertForTokenClassification,
     BertTokenizer,
+    BertweetTokenizer,
     CamembertConfig,
     CamembertForTokenClassification,
     CamembertTokenizer,
@@ -39,32 +50,25 @@ from transformers import (
     LongformerConfig,
     LongformerForTokenClassification,
     LongformerTokenizer,
+    MobileBertConfig,
+    MobileBertForTokenClassification,
+    MobileBertTokenizer,
     RobertaConfig,
     RobertaForTokenClassification,
     RobertaTokenizer,
     XLMRobertaConfig,
     XLMRobertaForTokenClassification,
     XLMRobertaTokenizer,
-    get_linear_schedule_with_warmup,
+    LayoutLMConfig,
+    LayoutLMForTokenClassification,
+    LayoutLMTokenizer,
 )
+from wandb import config
 from transformers.convert_graph_to_onnx import convert, quantize
 
-# from simpletransformers.config.global_args import global_args
-# from simpletransformers.config.model_args import NERArgs
-# from simpletransformers.config.utils import sweep_config_to_sweep_values
-# from simpletransformers.ner.ner_utils import (
-#     InputExample,
-#     LazyNERDataset,
-#     convert_examples_to_features,
-#     get_examples_from_df,
-#     get_labels,
-#     read_examples_from_file,
-# )
-from transquest.algo.sentence_level.monotransquest.model_args import MonoTransQuestArgs
 from transquest.algo.word_level.microtransquest.model_args import MicroTransQuestArgs
-from transquest.algo.word_level.microtransquest.utils import InputExample, get_examples_from_df, \
-    convert_examples_to_features, \
-    read_examples_from_file, LazyQEDataset, sweep_config_to_sweep_values
+from transquest.algo.word_level.microtransquest.utils import sweep_config_to_sweep_values, InputExample, \
+    read_examples_from_file, get_examples_from_df, convert_examples_to_features, LazyQEDataset
 
 try:
     import wandb
@@ -76,7 +80,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class MicroTransQuestModel:
+class NERModel:
     def __init__(
         self,
         model_type,
@@ -93,7 +97,7 @@ class MicroTransQuestModel:
 
         Args:
             model_type: The type of model (bert, roberta)
-            model_name: Default Transformer model name or path to a directory containing Transformer model file (pytorch_nodel.bin).
+            model_name: Default Transformer model name or path to a directory containing Transformer model file (pytorch_model.bin).
             labels (optional): A list of all Named Entity labels.  If not given, ["O", "B-MISC", "I-MISC",  "B-PER", "I-PER", "B-ORG", "I-ORG", "B-LOC", "I-LOC"] will be used.
             args (optional): Default args will be used if this parameter is not provided. If provided, it should be a dict containing the args that should be changed in the default args.
             use_cuda (optional): Use GPU if available. Setting to False will force model to use CPU only.
@@ -105,7 +109,7 @@ class MicroTransQuestModel:
             "bert": (BertConfig, BertForTokenClassification, BertTokenizer),
             "distilbert": (DistilBertConfig, DistilBertForTokenClassification, DistilBertTokenizer),
             "roberta": (RobertaConfig, RobertaForTokenClassification, RobertaTokenizer),
-            "xlmroberta": (XLMRobertaConfig, XLMRobertaForTokenClassification, XLMRobertaTokenizer)
+            "xlmroberta": (XLMRobertaConfig, XLMRobertaForTokenClassification, XLMRobertaTokenizer),
         }
 
         self.args = self._load_model_args(model_name)
@@ -116,9 +120,12 @@ class MicroTransQuestModel:
             self.args = args
 
         if "sweep_config" in kwargs:
+            self.is_sweeping = True
             sweep_config = kwargs.pop("sweep_config")
             sweep_values = sweep_config_to_sweep_values(sweep_config)
             self.args.update_from_dict(sweep_values)
+        else:
+            self.is_sweeping = False
 
         if self.args.manual_seed:
             random.seed(self.args.manual_seed)
@@ -139,15 +146,9 @@ class MicroTransQuestModel:
             pass
         else:
             self.args.labels_list = [
-                "O",
-                "B-MISC",
-                "I-MISC",
-                "B-PER",
-                "I-PER",
-                "B-ORG",
-                "I-ORG",
-                "B-LOC",
-                "I-LOC",
+                "OK",
+                "BAD",
+                "SEP",
             ]
         self.num_labels = len(self.args.labels_list)
 
@@ -210,7 +211,22 @@ class MicroTransQuestModel:
             except AttributeError:
                 raise AttributeError("fp16 requires Pytorch >= 1.6. Please update Pytorch or turn off fp16.")
 
-        self.tokenizer = tokenizer_class.from_pretrained(model_name, do_lower_case=self.args.do_lower_case, **kwargs)
+        if model_name in [
+            "vinai/bertweet-base",
+            "vinai/bertweet-covid19-base-cased",
+            "vinai/bertweet-covid19-base-uncased",
+        ]:
+            self.tokenizer = tokenizer_class.from_pretrained(
+                model_name, do_lower_case=self.args.do_lower_case, normalization=True, **kwargs
+            )
+        else:
+            self.tokenizer = tokenizer_class.from_pretrained(
+                model_name, do_lower_case=self.args.do_lower_case, **kwargs
+            )
+
+        if self.args.special_tokens_list:
+            self.tokenizer.add_tokens(self.args.special_tokens_list, special_tokens=True)
+            self.model.resize_token_embeddings(len(self.tokenizer))
 
         self.args.model_name = model_name
         self.args.model_type = model_type
@@ -374,10 +390,67 @@ class MicroTransQuestModel:
         warmup_steps = math.ceil(t_total * args.warmup_ratio)
         args.warmup_steps = warmup_steps if args.warmup_steps == 0 else args.warmup_steps
 
-        optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate, eps=args.adam_epsilon,)
-        scheduler = get_linear_schedule_with_warmup(
-            optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=t_total
-        )
+        if args.optimizer == "AdamW":
+            optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate, eps=args.adam_epsilon)
+        elif args.optimizer == "Adafactor":
+            optimizer = Adafactor(
+                optimizer_grouped_parameters,
+                lr=args.learning_rate,
+                eps=args.adafactor_eps,
+                clip_threshold=args.adafactor_clip_threshold,
+                decay_rate=args.adafactor_decay_rate,
+                beta1=args.adafactor_beta1,
+                weight_decay=args.weight_decay,
+                scale_parameter=args.adafactor_scale_parameter,
+                relative_step=args.adafactor_relative_step,
+                warmup_init=args.adafactor_warmup_init,
+            )
+            print("Using Adafactor for T5")
+        else:
+            raise ValueError(
+                "{} is not a valid optimizer class. Please use one of ('AdamW', 'Adafactor') instead.".format(
+                    args.optimizer
+                )
+            )
+
+        if args.scheduler == "constant_schedule":
+            scheduler = get_constant_schedule(optimizer)
+
+        elif args.scheduler == "constant_schedule_with_warmup":
+            scheduler = get_constant_schedule_with_warmup(optimizer, num_warmup_steps=args.warmup_steps)
+
+        elif args.scheduler == "linear_schedule_with_warmup":
+            scheduler = get_linear_schedule_with_warmup(
+                optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=t_total
+            )
+
+        elif args.scheduler == "cosine_schedule_with_warmup":
+            scheduler = get_cosine_schedule_with_warmup(
+                optimizer,
+                num_warmup_steps=args.warmup_steps,
+                num_training_steps=t_total,
+                num_cycles=args.cosine_schedule_num_cycles,
+            )
+
+        elif args.scheduler == "cosine_with_hard_restarts_schedule_with_warmup":
+            scheduler = get_cosine_with_hard_restarts_schedule_with_warmup(
+                optimizer,
+                num_warmup_steps=args.warmup_steps,
+                num_training_steps=t_total,
+                num_cycles=args.cosine_schedule_num_cycles,
+            )
+
+        elif args.scheduler == "polynomial_decay_schedule_with_warmup":
+            scheduler = get_polynomial_decay_schedule_with_warmup(
+                optimizer,
+                num_warmup_steps=args.warmup_steps,
+                num_training_steps=t_total,
+                lr_end=args.polynomial_decay_schedule_lr_end,
+                power=args.polynomial_decay_schedule_lr_end,
+            )
+
+        else:
+            raise ValueError("{} is not a valid scheduler.".format(args.scheduler))
 
         if args.n_gpu > 1:
             model = torch.nn.DataParallel(model)
@@ -448,11 +521,11 @@ class MicroTransQuestModel:
                 if self.args.fp16:
                     with amp.autocast():
                         outputs = model(**inputs)
-                        # model outputs are always tuple in pytorch-monotransquest (see doc)
+                        # model outputs are always tuple in pytorch-transformers (see doc)
                         loss = outputs[0]
                 else:
                     outputs = model(**inputs)
-                    # model outputs are always tuple in pytorch-monotransquest (see doc)
+                    # model outputs are always tuple in pytorch-transformers (see doc)
                     loss = outputs[0]
 
                 if args.n_gpu > 1:
@@ -477,7 +550,8 @@ class MicroTransQuestModel:
                 if (step + 1) % args.gradient_accumulation_steps == 0:
                     if self.args.fp16:
                         scaler.unscale_(optimizer)
-                    torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
+                    if args.optimizer == "AdamW":
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
 
                     if self.args.fp16:
                         scaler.step(optimizer)
@@ -490,26 +564,22 @@ class MicroTransQuestModel:
 
                     if args.logging_steps > 0 and global_step % args.logging_steps == 0:
                         # Log metrics
-                        tb_writer.add_scalar("lr", scheduler.get_lr()[0], global_step)
+                        tb_writer.add_scalar("lr", scheduler.get_last_lr()[0], global_step)
                         tb_writer.add_scalar(
                             "loss", (tr_loss - logging_loss) / args.logging_steps, global_step,
                         )
                         logging_loss = tr_loss
-                        if args.wandb_project:
+                        if args.wandb_project or self.is_sweeping:
                             wandb.log(
                                 {
                                     "Training loss": current_loss,
-                                    "lr": scheduler.get_lr()[0],
+                                    "lr": scheduler.get_last_lr()[0],
                                     "global_step": global_step,
                                 }
                             )
 
                     if args.save_steps > 0 and global_step % args.save_steps == 0:
                         # Save model checkpoint
-                        if args.save_recent_only:
-                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
-                            for del_path in del_paths:
-                                shutil.rmtree(del_path)
                         output_dir_current = os.path.join(output_dir, "checkpoint-{}".format(global_step))
 
                         self.save_model(output_dir_current, optimizer, scheduler, model=model)
@@ -535,10 +605,6 @@ class MicroTransQuestModel:
                             tb_writer.add_scalar("eval_{}".format(key), value, global_step)
 
                         if args.save_eval_checkpoints:
-                            if args.save_recent_only:
-                                del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
-                                for del_path in del_paths:
-                                    shutil.rmtree(del_path)
                             self.save_model(output_dir_current, optimizer, scheduler, model=model, results=results)
 
                         training_progress_scores["global_step"].append(global_step)
@@ -550,7 +616,7 @@ class MicroTransQuestModel:
                             os.path.join(args.output_dir, "training_progress_scores.csv"), index=False,
                         )
 
-                        if args.wandb_project:
+                        if args.wandb_project or self.is_sweeping:
                             wandb.log(self._get_last_metrics(training_progress_scores))
 
                         if not best_eval_metric:
@@ -613,10 +679,6 @@ class MicroTransQuestModel:
             output_dir_current = os.path.join(output_dir, "checkpoint-{}-epoch-{}".format(global_step, epoch_number))
 
             if args.save_model_every_epoch or args.evaluate_during_training:
-                if args.save_recent_only:
-                    del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
-                    for del_path in del_paths:
-                        shutil.rmtree(del_path)
                 os.makedirs(output_dir_current, exist_ok=True)
 
             if args.save_model_every_epoch:
@@ -636,7 +698,7 @@ class MicroTransQuestModel:
                 report = pd.DataFrame(training_progress_scores)
                 report.to_csv(os.path.join(args.output_dir, "training_progress_scores.csv"), index=False)
 
-                if args.wandb_project:
+                if args.wandb_project or self.is_sweeping:
                     wandb.log(self._get_last_metrics(training_progress_scores))
 
                 if not best_eval_metric:
@@ -841,7 +903,7 @@ class MicroTransQuestModel:
         output_eval_file = os.path.join(eval_output_dir, "eval_results.txt")
         with open(output_eval_file, "w") as writer:
             if args.classification_report:
-                cls_report = classification_report(out_label_list, preds_list)
+                cls_report = classification_report(out_label_list, preds_list, digits=4)
                 writer.write("{}\n".format(cls_report))
             for key in sorted(result.keys()):
                 writer.write("{} = {}\n".format(key, str(result[key])))
@@ -944,6 +1006,9 @@ class MicroTransQuestModel:
                     out_input_ids = np.append(out_input_ids, inputs_onnx["input_ids"], axis=0)
                     out_attention_mask = np.append(out_attention_mask, inputs_onnx["attention_mask"], axis=0,)
             out_label_ids = np.zeros_like(out_input_ids)
+            for index in range(len(out_label_ids)):
+                out_label_ids[index][0] = -100
+                out_label_ids[index][-1] = -100
         else:
             self._move_model_to_device()
 
@@ -1094,7 +1159,10 @@ class MicroTransQuestModel:
         if not to_predict and isinstance(data, str) and self.args.lazy_loading:
             dataset = LazyQEDataset(data, tokenizer, self.args)
         else:
-            if not to_predict:
+            if to_predict:
+                examples = to_predict
+                no_cache = True
+            else:
                 if isinstance(data, str):
                     examples = read_examples_from_file(
                         data, mode, bbox=True if self.args.model_type == "layoutlm" else False
@@ -1103,9 +1171,6 @@ class MicroTransQuestModel:
                     if self.args.lazy_loading:
                         raise ValueError("Input must be given as a path to a file when using lazy loading")
                     examples = get_examples_from_df(data, bbox=True if self.args.model_type == "layoutlm" else False)
-            else:
-                examples = to_predict
-                no_cache = True
 
             cached_features_file = os.path.join(
                 args.cache_dir,
@@ -1267,7 +1332,7 @@ class MicroTransQuestModel:
         self.args.save(output_dir)
 
     def _load_model_args(self, input_dir):
-        args = MonoTransQuestArgs()
+        args = MicroTransQuestArgs()
         args.load(input_dir)
         return args
 

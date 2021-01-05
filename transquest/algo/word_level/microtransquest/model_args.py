@@ -9,9 +9,10 @@ class MicroTransQuestArgs(TransQuestArgs):
     Model args for a MicroTransQuestModel
     """
 
-    model_class: str = "MicroTransQuestModel"
+    model_class: str = "NERModel"
     classification_report: bool = False
     labels_list: list = field(default_factory=list)
     lazy_loading: bool = False
     lazy_loading_start_line: int = 0
     onnx: bool = False
+    special_tokens_list: list = field(default_factory=list)
