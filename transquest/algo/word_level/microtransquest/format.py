@@ -14,11 +14,11 @@ def prepare_data(source_sentences, source_tags, target_sentences, target_tags):
         target_words = target_sentence.split()
         target_tags = target_tag_lind.split()
 
-        data.append([sentence_id, "<s>", target_tags.pop(0)])
+        data.append([sentence_id, "<gap>", target_tags.pop(0)])
 
         for word in target_words:
             data.append([sentence_id, word, target_tags.pop(0)])
-            data.append([sentence_id, "<s>", target_tags.pop(0)])
+            data.append([sentence_id, "<gap>", target_tags.pop(0)])
 
         sentence_id += 1
 
