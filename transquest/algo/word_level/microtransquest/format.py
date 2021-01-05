@@ -23,3 +23,5 @@ def prepare_data(source_sentences, source_tags, target_sentences, target_tags):
         sentence_id += 1
 
     return pd.DataFrame(data, columns=['sentence_id', 'words', 'labels'])
+
+# def prepare_testdata(source_sentences, target_sentences):
