@@ -80,7 +80,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class NERModel:
+class MicroTransQuestModel:
     def __init__(
         self,
         model_type,
