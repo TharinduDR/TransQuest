@@ -39,27 +39,57 @@ def prepare_testdata(source_sentences, target_sentences):
     return test_sentences
 
 
-def post_process(predicted_sentences):
+def post_process(predicted_sentences, test_sentences):
     sources_tags = []
     targets_tags = []
-    for predicted_sentence in predicted_sentences:
+    for predicted_sentence, test_sentence in zip(predicted_sentences,test_sentences):
         source_tags = []
         target_tags = []
+        words = test_sentence.split()
         source_sentence = True
-        for word_prediction in predicted_sentence:
-            word = list(word_prediction.keys())[0]
+        for idx, word in enumerate(words):
 
             if word == "[SEP]":
                 source_sentence = False
                 continue
             if source_sentence:
-                source_tags.append(list(word_prediction.values())[0])
+                if idx >= len(predicted_sentence):
+                    source_tags.append("OK")
+                else:
+                    source_tags.append(list(predicted_sentence[idx].values())[0])
             else:
-                target_tags.append(list(word_prediction.values())[0])
+                if idx >= len(predicted_sentence):
+                    target_tags.append("OK")
+                else:
+                    target_tags.append(list(predicted_sentence[idx].values())[0])
         sources_tags.append(source_tags)
         targets_tags.append(target_tags)
 
     return sources_tags, targets_tags
+
+
+# def post_process(predicted_sentences, test_sentences):
+#     sources_tags = []
+#     targets_tags = []
+#     for predicted_sentence, test_sentence in zip(predicted_sentences,test_sentences):
+#         source_tags = []
+#         target_tags = []
+#         words = test_sentence.split()
+#         source_sentence = True
+#         for word_prediction in predicted_sentence:
+#             word = list(word_prediction.keys())[0]
+#
+#             if word == "[SEP]":
+#                 source_sentence = False
+#                 continue
+#             if source_sentence:
+#                 source_tags.append(list(word_prediction.values())[0])
+#             else:
+#                 target_tags.append(list(word_prediction.values())[0])
+#         sources_tags.append(source_tags)
+#         targets_tags.append(target_tags)
+#
+#     return sources_tags, targets_tags
 
 
 
