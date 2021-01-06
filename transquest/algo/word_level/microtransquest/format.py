@@ -56,7 +56,7 @@ def post_process(predicted_sentences):
                 source_tags.append(list(word_prediction.values())[0])
             else:
                 target_tags.append(list(word_prediction.values())[0])
-        sources_tags.append(sources_tags)
+        sources_tags.append(source_tags)
         targets_tags.append(target_tags)
 
     return sources_tags, targets_tags
