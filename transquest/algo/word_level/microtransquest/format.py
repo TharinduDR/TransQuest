@@ -9,16 +9,16 @@ def prepare_data(source_sentences, source_tags, target_sentences, target_tags):
         for word, tag in zip(source_sentence.split(), source_tag_line.split()):
             data.append([sentence_id, word, tag])
 
-        data.append([sentence_id, "[SEP]", "SEP"])
+        data.append([sentence_id, "[SEP]", "OK"])
 
         target_words = target_sentence.split()
         target_tags = target_tag_lind.split()
 
-        data.append([sentence_id, "<gap>", target_tags.pop(0)])
+        data.append([sentence_id, "_", target_tags.pop(0)])
 
         for word in target_words:
             data.append([sentence_id, word, target_tags.pop(0)])
-            data.append([sentence_id, "<gap>", target_tags.pop(0)])
+            data.append([sentence_id, "_", target_tags.pop(0)])
 
         sentence_id += 1
 
@@ -32,8 +32,8 @@ def prepare_testdata(source_sentences, target_sentences):
         test_sentence = source_sentence + " " + "[SEP]"
         target_words = target_sentence.split()
         for target_word in target_words:
-            test_sentence = test_sentence + " " + "<gap>" + " " + target_word
-        test_sentence = test_sentence + " " + "<gap>"
+            test_sentence = test_sentence + " " + "_" + " " + target_word
+        test_sentence = test_sentence + " " + "_"
         test_sentences.append(test_sentence)
 
     return test_sentences
