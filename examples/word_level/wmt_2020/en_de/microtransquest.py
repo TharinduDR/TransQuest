@@ -33,7 +33,7 @@ else:
 model = MicroTransQuestModel(MODEL_TYPE, microtransquest_config["best_model_dir"], labels=tags, args=microtransquest_config)
 test_sentences = prepare_testdata(test_source_sentences, test_target_sentences)
 
-predicted_labels = model.predict(test_sentences, split_on_space=True)
+predicted_labels, raw_predictions = model.predict(test_sentences, split_on_space=True)
 
 sources_tags, targets_tags = post_process(predicted_labels)
 
