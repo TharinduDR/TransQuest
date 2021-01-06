@@ -1,10 +1,18 @@
 from multiprocessing import cpu_count
 
 TRAIN_PATH = "examples/word_level/wmt_2020/en_de/data/en-de/train/"
-SOURCE_FILE = "train.src"
-SOURCE_TAGS_FILE = "train.source_tags"
-TARGET_FILE = "train.mt"
-TARGET_TAGS_FLE = "train.tags"
+TRAIN_SOURCE_FILE = "train.src"
+TRAIN_SOURCE_TAGS_FILE = "train.source_tags"
+TRAIN_TARGET_FILE = "train.mt"
+TRAIN_TARGET_TAGS_FLE = "train.tags"
+
+TEST_PATH = "examples/word_level/wmt_2020/en_de/data/en-de/test-blind/"
+TEST_SOURCE_FILE = "test.src"
+TEST_TARGET_FILE = "test.mt"
+
+TEST_SOURCE_TAGS_FILE = "test.source_tags"
+TEST_TARGET_TAGS_FLE = "test.tags"
+
 SEED = 777
 TEMP_DIRECTORY = "temp/data"
 GOOGLE_DRIVE = False

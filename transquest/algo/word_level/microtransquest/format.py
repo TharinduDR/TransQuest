@@ -24,4 +24,43 @@ def prepare_data(source_sentences, source_tags, target_sentences, target_tags):
 
     return pd.DataFrame(data, columns=['sentence_id', 'words', 'labels'])
 
-# def prepare_testdata(source_sentences, target_sentences):
+
+def prepare_testdata(source_sentences, target_sentences):
+
+    test_sentences = []
+    for source_sentence, target_sentence in zip(source_sentences, target_sentences):
+        test_sentence = source_sentence + " " + "[SEP]"
+        target_words = target_sentence.split()
+        for target_word in target_words:
+            test_sentence = test_sentence + " " + "<gap>" + " " + target_word
+        test_sentence = test_sentence + " " + "<gap>"
+        test_sentences.append(test_sentence)
+
+    return test_sentences
+
+
+def post_process(predicted_sentences):
+    sources_tags = []
+    targets_tags = []
+    for predicted_sentence in predicted_sentences:
+        source_tags = []
+        target_tags = []
+        source_sentence = True
+        for word_prediction in predicted_sentence:
+            word = list(word_prediction.keys())[0]
+
+            if word == "[SEP]":
+                source_sentence = False
+                continue
+            if source_sentence:
+                source_tags.append(list(word_prediction.values())[0])
+            else:
+                target_tags.append(list(word_prediction.values())[0])
+        sources_tags.append(sources_tags)
+        targets_tags.append(target_tags)
+
+    return sources_tags, targets_tags
+
+
+
+
