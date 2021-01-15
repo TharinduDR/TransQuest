@@ -18,3 +18,5 @@ class MicroTransQuestArgs(TransQuestArgs):
     special_tokens_list: list = field(default_factory=list)
     add_tag: bool = False
     tag: str = "<gap>"
+    default_quality: str = "OK"
+

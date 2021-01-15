@@ -39,31 +39,35 @@ def prepare_testdata(source_sentences, target_sentences, args):
     return test_sentences
 
 
-def post_process(predicted_sentences, test_sentences):
+def post_process(predicted_sentences, test_sentences, args):
     sources_tags = []
     targets_tags = []
-    for predicted_sentence, test_sentence in zip(predicted_sentences,test_sentences):
+    for predicted_sentence, test_sentence in zip(predicted_sentences, test_sentences):
         source_tags = []
         target_tags = []
         words = test_sentence.split()
-        source_sentence = True
+        is_source_sentence = True
+        souurce_sentence = test_sentence.split("[SEP]")[0]
+        target_sentence = test_sentence.split("[SEP]")[1]
         for idx, word in enumerate(words):
 
             if word == "[SEP]":
-                source_sentence = False
+                is_source_sentence = False
                 continue
-            if source_sentence:
-                if idx >= len(predicted_sentence):
-                    source_tags.append("OK")
-                else:
-                    source_tags.append(list(predicted_sentence[idx].values())[0])
+            if is_source_sentence:
+                source_tags.append(list(predicted_sentence[idx].values())[0])
             else:
-                if idx >= len(predicted_sentence):
-                    target_tags.append("OK")
-                else:
-                    target_tags.append(list(predicted_sentence[idx].values())[0])
+                target_tags.append(list(predicted_sentence[idx].values())[0])
+
+        assert len(source_tags) == len(souurce_sentence.split())
+
+        if len(target_sentence.split()) > len(target_tags):
+            target_tags = target_tags + [args["default_quality"] for x in range(len(target_sentence.split()) - len(target_tags))]
+
         sources_tags.append(source_tags)
         targets_tags.append(target_tags)
+
+
 
     return sources_tags, targets_tags
 

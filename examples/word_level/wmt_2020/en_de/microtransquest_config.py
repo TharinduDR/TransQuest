@@ -83,6 +83,8 @@ microtransquest_config = {
     "add_tag": True,
     "tag": "<gap>",
 
+    "default_quality": "OK",
+
     "config": {},
     "local_rank": -1,
     "encoding": None,

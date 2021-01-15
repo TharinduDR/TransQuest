@@ -35,7 +35,7 @@ test_sentences = prepare_testdata(test_source_sentences, test_target_sentences, 
 
 predicted_labels, raw_predictions = model.predict(test_sentences, split_on_space=True)
 
-sources_tags, targets_tags = post_process(predicted_labels, test_sentences)
+sources_tags, targets_tags = post_process(predicted_labels, test_sentences, args=microtransquest_config)
 
 with open(os.path.join(TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE), 'w') as f:
     for _list in sources_tags:
