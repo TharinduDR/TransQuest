@@ -242,6 +242,10 @@ class MicroTransQuestModel:
             )
             self.args.use_multiprocessing = False
 
+        if self.args.add_tag:
+            self.tokenizer.add_tokens([self.args.tag], special_tokens=True)
+            self.model.resize_token_embeddings(len(self.tokenizer))
+
         if self.args.wandb_project and not wandb_available:
             warnings.warn("wandb_project specified but wandb is not available. Wandb disabled.")
             self.args.wandb_project = None

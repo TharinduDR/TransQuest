@@ -15,7 +15,7 @@ if not os.path.exists(TEMP_DIRECTORY):
 
 train_source_sentences, train_target_sentences, train_source_tags, train_target_tags = reader(TRAIN_PATH, TRAIN_SOURCE_FILE, TRAIN_TARGET_FILE, TRAIN_SOURCE_TAGS_FILE, TRAIN_TARGET_TAGS_FLE)
 test_source_sentences, test_target_sentences = reader(TEST_PATH, TEST_SOURCE_FILE, TEST_TARGET_FILE)
-train_df = prepare_data(train_source_sentences, train_source_tags, train_target_sentences, train_target_tags)
+train_df = prepare_data(train_source_sentences, train_source_tags, train_target_sentences, train_target_tags, args=microtransquest_config)
 
 train_df.to_csv("check.csv", sep='\t', encoding='utf-8')
 
@@ -31,7 +31,7 @@ else:
     model.train_model(train_df)
 
 model = MicroTransQuestModel(MODEL_TYPE, microtransquest_config["best_model_dir"], labels=tags, args=microtransquest_config)
-test_sentences = prepare_testdata(test_source_sentences, test_target_sentences)
+test_sentences = prepare_testdata(test_source_sentences, test_target_sentences, args=microtransquest_config)
 
 predicted_labels, raw_predictions = model.predict(test_sentences, split_on_space=True)
 

@@ -80,6 +80,9 @@ microtransquest_config = {
 
     "manual_seed": SEED,
 
+    "add_tag": True,
+    "tag": "<gap>",
+
     "config": {},
     "local_rank": -1,
     "encoding": None,
