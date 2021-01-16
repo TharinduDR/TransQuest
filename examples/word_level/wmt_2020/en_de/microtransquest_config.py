@@ -10,8 +10,8 @@ TEST_PATH = "examples/word_level/wmt_2020/en_de/data/en-de/test-blind/"
 TEST_SOURCE_FILE = "test.src"
 TEST_TARGET_FILE = "test.mt"
 
-TEST_SOURCE_TAGS_FILE = "test.source_tags"
-TEST_TARGET_TAGS_FLE = "test.tags"
+TEST_SOURCE_TAGS_FILE = "predictions_src.txt"
+TEST_TARGET_TAGS_FLE = "predictions_mt.txt"
 
 SEED = 777
 TEMP_DIRECTORY = "temp/data"
