@@ -73,18 +73,18 @@ fold_targets_tags_df.to_csv("source.csv", sep='\t')
 #
 # sources_tags, targets_tags = post_process(predicted_labels, test_sentences, args=microtransquest_config)
 
-with open(os.path.join(TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE), 'w') as f:
-    for _list in sources_tags:
-        for _string in _list:
-            f.write(str(_string) + ' ')
-        f.write(str('\n'))
-
-
-with open(os.path.join(TEMP_DIRECTORY, TEST_TARGET_TAGS_FLE), 'w') as f:
-    for _list in targets_tags:
-        for _string in _list:
-            f.write(str(_string) + ' ')
-        f.write(str('\n'))
+# with open(os.path.join(TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE), 'w') as f:
+#     for _list in sources_tags:
+#         for _string in _list:
+#             f.write(str(_string) + ' ')
+#         f.write(str('\n'))
+#
+#
+# with open(os.path.join(TEMP_DIRECTORY, TEST_TARGET_TAGS_FLE), 'w') as f:
+#     for _list in targets_tags:
+#         for _string in _list:
+#             f.write(str(_string) + ' ')
+#         f.write(str('\n'))
 
 
 
