@@ -17,6 +17,8 @@ if not os.path.exists(TEMP_DIRECTORY):
 raw_train_df = reader(TRAIN_PATH, microtransquest_config, TRAIN_SOURCE_FILE, TRAIN_TARGET_FILE, TRAIN_SOURCE_TAGS_FILE, TRAIN_TARGET_TAGS_FLE)
 raw_test_df = reader(TEST_PATH, microtransquest_config, TEST_SOURCE_FILE, TEST_TARGET_FILE)
 
+# raw_train_df.to_csv("train.csv", sep='\t')
+
 test_sentences = prepare_testdata(raw_test_df, args=microtransquest_config)
 
 fold_sources_tags = []

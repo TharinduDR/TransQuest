@@ -3,9 +3,14 @@ import pandas as pd
 
 def prepare_data(raw_df, args):
     source_sentences = raw_df[args["source_column"]].tolist()
-    source_tags = raw_df[args["target_column"]].tolist()
-    target_sentences = raw_df[args["source_tags_column"]].tolist()
+    source_tags = raw_df[args["source_tags_column"]].tolist()
+    target_sentences = raw_df[args["target_column"]].tolist()
     target_tags = raw_df[args["target_tags_column"]].tolist()
+
+    print((len(source_sentences)))
+    print((len(source_tags)))
+    print((len(target_sentences)))
+    print((len(target_tags)))
 
     sentence_id = 0
     data = []
@@ -17,6 +22,7 @@ def prepare_data(raw_df, args):
 
         target_words = target_sentence.split()
         target_tags = target_tag_lind.split()
+
 
         data.append([sentence_id, args["tag"], target_tags.pop(0)])
 
