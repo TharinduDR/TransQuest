@@ -19,7 +19,6 @@ if not os.path.exists(TEMP_DIRECTORY):
 raw_train_df = reader(TRAIN_PATH, microtransquest_config, TRAIN_SOURCE_FILE, TRAIN_TARGET_FILE, TRAIN_SOURCE_TAGS_FILE, TRAIN_TARGET_TAGS_FLE)
 raw_test_df = reader(TEST_PATH, microtransquest_config, TEST_SOURCE_FILE, TEST_TARGET_FILE)
 
-# raw_train_df.to_csv("train.csv", sep='\t')
 
 test_sentences = prepare_testdata(raw_test_df, args=microtransquest_config)
 
@@ -52,16 +51,8 @@ for i in range(microtransquest_config["n_fold"]):
     fold_sources_tags.append(sources_tags)
     fold_targets_tags.append(targets_tags)
 
-# fold_sources_tags_df = pd.DataFrame.from_records(fold_sources_tags)
-# fold_targets_tags_df = pd.DataFrame.from_records(fold_targets_tags)
-#
-# fold_sources_tags_df.to_csv("source.csv", sep='\t')
-# fold_targets_tags_df.to_csv("source.csv", sep='\t')
 
-for fold, fold_prediction in enumerate(fold_sources_tags):
-    for sentence_id, sentence_prediction in fold_prediction:
-        sentence_prediction
-
+source_predictions = []
 for sentence_id in range(len(test_sentences)):
     majority_prediction = []
     predictions = []
@@ -75,6 +66,36 @@ for sentence_id in range(len(test_sentences)):
         for prediction in predictions:
             word_prediction.append(prediction[word_id])
         majority_prediction.append(max(set(word_prediction), key=word_prediction.count))
+    source_predictions.append(majority_prediction)
+
+with open(os.path.join(TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE), 'w') as f:
+    for _list in source_predictions:
+        for _string in _list:
+            f.write(str(_string) + ' ')
+        f.write(str('\n'))
+
+
+target_predictions = []
+for sentence_id in range(len(test_sentences)):
+    majority_prediction = []
+    predictions = []
+    for fold_prediction in fold_targets_tags:
+        predictions.append(fold_prediction[sentence_id])
+
+    sentence_length = len(predictions[0])
+
+    for word_id in range(sentence_length):
+        word_prediction = []
+        for prediction in predictions:
+            word_prediction.append(prediction[word_id])
+        majority_prediction.append(max(set(word_prediction), key=word_prediction.count))
+    target_predictions.append(majority_prediction)
+
+with open(os.path.join(TEMP_DIRECTORY, TEST_TARGET_TAGS_FLE), 'w') as f:
+    for _list in target_predictions:
+        for _string in _list:
+            f.write(str(_string) + ' ')
+        f.write(str('\n'))
 
 
 
