@@ -1,7 +1,11 @@
 import pandas as pd
 
 
-def prepare_data(source_sentences, source_tags, target_sentences, target_tags, args):
+def prepare_data(raw_df, args):
+    source_sentences = raw_df[args[""]].tolist()
+    source_tags = raw_df[args[""]].tolist()
+    target_sentences = raw_df[args[""]].tolist()
+    target_tags = raw_df[args[""]].tolist()
 
     sentence_id = 0
     data = []
@@ -25,7 +29,10 @@ def prepare_data(source_sentences, source_tags, target_sentences, target_tags, a
     return pd.DataFrame(data, columns=['sentence_id', 'words', 'labels'])
 
 
-def prepare_testdata(source_sentences, target_sentences, args):
+def prepare_testdata(raw_df, args):
+
+    source_sentences = raw_df[args[""]].tolist()
+    target_sentences = raw_df[args[""]].tolist()
 
     test_sentences = []
     for source_sentence, target_sentence in zip(source_sentences, target_sentences):

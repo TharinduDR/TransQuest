@@ -88,4 +88,9 @@ microtransquest_config = {
     "config": {},
     "local_rank": -1,
     "encoding": None,
+
+    "source_column": "source",
+    "target_column": "target",
+    "source_tags_column": "source_tags",
+    "target_tags_column": "target_tags",
 }
