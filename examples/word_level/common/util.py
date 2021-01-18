@@ -20,7 +20,7 @@ def reader(path, args, source_file, target_file, source_tags_file=None, target_t
         df = pd.DataFrame(
             {
                 args["source_column"]: source_sentences,
-                args["source_column"]: target_sentences,
+                args["target_column"]: target_sentences,
                 args["source_tags_column"]: source_tags,
                 args["target_tags_column"]: target_tags
             }
@@ -30,7 +30,7 @@ def reader(path, args, source_file, target_file, source_tags_file=None, target_t
         df = pd.DataFrame(
             {
                 args["source_column"]: source_sentences,
-                args["source_column"]: target_sentences
+                args["target_column"]: target_sentences
             }
         )
 
