@@ -10,7 +10,6 @@ from examples.word_level.wmt_2020.en_de.microtransquest_config import TRAIN_PATH
     TEST_TARGET_FILE, TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE, TEST_TARGET_TAGS_FLE, SEED
 from transquest.algo.word_level.microtransquest.run_model import MicroTransQuestModel
 from transquest.algo.word_level.microtransquest.format import prepare_data, prepare_testdata, post_process
-import pandas as pd
 
 
 if not os.path.exists(TEMP_DIRECTORY):
