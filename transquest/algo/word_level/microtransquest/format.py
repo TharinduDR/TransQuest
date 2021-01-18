@@ -7,11 +7,6 @@ def prepare_data(raw_df, args):
     target_sentences = raw_df[args["target_column"]].tolist()
     target_tags = raw_df[args["target_tags_column"]].tolist()
 
-    print((len(source_sentences)))
-    print((len(source_tags)))
-    print((len(target_sentences)))
-    print((len(target_tags)))
-
     sentence_id = 0
     data = []
     for source_sentence, source_tag_line, target_sentence, target_tag_lind in zip(source_sentences, source_tags, target_sentences, target_tags):

@@ -1,3 +1,5 @@
+import shutil
+
 from sklearn.model_selection import train_test_split
 import os
 from examples.word_level.common.util import reader
@@ -26,6 +28,9 @@ fold_targets_tags = []
 
 for i in range(microtransquest_config["n_fold"]):
 
+    if os.path.exists(microtransquest_config['output_dir']) and os.path.isdir(microtransquest_config['output_dir']):
+        shutil.rmtree(microtransquest_config['output_dir'])
+
     if microtransquest_config["evaluate_during_training"]:
         raw_train, raw_eval = train_test_split(raw_train_df, test_size=0.1, random_state=SEED * i)
         train_df = prepare_data(raw_train, args=microtransquest_config)
@@ -47,11 +52,35 @@ for i in range(microtransquest_config["n_fold"]):
     fold_sources_tags.append(sources_tags)
     fold_targets_tags.append(targets_tags)
 
-fold_sources_tags_df = pd.DataFrame.from_records(fold_sources_tags)
-fold_targets_tags_df = pd.DataFrame.from_records(fold_targets_tags)
+# fold_sources_tags_df = pd.DataFrame.from_records(fold_sources_tags)
+# fold_targets_tags_df = pd.DataFrame.from_records(fold_targets_tags)
+#
+# fold_sources_tags_df.to_csv("source.csv", sep='\t')
+# fold_targets_tags_df.to_csv("source.csv", sep='\t')
 
-fold_sources_tags_df.to_csv("source.csv", sep='\t')
-fold_targets_tags_df.to_csv("source.csv", sep='\t')
+for fold, fold_prediction in enumerate(fold_sources_tags):
+    for sentence_id, sentence_prediction in fold_prediction:
+        sentence_prediction
+
+for sentence_id in range(len(test_sentences)):
+    majority_prediction = []
+    predictions = []
+    for fold_prediction in fold_sources_tags:
+        predictions.append(fold_prediction[sentence_id])
+
+    sentence_length = len(predictions[0])
+
+    for word_id in range(sentence_length):
+        word_prediction = []
+        for prediction in predictions:
+            word_prediction.append(prediction[word_id])
+        majority_prediction.append(max(set(word_prediction), key=word_prediction.count))
+
+
+
+
+
+
 
 
 
