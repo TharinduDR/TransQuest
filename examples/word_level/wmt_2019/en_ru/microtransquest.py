@@ -3,7 +3,7 @@ import shutil
 from sklearn.model_selection import train_test_split
 import os
 from examples.word_level.common.util import reader
-from examples.word_level.wmt_2020.en_de.microtransquest_config import TRAIN_PATH, TRAIN_SOURCE_FILE, \
+from examples.word_level.wmt_2019.en_ru.microtransquest_config import TRAIN_PATH, TRAIN_SOURCE_FILE, \
     TRAIN_SOURCE_TAGS_FILE, \
     TRAIN_TARGET_FILE, \
     TRAIN_TARGET_TAGS_FLE, MODEL_TYPE, MODEL_NAME, microtransquest_config, TEST_PATH, TEST_SOURCE_FILE, \
