@@ -62,6 +62,8 @@ def post_process(predicted_sentences, test_sentences, args):
         print(test_sentence)
         for idx, word in enumerate(words):
 
+            print(idx)
+            print(word)
             if word == "[SEP]":
                 is_source_sentence = False
                 continue
