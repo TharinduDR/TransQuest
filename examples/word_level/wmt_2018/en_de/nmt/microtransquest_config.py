@@ -2,7 +2,7 @@ from multiprocessing import cpu_count
 
 TRAIN_PATH = "examples/word_level/wmt_2018/en_de/nmt/data/en_de.nmt"
 TRAIN_SOURCE_FILE = "train.src"
-TRAIN_SOURCE_TAGS_FILE = "train.source_tags"
+TRAIN_SOURCE_TAGS_FILE = "train.src_tags"
 TRAIN_TARGET_FILE = "train.mt"
 TRAIN_TARGET_TAGS_FLE = "train.tags"
 
