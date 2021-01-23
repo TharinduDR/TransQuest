@@ -1,12 +1,12 @@
 from multiprocessing import cpu_count
 
-TRAIN_PATH = "examples/word_level/wmt_2019/en_ru/data/en-ru/train/"
+TRAIN_PATH = "examples/word_level/wmt_2019/en_ru/data/en-ru/train"
 TRAIN_SOURCE_FILE = "train.src"
 TRAIN_SOURCE_TAGS_FILE = "train.source_tags"
 TRAIN_TARGET_FILE = "train.mt"
 TRAIN_TARGET_TAGS_FLE = "train.tags"
 
-TEST_PATH = "examples/word_level/wmt_2019/en_ru/data/en-ru/test/"
+TEST_PATH = "examples/word_level/wmt_2019/en_ru/data/en-ru/test"
 TEST_SOURCE_FILE = "test.src"
 TEST_TARGET_FILE = "test.mt"
 
