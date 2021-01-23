@@ -57,6 +57,9 @@ def post_process(predicted_sentences, test_sentences, args):
         is_source_sentence = True
         souurce_sentence = test_sentence.split("[SEP]")[0]
         target_sentence = test_sentence.split("[SEP]")[1]
+
+        print(predicted_sentence)
+        print(test_sentence)
         for idx, word in enumerate(words):
 
             if word == "[SEP]":
@@ -74,8 +77,6 @@ def post_process(predicted_sentences, test_sentences, args):
 
         sources_tags.append(source_tags)
         targets_tags.append(target_tags)
-
-
 
     return sources_tags, targets_tags
 
