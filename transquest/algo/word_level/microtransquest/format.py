@@ -58,19 +58,21 @@ def post_process(predicted_sentences, test_sentences, args):
         souurce_sentence = test_sentence.split("[SEP]")[0]
         target_sentence = test_sentence.split("[SEP]")[1]
 
-        print(predicted_sentence)
-        print(test_sentence)
         for idx, word in enumerate(words):
 
-            print(idx)
-            print(word)
             if word == "[SEP]":
                 is_source_sentence = False
                 continue
             if is_source_sentence:
-                source_tags.append(list(predicted_sentence[idx].values())[0])
+                if idx < len(predicted_sentence):
+                    source_tags.append(list(predicted_sentence[idx].values())[0])
+                else:
+                    source_tags.append(args["default_quality"])
             else:
-                target_tags.append(list(predicted_sentence[idx].values())[0])
+                if idx < len(predicted_sentence):
+                    target_tags.append(list(predicted_sentence[idx].values())[0])
+                else:
+                    target_tags.append(args["default_quality"])
 
         assert len(source_tags) == len(souurce_sentence.split())
 
