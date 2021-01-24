@@ -89,8 +89,7 @@ with open(os.path.join(TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE), 'w') as f:
     for sentence_id, (test_source_sentence, source_prediction) in enumerate(
             zip(test_source_sentences, source_predictions)):
         words = test_source_sentence.split()
-        word_predictions = source_prediction.split()
-        for word_id, (word, word_prediction) in enumerate(zip(words, word_predictions)):
+        for word_id, (word, word_prediction) in enumerate(zip(words, source_prediction)):
             f.write("MicroTransQuest" + "\t" + "source" + "\t" +
                     str(sentence_id) + "\t" + str(word_id) + "\t"
                     + word + "\t" + word_prediction + '\n')
@@ -100,10 +99,10 @@ with open(os.path.join(TEMP_DIRECTORY, TEST_TARGET_TAGS_FILE), 'w') as target_f,
     for sentence_id, (test_sentence, target_prediction) in enumerate(zip(test_sentences, target_predictions)):
         target_sentence = test_sentence.split("[SEP]")[1]
         words = target_sentence.split()
-        word_predictions = target_prediction.split()
+        # word_predictions = target_prediction.split()
         gap_index = 0
         word_index = 0
-        for word, word_prediction in zip(words, word_predictions):
+        for word, word_prediction in zip(words, target_prediction):
             if word == microtransquest_config["tag"]:
                 gap_f.write("MicroTransQuest" + "\t" + "gap" + "\t" +
                             str(sentence_id) + "\t" + str(gap_index) + "\t"
