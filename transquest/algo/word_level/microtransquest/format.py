@@ -76,8 +76,8 @@ def post_process(predicted_sentences, test_sentences, args):
 
         assert len(source_tags) == len(source_sentence.split())
 
-        # if len(target_sentence.split()) > len(target_tags):
-        #     target_tags = target_tags + [args["default_quality"] for x in range(len(target_sentence.split()) - len(target_tags))]
+        if len(target_sentence.split()) > len(target_tags):
+            target_tags = target_tags + [args["default_quality"] for x in range(len(target_sentence.split()) - len(target_tags))]
 
         assert len(target_tags) == len(target_sentence.split())
         sources_tags.append(source_tags)
