@@ -19,6 +19,8 @@ raw_train_df = reader(TRAIN_PATH, microtransquest_config, TRAIN_SOURCE_FILE, TRA
                       TRAIN_TARGET_TAGS_FLE)
 raw_test_df = reader(TEST_PATH, microtransquest_config, TEST_SOURCE_FILE, TEST_TARGET_FILE)
 
+raw_train_df = raw_train_df.head(200)
+
 test_sentences = prepare_testdata(raw_test_df, args=microtransquest_config)
 
 fold_sources_tags = []
@@ -102,8 +104,8 @@ with open(os.path.join(TEMP_DIRECTORY, TEST_TARGET_TAGS_FILE), 'w') as target_f,
         # word_predictions = target_prediction.split()
         gap_index = 0
         word_index = 0
-        for word, word_prediction in zip(words, target_prediction):
-            if word == microtransquest_config["tag"]:
+        for word_id, (word, word_prediction) in enumerate(zip(words, target_prediction)):
+            if word_id % 2:
                 gap_f.write("MicroTransQuest" + "\t" + "gap" + "\t" +
                             str(sentence_id) + "\t" + str(gap_index) + "\t"
                             + "gap" + "\t" + word_prediction + '\n')
