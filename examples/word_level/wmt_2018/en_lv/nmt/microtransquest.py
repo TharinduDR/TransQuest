@@ -104,7 +104,8 @@ with open(os.path.join(TEMP_DIRECTORY, TEST_TARGET_TAGS_FILE), 'w') as target_f,
         gap_index = 0
         word_index = 0
         for word_id, (word, word_prediction) in enumerate(zip(words, target_prediction)):
-            if word_id % 2:
+            print(word_id)
+            if word_id % 2 == 0:
                 gap_f.write("MicroTransQuest" + "\t" + "gap" + "\t" +
                             str(sentence_id) + "\t" + str(gap_index) + "\t"
                             + "gap" + "\t" + word_prediction + '\n')
