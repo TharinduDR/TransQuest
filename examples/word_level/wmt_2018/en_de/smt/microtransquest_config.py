@@ -6,7 +6,7 @@ TRAIN_SOURCE_TAGS_FILE = "train.src_tags"
 TRAIN_TARGET_FILE = "train.mt"
 TRAIN_TARGET_TAGS_FLE = "train.tags"
 
-DEV_PATH = "examples/word_level/wmt_2018/en_de/nmt/data/en_de.smt"
+DEV_PATH = "examples/word_level/wmt_2018/en_de/smt/data/en_de.smt"
 DEV_SOURCE_FILE = "dev.src"
 DEV_SOURCE_TAGS_FILE = "dev.src_tags"
 DEV_TARGET_FILE = "dev.mt"
