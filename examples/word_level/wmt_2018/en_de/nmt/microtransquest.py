@@ -9,7 +9,8 @@ from examples.word_level.wmt_2018.en_de.nmt.microtransquest_config import TRAIN_
     TRAIN_TARGET_FILE, \
     TRAIN_TARGET_TAGS_FLE, MODEL_TYPE, MODEL_NAME, microtransquest_config, TEST_PATH, TEST_SOURCE_FILE, \
     TEST_TARGET_FILE, TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE, SEED, TEST_TARGET_TAGS_FILE, TEST_TARGET_GAPS_FILE, \
-    DEV_PATH, DEV_SOURCE_FILE, DEV_TARGET_FILE, DEV_SOURCE_TAGS_FILE, DEV_TARGET_TAGS_FLE
+    DEV_PATH, DEV_SOURCE_FILE, DEV_TARGET_FILE, DEV_SOURCE_TAGS_FILE, DEV_TARGET_TAGS_FLE, DEV_SOURCE_TAGS_FILE_SUB, \
+    DEV_TARGET_TAGS_FILE_SUB, DEV_TARGET_GAPS_FILE_SUB
 from transquest.algo.word_level.microtransquest.format import prepare_data, prepare_testdata, post_process
 from transquest.algo.word_level.microtransquest.run_model import MicroTransQuestModel
 
@@ -21,6 +22,8 @@ raw_train_df = reader(TRAIN_PATH, microtransquest_config, TRAIN_SOURCE_FILE, TRA
 raw_dev_df = reader(DEV_PATH, microtransquest_config, DEV_SOURCE_FILE, DEV_TARGET_FILE, DEV_SOURCE_TAGS_FILE,
                     DEV_TARGET_TAGS_FLE)
 raw_test_df = reader(TEST_PATH, microtransquest_config, TEST_SOURCE_FILE, TEST_TARGET_FILE)
+
+raw_train_df = raw_train_df.head(200)
 
 test_sentences = prepare_testdata(raw_test_df, args=microtransquest_config)
 dev_sentences = prepare_testdata(raw_dev_df, args=microtransquest_config)
@@ -164,23 +167,23 @@ dev_target_sentences = raw_dev_df[microtransquest_config["target_column"]].tolis
 dev_source_gold_tags = raw_dev_df[microtransquest_config["source_tags_column"]].tolist()
 dev_target_gold_tags = raw_dev_df[microtransquest_config["target_tags_column"]].tolist()
 
-with open(os.path.join(TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE), 'w') as f:
-    for sentence_id, (test_source_sentence, source_prediction, source_gold_tag) in enumerate(
-            zip(test_source_sentences, source_predictions, dev_source_gold_tags)):
-        words = test_source_sentence.split()
+with open(os.path.join(TEMP_DIRECTORY, DEV_SOURCE_TAGS_FILE_SUB), 'w') as f:
+    for sentence_id, (dev_source_sentence, dev_source_prediction, source_gold_tag) in enumerate(
+            zip(dev_source_sentences, dev_source_predictions, dev_source_gold_tags)):
+        words = dev_source_sentence.split()
         gold_predictions = source_gold_tag.split()
         for word_id, (word, word_prediction, gold_prediction) in enumerate(
-                zip(words, source_prediction, gold_predictions)):
+                zip(words, dev_source_prediction, gold_predictions)):
             f.write("MicroTransQuest" + "\t" + "source" + "\t" +
                     str(sentence_id) + "\t" + str(word_id) + "\t"
                     + word + "\t" + word_prediction + "\t" + gold_prediction + '\n')
 
-with open(os.path.join(TEMP_DIRECTORY, TEST_TARGET_TAGS_FILE), 'w') as target_f, open(
-        os.path.join(TEMP_DIRECTORY, TEST_TARGET_GAPS_FILE), 'w') as gap_f:
-    for sentence_id, (test_sentence, target_prediction, dev_target_gold_tag) in enumerate(
-            zip(test_sentences, target_predictions, dev_target_gold_tags)):
-        target_sentence = test_sentence.split("[SEP]")[1]
-        words = target_sentence.split()
+with open(os.path.join(TEMP_DIRECTORY, DEV_TARGET_TAGS_FILE_SUB), 'w') as target_f, open(
+        os.path.join(TEMP_DIRECTORY, DEV_TARGET_GAPS_FILE_SUB), 'w') as gap_f:
+    for sentence_id, (dev_sentence, dev_target_prediction, dev_target_gold_tag) in enumerate(
+            zip(dev_sentences, dev_target_predictions, dev_target_gold_tags)):
+        dev_target_sentence = dev_sentence.split("[SEP]")[1]
+        words = dev_target_sentence.split()
         gold_predictions = source_gold_tag.split()
         # word_predictions = target_prediction.split()
         gap_index = 0

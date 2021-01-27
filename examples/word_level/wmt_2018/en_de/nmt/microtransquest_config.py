@@ -20,6 +20,10 @@ TEST_SOURCE_TAGS_FILE = "predictions_src.txt"
 TEST_TARGET_TAGS_FILE = "predictions_mt.txt"
 TEST_TARGET_GAPS_FILE = "predictions_gaps.txt"
 
+DEV_SOURCE_TAGS_FILE_SUB = "dev_predictions_src.txt"
+DEV_TARGET_TAGS_FILE_SUB = "dev_predictions_mt.txt"
+DEV_TARGET_GAPS_FILE_SUB = "dev_predictions_gaps.txt"
+
 
 SEED = 777
 TEMP_DIRECTORY = "temp/data"
