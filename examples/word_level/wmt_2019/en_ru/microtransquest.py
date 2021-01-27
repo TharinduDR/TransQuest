@@ -8,7 +8,7 @@ from examples.word_level.wmt_2019.en_ru.microtransquest_config import TRAIN_PATH
     TRAIN_TARGET_FILE, \
     TRAIN_TARGET_TAGS_FLE, MODEL_TYPE, MODEL_NAME, microtransquest_config, TEST_PATH, TEST_SOURCE_FILE, \
     TEST_TARGET_FILE, TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE, TEST_TARGET_TAGS_FLE, SEED, DEV_SOURCE_TAGS_FILE, \
-    DEV_TARGET_TAGS_FLE, DEV_PATH, DEV_SOURCE_FILE, DEV_TARGET_FILE
+    DEV_TARGET_TAGS_FLE, DEV_PATH, DEV_SOURCE_FILE, DEV_TARGET_FILE, DEV_SOURCE_TAGS_FILE_SUB, DEV_TARGET_TAGS_FILE_SUB
 from transquest.algo.word_level.microtransquest.run_model import MicroTransQuestModel
 from transquest.algo.word_level.microtransquest.format import prepare_data, prepare_testdata, post_process
 
@@ -126,7 +126,7 @@ for sentence_id in range(len(dev_sentences)):
         majority_prediction.append(max(set(word_prediction), key=word_prediction.count))
     dev_source_predictions.append(majority_prediction)
 
-with open(os.path.join(TEMP_DIRECTORY, DEV_SOURCE_TAGS_FILE), 'w') as f:
+with open(os.path.join(TEMP_DIRECTORY, DEV_SOURCE_TAGS_FILE_SUB), 'w') as f:
     for _list in source_predictions:
         for _string in _list:
             f.write(str(_string) + ' ')
@@ -149,7 +149,7 @@ for sentence_id in range(len(dev_sentences)):
         majority_prediction.append(max(set(word_prediction), key=word_prediction.count))
     dev_target_predictions.append(majority_prediction)
 
-with open(os.path.join(TEMP_DIRECTORY, DEV_TARGET_TAGS_FLE), 'w') as f:
+with open(os.path.join(TEMP_DIRECTORY, DEV_TARGET_TAGS_FILE_SUB), 'w') as f:
     for _list in target_predictions:
         for _string in _list:
             f.write(str(_string) + ' ')
