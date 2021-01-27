@@ -6,6 +6,12 @@ TRAIN_SOURCE_TAGS_FILE = "train.src_tags"
 TRAIN_TARGET_FILE = "train.mt"
 TRAIN_TARGET_TAGS_FLE = "train.tags"
 
+DEV_PATH = "examples/word_level/wmt_2018/en_lv/smt/data/en_lv.smt"
+DEV_SOURCE_FILE = "dev.src"
+DEV_SOURCE_TAGS_FILE = "dev.src_tags"
+DEV_TARGET_FILE = "dev.mt"
+DEV_TARGET_TAGS_FLE = "dev.tags"
+
 TEST_PATH = "examples/word_level/wmt_2018/en_lv/smt/data/en_lv.smt"
 TEST_SOURCE_FILE = "test.src"
 TEST_TARGET_FILE = "test.mt"
@@ -14,6 +20,9 @@ TEST_SOURCE_TAGS_FILE = "predictions_src.txt"
 TEST_TARGET_TAGS_FILE = "predictions_mt.txt"
 TEST_TARGET_GAPS_FILE = "predictions_gaps.txt"
 
+DEV_SOURCE_TAGS_FILE_SUB = "dev_predictions_src.txt"
+DEV_TARGET_TAGS_FILE_SUB = "dev_predictions_mt.txt"
+DEV_TARGET_GAPS_FILE_SUB = "dev_predictions_gaps.txt"
 
 SEED = 777
 TEMP_DIRECTORY = "temp/data"
