@@ -183,12 +183,12 @@ with open(os.path.join(TEMP_DIRECTORY, DEV_TARGET_TAGS_FILE_SUB), 'w') as target
             zip(dev_sentences, dev_target_predictions, dev_target_gold_tags)):
         dev_target_sentence = dev_sentence.split("[SEP]")[1]
         words = dev_target_sentence.split()
-        gold_predictions = source_gold_tag.split()
+        gold_predictions = dev_target_gold_tag.split()
         # word_predictions = target_prediction.split()
         gap_index = 0
         word_index = 0
         for word_id, (word, word_prediction, gold_prediction) in enumerate(
-                zip(words, target_prediction, gold_predictions)):
+                zip(words, dev_target_prediction, gold_predictions)):
             if word_id % 2 == 0:
                 gap_f.write("MicroTransQuest" + "\t" + "gap" + "\t" +
                             str(sentence_id) + "\t" + str(gap_index) + "\t"
