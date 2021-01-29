@@ -23,7 +23,11 @@ for language, path in models.items():
     if not os.path.exists(os.path.join(TEMP_DIRECTORY, language)):
         os.makedirs(os.path.join(TEMP_DIRECTORY, language))
 
-    model = MicroTransQuestModel(MODEL_TYPE, path, labels=["OK", "BAD"], args=microtransquest_config)
+    if language == "en_lv_smt":
+        model = MicroTransQuestModel(MODEL_TYPE, path, labels=["BAD", "OK"], args=microtransquest_config)
+
+    else:
+        model = MicroTransQuestModel(MODEL_TYPE, path, labels=["OK", "BAD"], args=microtransquest_config)
 
     if not os.path.exists(TEMP_DIRECTORY):
         os.makedirs(TEMP_DIRECTORY)
