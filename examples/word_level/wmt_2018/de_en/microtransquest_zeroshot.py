@@ -20,8 +20,8 @@ models = {
 
 for language, path in models.items():
 
-    if not os.path.exists(TEMP_DIRECTORY, language):
-        os.makedirs(TEMP_DIRECTORY, language)
+    if not os.path.exists(os.path.join(TEMP_DIRECTORY, language)):
+        os.makedirs(os.path.join(TEMP_DIRECTORY, language))
 
     model = MicroTransQuestModel(MODEL_TYPE, path, labels=["OK", "BAD"], args=microtransquest_config)
 
