@@ -11,8 +11,8 @@ from transquest.algo.word_level.microtransquest.run_model import MicroTransQuest
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-download_from_google_drive("1-608WXHIRi-r955dETZD-MlxXTyzExaU", TEMP_DIRECTORY)
-model = MicroTransQuestModel(MODEL_TYPE, TEMP_DIRECTORY , labels=["OK", "BAD"],
+
+model = MicroTransQuestModel(MODEL_TYPE, "/content/drive/MyDrive/TransQuestModels/MicroTransQuest/wmt2018/de_en_smt_pharmaceutical/best_model", labels=["OK", "BAD"],
                                      args=microtransquest_config)
 
 if not os.path.exists(TEMP_DIRECTORY):
