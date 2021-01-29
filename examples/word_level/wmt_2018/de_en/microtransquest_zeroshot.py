@@ -51,7 +51,7 @@ for language, path in models.items():
                         + word + "\t" + word_prediction + '\n')
 
     with open(os.path.join(TEMP_DIRECTORY, language, TEST_TARGET_TAGS_FILE), 'w') as target_f, open(
-            os.path.join(TEMP_DIRECTORY, TEST_TARGET_GAPS_FILE), 'w') as gap_f:
+            os.path.join(TEMP_DIRECTORY, language, TEST_TARGET_GAPS_FILE), 'w') as gap_f:
         for sentence_id, (test_sentence, target_prediction) in enumerate(zip(test_sentences, targets_tags)):
             target_sentence = test_sentence.split("[SEP]")[1]
             words = target_sentence.split()
