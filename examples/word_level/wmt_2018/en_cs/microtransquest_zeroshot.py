@@ -11,6 +11,7 @@ if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
 models = {
+    "de_en": "/content/drive/MyDrive/TransQuestModels/MicroTransQuest/wmt2018/de_en_smt_pharmaceutical/best_model",
     "en_cs": "/content/drive/MyDrive/TransQuestModels/MicroTransQuest/wmt2018/en_cs_smt_it/best_model",
     "en_de_nmt": "/content/drive/MyDrive/TransQuestModels/MicroTransQuest/wmt2018/en_de_nmt_it/best_model",
     "en_de_smt": "/content/drive/MyDrive/TransQuestModels/MicroTransQuest/wmt2018/en_de_smt_it/best_model",
