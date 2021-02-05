@@ -54,6 +54,6 @@ class MonoTransQuestApp:
                                             unzip=True)
 
     def predict_quality(self, test_sentence_pairs):
-        logger.info("predicting")
+        print("predicting")
         predictions, raw_outputs = self.model.predict(test_sentence_pairs)
         return predictions
