@@ -65,7 +65,7 @@ from transquest.algo.sentence_level.monotransquest.models.xlm_model import XLMFo
 from transquest.algo.sentence_level.monotransquest.models.xlm_roberta_model import XLMRobertaForSequenceClassification
 from transquest.algo.sentence_level.monotransquest.utils import LazyClassificationDataset, InputExample, \
     convert_examples_to_features
-from transquest.algo.word_level.minitransquest.utils import sweep_config_to_sweep_values
+from transquest.algo.word_level.microtransquest.utils import sweep_config_to_sweep_values
 
 try:
     import wandb

@@ -3,7 +3,7 @@ requests
 tqdm>=4.47.0
 regex
 transformers>=4.0.0
-tokenizers
+tokenizers==0.9.4
 tensorboardX
 wandb
 matplotlib
