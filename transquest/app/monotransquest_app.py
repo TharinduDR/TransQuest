@@ -4,9 +4,8 @@ from tqdm.auto import tqdm, trange
 from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
 from transquest.app.util.model_downloader import GoogleDriveDownloader as gdd
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
 class MonoTransQuestApp:
     def __init__(self, model_name_or_path, model_type=None, use_cuda=True, force_download=False, cuda_device=-1):

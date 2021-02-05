@@ -1,17 +1,17 @@
 from __future__ import print_function
 
 import logging
-
-import requests
-import zipfile
 import warnings
-from sys import stdout
+import zipfile
 from os import makedirs
 from os.path import dirname
 from os.path import exists
+from sys import stdout
+
+import requests
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+
 
 class GoogleDriveDownloader:
     """
