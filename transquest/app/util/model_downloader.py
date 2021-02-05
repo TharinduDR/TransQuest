@@ -10,6 +10,7 @@ from os import makedirs
 from os.path import dirname
 from os.path import exists
 
+logger = logging.getLogger(__name__)
 
 class GoogleDriveDownloader:
     """
@@ -53,7 +54,7 @@ class GoogleDriveDownloader:
 
             session = requests.Session()
 
-            logging.info('Downloading {} into {}... '.format(file_id, dest_path), end='')
+            logger.info('Downloading {} into {}... '.format(file_id, dest_path), end='')
             stdout.flush()
 
             response = session.get(GoogleDriveDownloader.DOWNLOAD_URL, params={'id': file_id}, stream=True)
@@ -68,15 +69,15 @@ class GoogleDriveDownloader:
 
             current_download_size = [0]
             GoogleDriveDownloader._save_response_content(response, dest_path, showsize, current_download_size)
-            logging.info('Done.')
+            logger.info('Done.')
 
             if unzip:
                 try:
-                    logging.info('Unzipping...', end='')
+                    logger.info('Unzipping...', end='')
                     stdout.flush()
                     with zipfile.ZipFile(dest_path, 'r') as z:
                         z.extractall(destination_directory)
-                    logging.info('Done.')
+                    logger.info('Done.')
                 except zipfile.BadZipfile:
                     warnings.warn('Ignoring `unzip` since "{}" does not look like a valid zip file'.format(file_id))
 
@@ -94,7 +95,7 @@ class GoogleDriveDownloader:
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
                     if showsize:
-                        logging.info('\r' + GoogleDriveDownloader.sizeof_fmt(current_size[0]), end=' ')
+                        logger.info('\r' + GoogleDriveDownloader.sizeof_fmt(current_size[0]), end=' ')
                         stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE
 
