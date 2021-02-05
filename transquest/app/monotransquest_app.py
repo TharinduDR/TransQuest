@@ -1,12 +1,14 @@
-import os
 import logging
+import os
+
 from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
 from transquest.app.util.model_downloader import GoogleDriveDownloader as gdd
 
 logger = logging.getLogger(__name__)
 
+
 class MonoTransQuestApp:
-    def __init__(self, model_name_or_path, model_type=None,  use_cuda=True, force_download=False, cuda_device=-1):
+    def __init__(self, model_name_or_path, model_type=None, use_cuda=True, force_download=False, cuda_device=-1):
 
         self.model_name_or_path = model_name_or_path
         self.model_type = model_type
@@ -30,7 +32,7 @@ class MonoTransQuestApp:
                         os.getenv('XDG_CACHE_HOME', '~/.cache'), 'torch')))
             default_cache_path = os.path.join(torch_cache_home, 'transquest')
             self.model_path = os.path.join(default_cache_path, self.model_name_or_path)
-            if not os.path.exists(self.model_path) or not os.listdir(self.model_path) or force_download:
+            if force_download or (not os.path.exists(self.model_path) or not os.listdir(self.model_path)):
                 logger.info(
                     "Downloading a MonoTransQuest model and saving it at {}".format(self.model_path))
 
@@ -39,19 +41,18 @@ class MonoTransQuestApp:
                                                     showsize=True, unzip=True)
 
             self.model = MonoTransQuestModel(self.trained_model_type, self.model_path, use_cuda=self.use_cuda,
-                                        cuda_device=self.cuda_device)
+                                             cuda_device=self.cuda_device)
 
         else:
             self.model = MonoTransQuestModel(model_type, self.model_name_or_path, use_cuda=self.use_cuda,
-                                        cuda_device=self.cuda_device)
+                                             cuda_device=self.cuda_device)
 
     @staticmethod
     def _download(drive_id, model_name):
         gdd.download_file_from_google_drive(file_id=drive_id,
-                                            dest_path= os.path.join(".transquest", model_name, "model.zip"),
+                                            dest_path=os.path.join(".transquest", model_name, "model.zip"),
                                             unzip=True)
 
     def predict_quality(self, test_sentence_pairs):
         predictions, raw_outputs = self.model.predict(test_sentence_pairs)
         return predictions
-
