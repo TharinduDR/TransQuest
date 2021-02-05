@@ -1,11 +1,11 @@
 import logging
 import os
-
+from tqdm.auto import tqdm, trange
 from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
 from transquest.app.util.model_downloader import GoogleDriveDownloader as gdd
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+# logger.setLevel(logging.INFO)
 
 
 class MonoTransQuestApp:
