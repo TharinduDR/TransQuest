@@ -3,7 +3,7 @@ from transquest.app.monotransquest_app import MonoTransQuestApp
 test_sentences = [
         [
             "Jocurile de oferă noi provocări pentru IA în domeniul teoriei jocurilor.",
-            "Games provide new challenges for IA in the area of gambling theory",
+            "Games provide new challenges for IA in the area of gambling theory"
         ]
     ]
 

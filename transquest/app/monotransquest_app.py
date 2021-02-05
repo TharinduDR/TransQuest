@@ -1,7 +1,7 @@
 import os
 import logging
 from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
-from google_drive_downloader import GoogleDriveDownloader as gdd
+from transquest.app.util.model_downloader import GoogleDriveDownloader as gdd
 
 
 class MonoTransQuestApp:

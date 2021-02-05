@@ -7,7 +7,6 @@ tokenizers==0.9.4
 tensorboardX
 wandb
 matplotlib
-googledrivedownloader
 onnxruntime
 seqeval
 sentencepiece
