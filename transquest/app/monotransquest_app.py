@@ -33,7 +33,7 @@ class MonoTransQuestApp:
             default_cache_path = os.path.join(torch_cache_home, 'transquest')
             self.model_path = os.path.join(default_cache_path, self.model_name_or_path)
             if force_download or (not os.path.exists(self.model_path) or not os.listdir(self.model_path)):
-                print(
+                logger.info(
                     "Downloading a MonoTransQuest model and saving it at {}".format(self.model_path))
 
                 gdd.download_file_from_google_drive(file_id=self.drive_id,
