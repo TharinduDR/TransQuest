@@ -7,6 +7,7 @@ from transquest.app.util.model_downloader import GoogleDriveDownloader as gdd
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+
 class MonoTransQuestApp:
     def __init__(self, model_name_or_path, model_type=None, use_cuda=True, force_download=False, cuda_device=-1):
 
@@ -34,7 +35,7 @@ class MonoTransQuestApp:
             self.model_path = os.path.join(default_cache_path, self.model_name_or_path)
             if force_download or (not os.path.exists(self.model_path) or not os.listdir(self.model_path)):
                 logger.info(
-                    "Downloading a MonoTransQuest model and saving it at {}".format(self.model_path))
+                    "   Downloading a MonoTransQuest model and saving it at {}".format(self.model_path))
 
                 gdd.download_file_from_google_drive(file_id=self.drive_id,
                                                     dest_path=os.path.join(self.model_path, "model.zip"),
