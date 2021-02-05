@@ -11,6 +11,7 @@ from os.path import dirname
 from os.path import exists
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 class GoogleDriveDownloader:
     """
