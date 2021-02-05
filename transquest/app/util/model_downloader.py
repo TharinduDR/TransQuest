@@ -55,7 +55,7 @@ class GoogleDriveDownloader:
 
             session = requests.Session()
 
-            logger.info('   Downloading {} into {}... '.format(file_id, dest_path), end='')
+            logger.info('   Downloading {} into {}... '.format(file_id, dest_path), terminator='')
             stdout.flush()
 
             response = session.get(GoogleDriveDownloader.DOWNLOAD_URL, params={'id': file_id}, stream=True)
