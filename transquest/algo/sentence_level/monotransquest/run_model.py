@@ -10,36 +10,23 @@ import math
 import os
 import random
 import shutil
+import tempfile
 import warnings
 from dataclasses import asdict
-from multiprocessing import cpu_count
-import tempfile
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import torch
-from scipy.stats import mode, pearsonr
+from scipy.stats import mode
 from sklearn.metrics import (
     confusion_matrix,
     label_ranking_average_precision_score,
     matthews_corrcoef,
-    mean_squared_error,
 )
 from tensorboardX import SummaryWriter
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, TensorDataset
-from torch.utils.data.distributed import DistributedSampler
 from tqdm.auto import tqdm, trange
-from tqdm.contrib import tenumerate
-from transformers.optimization import (
-    get_constant_schedule,
-    get_constant_schedule_with_warmup,
-    get_linear_schedule_with_warmup,
-    get_cosine_schedule_with_warmup,
-    get_cosine_with_hard_restarts_schedule_with_warmup,
-    get_polynomial_decay_schedule_with_warmup,
-)
-from transformers.optimization import AdamW, Adafactor
 from transformers import (
     BertConfig,
     BertTokenizer,
@@ -56,6 +43,15 @@ from transformers import (
     XLMTokenizer,
 )
 from transformers.convert_graph_to_onnx import convert, quantize
+from transformers.optimization import AdamW, Adafactor
+from transformers.optimization import (
+    get_constant_schedule,
+    get_constant_schedule_with_warmup,
+    get_linear_schedule_with_warmup,
+    get_cosine_schedule_with_warmup,
+    get_cosine_with_hard_restarts_schedule_with_warmup,
+    get_polynomial_decay_schedule_with_warmup,
+)
 
 from transquest.algo.sentence_level.monotransquest.model_args import MonoTransQuestArgs
 from transquest.algo.sentence_level.monotransquest.models.bert_model import BertForSequenceClassification
@@ -79,16 +75,16 @@ logger = logging.getLogger(__name__)
 
 class MonoTransQuestModel:
     def __init__(
-        self,
-        model_type,
-        model_name,
-        num_labels=None,
-        weight=None,
-        args=None,
-        use_cuda=True,
-        cuda_device=-1,
-        onnx_execution_provider=None,
-        **kwargs,
+            self,
+            model_type,
+            model_name,
+            num_labels=None,
+            weight=None,
+            args=None,
+            use_cuda=True,
+            cuda_device=-1,
+            onnx_execution_provider=None,
+            **kwargs,
     ):
 
         """
@@ -263,15 +259,15 @@ class MonoTransQuestModel:
             self.args.wandb_project = None
 
     def train_model(
-        self,
-        train_df,
-        multi_label=False,
-        output_dir=None,
-        show_running_loss=True,
-        args=None,
-        eval_df=None,
-        verbose=True,
-        **kwargs,
+            self,
+            train_df,
+            multi_label=False,
+            output_dir=None,
+            show_running_loss=True,
+            args=None,
+            eval_df=None,
+            verbose=True,
+            **kwargs,
     ):
         """
         Trains the model using 'train_df'
@@ -393,14 +389,14 @@ class MonoTransQuestModel:
         return global_step, training_details
 
     def train(
-        self,
-        train_dataloader,
-        output_dir,
-        multi_label=False,
-        show_running_loss=True,
-        eval_df=None,
-        verbose=True,
-        **kwargs,
+            self,
+            train_dataloader,
+            output_dir,
+            multi_label=False,
+            show_running_loss=True,
+            eval_df=None,
+            verbose=True,
+            **kwargs,
     ):
         """
         Trains the model on train_dataset.
@@ -560,7 +556,7 @@ class MonoTransQuestModel:
                 global_step = int(checkpoint_suffix)
                 epochs_trained = global_step // (len(train_dataloader) // args.gradient_accumulation_steps)
                 steps_trained_in_current_epoch = global_step % (
-                    len(train_dataloader) // args.gradient_accumulation_steps
+                        len(train_dataloader) // args.gradient_accumulation_steps
                 )
 
                 logger.info("   Continuing training from checkpoint, will skip to saved global_step")
@@ -671,8 +667,8 @@ class MonoTransQuestModel:
                         self.save_model(output_dir_current, optimizer, scheduler, model=model)
 
                     if args.evaluate_during_training and (
-                        args.evaluate_during_training_steps > 0
-                        and global_step % args.evaluate_during_training_steps == 0
+                            args.evaluate_during_training_steps > 0
+                            and global_step % args.evaluate_during_training_steps == 0
                     ):
                         # Only evaluate when single GPU otherwise metrics may not average well
                         results, _, _ = self.eval_model(
@@ -854,7 +850,7 @@ class MonoTransQuestModel:
         )
 
     def eval_model(
-        self, eval_df, multi_label=False, output_dir=None, verbose=True, silent=False, wandb_log=True, **kwargs
+            self, eval_df, multi_label=False, output_dir=None, verbose=True, silent=False, wandb_log=True, **kwargs
     ):
         """
         Evaluates the model on eval_df. Saves results to output_dir.
@@ -891,7 +887,8 @@ class MonoTransQuestModel:
         return result, model_outputs, wrong_preds
 
     def evaluate(
-        self, eval_df, output_dir, multi_label=False, prefix="", verbose=True, silent=False, wandb_log=True, **kwargs
+            self, eval_df, output_dir, multi_label=False, prefix="", verbose=True, silent=False, wandb_log=True,
+            **kwargs
     ):
         """
         Evaluates the model on eval_df.
@@ -1024,7 +1021,7 @@ class MonoTransQuestModel:
                 window_ranges.append([count, count + n_windows])
                 count += n_windows
 
-            preds = [preds[window_range[0] : window_range[1]] for window_range in window_ranges]
+            preds = [preds[window_range[0]: window_range[1]] for window_range in window_ranges]
             out_label_ids = [
                 out_label_ids[i] for i in range(len(out_label_ids)) if i in [window[0] for window in window_ranges]
             ]
@@ -1085,7 +1082,7 @@ class MonoTransQuestModel:
         return results, model_outputs, wrong
 
     def load_and_cache_examples(
-        self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False
+            self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False
     ):
         """
         Converts a list of InputExample objects to a TensorDataset containing InputFeatures. Caches the InputFeatures.
@@ -1118,8 +1115,8 @@ class MonoTransQuestModel:
         )
 
         if os.path.exists(cached_features_file) and (
-            (not args.reprocess_input_data and not no_cache)
-            or (mode == "dev" and args.use_cached_eval_features and not no_cache)
+                (not args.reprocess_input_data and not no_cache)
+                or (mode == "dev" and args.use_cached_eval_features and not no_cache)
         ):
             features = torch.load(cached_features_file)
             if verbose:
@@ -1288,7 +1285,7 @@ class MonoTransQuestModel:
             )
 
             for i, (input_ids, attention_mask) in enumerate(
-                zip(model_inputs["input_ids"], model_inputs["attention_mask"])
+                    zip(model_inputs["input_ids"], model_inputs["attention_mask"])
             ):
                 input_ids = input_ids.unsqueeze(0).detach().cpu().numpy()
                 attention_mask = attention_mask.unsqueeze(0).detach().cpu().numpy()
@@ -1441,7 +1438,7 @@ class MonoTransQuestModel:
                     window_ranges.append([count, count + n_windows])
                     count += n_windows
 
-                preds = [preds[window_range[0] : window_range[1]] for window_range in window_ranges]
+                preds = [preds[window_range[0]: window_range[1]] for window_range in window_ranges]
 
                 model_outputs = preds
 

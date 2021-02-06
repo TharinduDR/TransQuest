@@ -38,7 +38,6 @@ try:
 except ImportError:
     torchvision_available = False
 
-
 csv.field_size_limit(2147483647)
 
 
@@ -82,14 +81,14 @@ class InputFeatures(object):
 
 
 def convert_example_to_feature(
-    example_row,
-    pad_token=0,
-    sequence_a_segment_id=0,
-    sequence_b_segment_id=1,
-    cls_token_segment_id=1,
-    pad_token_segment_id=0,
-    mask_padding_with_zero=True,
-    sep_token_extra=False,
+        example_row,
+        pad_token=0,
+        sequence_a_segment_id=0,
+        sequence_b_segment_id=1,
+        cls_token_segment_id=1,
+        pad_token_segment_id=0,
+        mask_padding_with_zero=True,
+        sep_token_extra=False,
 ):
     (
         example,
@@ -235,14 +234,14 @@ def convert_example_to_feature(
 
 
 def convert_example_to_feature_sliding_window(
-    example_row,
-    pad_token=0,
-    sequence_a_segment_id=0,
-    sequence_b_segment_id=1,
-    cls_token_segment_id=1,
-    pad_token_segment_id=0,
-    mask_padding_with_zero=True,
-    sep_token_extra=False,
+        example_row,
+        pad_token=0,
+        sequence_a_segment_id=0,
+        sequence_b_segment_id=1,
+        cls_token_segment_id=1,
+        pad_token_segment_id=0,
+        mask_padding_with_zero=True,
+        sep_token_extra=False,
 ):
     (
         example,
@@ -275,7 +274,7 @@ def convert_example_to_feature_sliding_window(
         tokens_a = tokenizer.tokenize(example.text_a)
 
     if len(tokens_a) > bucket_size:
-        token_sets = [tokens_a[i : i + bucket_size] for i in range(0, len(tokens_a), stride)]
+        token_sets = [tokens_a[i: i + bucket_size] for i in range(0, len(tokens_a), stride)]
     else:
         token_sets.append(tokens_a)
 
@@ -342,38 +341,38 @@ def convert_example_to_feature_sliding_window(
         #     raise KeyError(output_mode)
 
         input_features.append(
-            InputFeatures(input_ids=input_ids, input_mask=input_mask, segment_ids=segment_ids, label_id=example.label,)
+            InputFeatures(input_ids=input_ids, input_mask=input_mask, segment_ids=segment_ids, label_id=example.label, )
         )
 
     return input_features
 
 
 def convert_examples_to_features(
-    examples,
-    max_seq_length,
-    tokenizer,
-    output_mode,
-    cls_token_at_end=False,
-    sep_token_extra=False,
-    pad_on_left=False,
-    cls_token="[CLS]",
-    sep_token="[SEP]",
-    pad_token=0,
-    sequence_a_segment_id=0,
-    sequence_b_segment_id=1,
-    cls_token_segment_id=1,
-    pad_token_segment_id=0,
-    mask_padding_with_zero=True,
-    process_count=cpu_count() - 2,
-    multi_label=False,
-    silent=False,
-    use_multiprocessing=True,
-    sliding_window=False,
-    flatten=False,
-    stride=None,
-    add_prefix_space=False,
-    pad_to_max_length=True,
-    args=None,
+        examples,
+        max_seq_length,
+        tokenizer,
+        output_mode,
+        cls_token_at_end=False,
+        sep_token_extra=False,
+        pad_on_left=False,
+        cls_token="[CLS]",
+        sep_token="[SEP]",
+        pad_token=0,
+        sequence_a_segment_id=0,
+        sequence_b_segment_id=1,
+        cls_token_segment_id=1,
+        pad_token_segment_id=0,
+        mask_padding_with_zero=True,
+        process_count=cpu_count() - 2,
+        multi_label=False,
+        silent=False,
+        use_multiprocessing=True,
+        sliding_window=False,
+        flatten=False,
+        stride=None,
+        add_prefix_space=False,
+        pad_to_max_length=True,
+        args=None,
 ):
     """ Loads a data file into a list of `InputBatch`s
         `cls_token_at_end` define the location of the CLS token:
@@ -481,20 +480,20 @@ class ImageEncoder(nn.Module):
 
 class JsonlDataset(Dataset):
     def __init__(
-        self,
-        data_path,
-        tokenizer,
-        transforms,
-        labels,
-        max_seq_length,
-        files_list=None,
-        image_path=None,
-        text_label=None,
-        labels_label=None,
-        images_label=None,
-        image_type_extension=None,
-        data_type_extension=None,
-        multi_label=False,
+            self,
+            data_path,
+            tokenizer,
+            transforms,
+            labels,
+            max_seq_length,
+            files_list=None,
+            image_path=None,
+            text_label=None,
+            labels_label=None,
+            images_label=None,
+            image_type_extension=None,
+            data_type_extension=None,
+            multi_label=False,
     ):
 
         self.text_label = text_label if text_label else "text"
@@ -585,7 +584,7 @@ def get_image_transforms():
             transforms.Resize(256),
             transforms.CenterCrop(224),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.46777044, 0.44531429, 0.40661017], std=[0.12221994, 0.12145835, 0.14380469],),
+            transforms.Normalize(mean=[0.46777044, 0.44531429, 0.40661017], std=[0.12221994, 0.12145835, 0.14380469], ),
         ]
     )
 

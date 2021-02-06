@@ -55,7 +55,7 @@ class GoogleDriveDownloader:
 
             session = requests.Session()
 
-            logger.info('   Downloading {} into {}... '.format(file_id, dest_path), terminator='')
+            logger.info('   Downloading {} into {}... '.format(file_id, dest_path))
             stdout.flush()
 
             response = session.get(GoogleDriveDownloader.DOWNLOAD_URL, params={'id': file_id}, stream=True)
@@ -66,7 +66,7 @@ class GoogleDriveDownloader:
                 response = session.get(GoogleDriveDownloader.DOWNLOAD_URL, params=params, stream=True)
 
             if showsize:
-                print()  # Skip to the next line
+                logger.info("\n")  # Skip to the next line
 
             current_download_size = [0]
             GoogleDriveDownloader._save_response_content(response, dest_path, showsize, current_download_size)
@@ -74,7 +74,7 @@ class GoogleDriveDownloader:
 
             if unzip:
                 try:
-                    logger.info('Unzipping...', end='')
+                    logger.info('Unzipping...')
                     stdout.flush()
                     with zipfile.ZipFile(dest_path, 'r') as z:
                         z.extractall(destination_directory)
@@ -96,7 +96,7 @@ class GoogleDriveDownloader:
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
                     if showsize:
-                        logger.info('\r' + GoogleDriveDownloader.sizeof_fmt(current_size[0]), end=' ')
+                        logger.info('\r' + GoogleDriveDownloader.sizeof_fmt(current_size[0]))
                         stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE
 
