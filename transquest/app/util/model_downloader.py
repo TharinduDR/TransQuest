@@ -96,7 +96,7 @@ class GoogleDriveDownloader:
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
                     if showsize:
-                        logger.info('\r' + GoogleDriveDownloader.sizeof_fmt(current_size[0]))
+                        print('\r' + GoogleDriveDownloader.sizeof_fmt(current_size[0]), end=' ')
                         stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE
 
