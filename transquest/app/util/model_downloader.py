@@ -67,6 +67,7 @@ class GoogleDriveDownloader:
             if token:
                 params = {'id': file_id, 'confirm': token}
                 response = session.get(GoogleDriveDownloader.DOWNLOAD_URL, params=params, stream=True)
+                print(response)
 
             # if showsize:
             #     logger.info("\n")  # Skip to the next line
