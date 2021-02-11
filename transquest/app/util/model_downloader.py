@@ -1,33 +1,26 @@
 from __future__ import print_function
-
-import logging
-import warnings
+import requests
 import zipfile
+import warnings
+from sys import stdout
 from os import makedirs
 from os.path import dirname
 from os.path import exists
-from sys import stdout
-
-import requests
-from tqdm import tqdm
-
-logger = logging.getLogger(__name__)
 
 
 class GoogleDriveDownloader:
     """
     Minimal class to download shared files from Google Drive.
     """
-    MODEL_SIZE = 3.8
+
     CHUNK_SIZE = 32768
     DOWNLOAD_URL = 'https://docs.google.com/uc?export=download'
 
     @staticmethod
-    def download_file_from_google_drive(file_id, dest_path, overwrite=False, unzip=False, showsize=False, size=MODEL_SIZE):
+    def download_file_from_google_drive(file_id, dest_path, overwrite=False, unzip=False, showsize=False):
         """
         Downloads a shared file from google drive into a given folder.
         Optionally unzips it.
-
         Parameters
         ----------
         file_id: str
@@ -43,8 +36,6 @@ class GoogleDriveDownloader:
             If the file is not a zip file, ignores it.
         showsize: bool
             optional, if True print the current download size.
-        size:float
-            optional, if given it shows the progress of the download
         Returns
         -------
         None
@@ -58,7 +49,7 @@ class GoogleDriveDownloader:
 
             session = requests.Session()
 
-            logger.info('   Downloading {} into {}... '.format(file_id, dest_path))
+            print('Downloading {} into {}... '.format(file_id, dest_path), end='')
             stdout.flush()
 
             response = session.get(GoogleDriveDownloader.DOWNLOAD_URL, params={'id': file_id}, stream=True)
@@ -68,22 +59,20 @@ class GoogleDriveDownloader:
                 params = {'id': file_id, 'confirm': token}
                 response = session.get(GoogleDriveDownloader.DOWNLOAD_URL, params=params, stream=True)
 
-
-            # if showsize:
-            #     logger.info("\n")  # Skip to the next line
+            if showsize:
+                print()  # Skip to the next line
 
             current_download_size = [0]
-
-            GoogleDriveDownloader._save_response_content(response, dest_path, showsize, current_download_size, size)
-            logger.info('Done.')
+            GoogleDriveDownloader._save_response_content(response, dest_path, showsize, current_download_size)
+            print('Done.')
 
             if unzip:
                 try:
-                    logger.info('Unzipping...')
+                    print('Unzipping...', end='')
                     stdout.flush()
                     with zipfile.ZipFile(dest_path, 'r') as z:
                         z.extractall(destination_directory)
-                    logger.info('Done.')
+                    print('Done.')
                 except zipfile.BadZipfile:
                     warnings.warn('Ignoring `unzip` since "{}" does not look like a valid zip file'.format(file_id))
 
@@ -95,20 +84,13 @@ class GoogleDriveDownloader:
         return None
 
     @staticmethod
-    def _save_response_content(response, destination, showsize, current_size, total_size):
-        print(total_size)
-        progress_bar = tqdm(total=total_size)
+    def _save_response_content(response, destination, showsize, current_size):
         with open(destination, 'wb') as f:
             for chunk in response.iter_content(GoogleDriveDownloader.CHUNK_SIZE):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
                     if showsize:
-                        # print('\r' + str(float(GoogleDriveDownloader.sizeof_fmt(current_size[0]))/total_size), end=' ')
-                        # print('\r' + (format(current_size[0]/(1024*1024*1024), '.1f')), end=' ')
-                        gib_value = float(format(current_size[0]/(1024*1024*1024), '.1f'))
-                        # print('\r' + str(gib_value), end=' ')
-                        progress_bar.update(gib_value)
-                        # float(format(current_size[0]/(1024*1024*1024), '.2f'))
+                        print('\r' + GoogleDriveDownloader.sizeof_fmt(current_size[0]), end=' ')
                         stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE
 

@@ -39,7 +39,7 @@ class MonoTransQuestApp:
 
                 gdd.download_file_from_google_drive(file_id=self.drive_id,
                                                     dest_path=os.path.join(self.model_path, "model.zip"),
-                                                    showsize=True, unzip=True, overwrite=True, size=self.size)
+                                                    showsize=True, unzip=True, overwrite=True)
 
             self.model = MonoTransQuestModel(self.trained_model_type, self.model_path, use_cuda=self.use_cuda,
                                              cuda_device=self.cuda_device)
