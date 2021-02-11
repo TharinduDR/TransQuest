@@ -105,8 +105,5 @@ class GoogleDriveDownloader:
     # From https://stackoverflow.com/questions/1094841/reusable-library-to-get-human-readable-version-of-file-size
     @staticmethod
     def sizeof_fmt(num):
-        for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
-            if abs(num) < 1024.0:
-                return '{:.1f}'.format(num)
-            num /= 1024.0
+        num /= 1024.0
         return '{:.1f} '.format(num)
