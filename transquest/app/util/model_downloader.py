@@ -99,7 +99,7 @@ class GoogleDriveDownloader:
                     f.write(chunk)
                     if showsize:
                         # print('\r' + str(float(GoogleDriveDownloader.sizeof_fmt(current_size[0]))/total_size), end=' ')
-                        print('\r' + current_size[0]/1024, end=' ')
+                        print('\r' + str(current_size[0]/1024), end=' ')
                         stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE
 
