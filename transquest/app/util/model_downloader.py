@@ -17,12 +17,12 @@ class GoogleDriveDownloader:
     """
     Minimal class to download shared files from Google Drive.
     """
-
+    MODEL_SIZE = 3.8
     CHUNK_SIZE = 32768
     DOWNLOAD_URL = 'https://docs.google.com/uc?export=download'
 
     @staticmethod
-    def download_file_from_google_drive(file_id, dest_path, overwrite=False, unzip=False, showsize=False):
+    def download_file_from_google_drive(file_id, dest_path, overwrite=False, unzip=False, showsize=False, size=MODEL_SIZE):
         """
         Downloads a shared file from google drive into a given folder.
         Optionally unzips it.
@@ -42,6 +42,8 @@ class GoogleDriveDownloader:
             If the file is not a zip file, ignores it.
         showsize: bool
             optional, if True print the current download size.
+        size:float
+            optional, if given it shows the progress of the download
         Returns
         -------
         None
@@ -69,7 +71,7 @@ class GoogleDriveDownloader:
                 logger.info("\n")  # Skip to the next line
 
             current_download_size = [0]
-            GoogleDriveDownloader._save_response_content(response, dest_path, showsize, current_download_size)
+            GoogleDriveDownloader._save_response_content(response, dest_path, showsize, current_download_size, size)
             logger.info('Done.')
 
             if unzip:
@@ -90,13 +92,13 @@ class GoogleDriveDownloader:
         return None
 
     @staticmethod
-    def _save_response_content(response, destination, showsize, current_size):
+    def _save_response_content(response, destination, showsize, current_size, total_size):
         with open(destination, 'wb') as f:
             for chunk in response.iter_content(GoogleDriveDownloader.CHUNK_SIZE):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
                     if showsize:
-                        print('\r' + GoogleDriveDownloader.sizeof_fmt(current_size[0]), end=' ')
+                        print('\r' + GoogleDriveDownloader.sizeof_fmt(current_size[0]/total_size), end=' ')
                         stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE
 

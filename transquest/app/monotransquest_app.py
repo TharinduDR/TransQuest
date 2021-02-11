@@ -15,13 +15,14 @@ class MonoTransQuestApp:
         self.use_cuda = use_cuda
         self.cuda_device = cuda_device
 
+
         MODEL_CONFIG = {
-            "monotransquest-da-si_en": ("xlmroberta", "1-UXvna_RGnb6_TTRr4vSGCqA5yl0SYn9"),
-            "monotransquest-da-ro_en": ("xlmroberta", "1-aeDbR_ftqsTslFJbNybebj5MAhPfIw8")
+            "monotransquest-da-si_en": ("xlmroberta", "1-UXvna_RGnb6_TTRr4vSGCqA5yl0SYn9", 3.8),
+            "monotransquest-da-ro_en": ("xlmroberta", "1-aeDbR_ftqsTslFJbNybebj5MAhPfIw8", 3.8)
         }
 
         if model_name_or_path in MODEL_CONFIG:
-            self.trained_model_type, self.drive_id = MODEL_CONFIG[model_name_or_path]
+            self.trained_model_type, self.drive_id, self.size = MODEL_CONFIG[model_name_or_path]
 
             try:
                 from torch.hub import _get_torch_home
@@ -38,7 +39,7 @@ class MonoTransQuestApp:
 
                 gdd.download_file_from_google_drive(file_id=self.drive_id,
                                                     dest_path=os.path.join(self.model_path, "model.zip"),
-                                                    showsize=True, unzip=True, overwrite=True)
+                                                    showsize=True, unzip=True, overwrite=True, size=self.size)
 
             self.model = MonoTransQuestModel(self.trained_model_type, self.model_path, use_cuda=self.use_cuda,
                                              cuda_device=self.cuda_device)
