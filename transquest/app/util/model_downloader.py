@@ -67,7 +67,7 @@ class GoogleDriveDownloader:
             if token:
                 params = {'id': file_id, 'confirm': token}
                 response = session.get(GoogleDriveDownloader.DOWNLOAD_URL, params=params, stream=True)
-                print(response)
+
 
             # if showsize:
             #     logger.info("\n")  # Skip to the next line
@@ -96,6 +96,7 @@ class GoogleDriveDownloader:
 
     @staticmethod
     def _save_response_content(response, destination, showsize, current_size, total_size):
+        print(total_size)
         progress_bar = tqdm(total=total_size)
         with open(destination, 'wb') as f:
             for chunk in response.iter_content(GoogleDriveDownloader.CHUNK_SIZE):
