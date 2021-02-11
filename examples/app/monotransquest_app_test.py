@@ -13,5 +13,5 @@ test_sentences = [
     ]
 ]
 
-app = MonoTransQuestApp("monotransquest-da-si_en", use_cuda=False, force_download=True)
+app = MonoTransQuestApp("monotransquest-da-ro_en", use_cuda=False, force_download=True)
 print(app.predict_quality(test_sentences))
