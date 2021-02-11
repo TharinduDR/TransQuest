@@ -67,8 +67,8 @@ class GoogleDriveDownloader:
                 params = {'id': file_id, 'confirm': token}
                 response = session.get(GoogleDriveDownloader.DOWNLOAD_URL, params=params, stream=True)
 
-            if showsize:
-                logger.info("\n")  # Skip to the next line
+            # if showsize:
+            #     # logger.info("\n")  # Skip to the next line
 
             current_download_size = [0]
             GoogleDriveDownloader._save_response_content(response, dest_path, showsize, current_download_size, size)
@@ -104,9 +104,9 @@ class GoogleDriveDownloader:
 
     # From https://stackoverflow.com/questions/1094841/reusable-library-to-get-human-readable-version-of-file-size
     @staticmethod
-    def sizeof_fmt(num, suffix='B'):
+    def sizeof_fmt(num):
         for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
             if abs(num) < 1024.0:
-                return '{:.1f} {}{}'.format(num, unit, suffix)
+                return '{:.1f}'.format(num)
             num /= 1024.0
-        return '{:.1f} {}{}'.format(num, 'Yi', suffix)
+        return '{:.1f} '.format(num)
