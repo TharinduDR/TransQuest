@@ -107,7 +107,7 @@ class GoogleDriveDownloader:
                         # print('\r' + str(gib_value), end=' ')
                         progress_bar.update(gib_value)
                         # float(format(current_size[0]/(1024*1024*1024), '.2f'))
-                        # stdout.flush()
+                        stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE
 
     # From https://stackoverflow.com/questions/1094841/reusable-library-to-get-human-readable-version-of-file-size
