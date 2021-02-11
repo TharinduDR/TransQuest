@@ -9,6 +9,7 @@ from os.path import exists
 from sys import stdout
 
 import requests
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
@@ -93,14 +94,17 @@ class GoogleDriveDownloader:
 
     @staticmethod
     def _save_response_content(response, destination, showsize, current_size, total_size):
+        progress_bar = tqdm(total=float(total_size))
         with open(destination, 'wb') as f:
             for chunk in response.iter_content(GoogleDriveDownloader.CHUNK_SIZE):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
                     if showsize:
                         # print('\r' + str(float(GoogleDriveDownloader.sizeof_fmt(current_size[0]))/total_size), end=' ')
-                        print('\r' + str(current_size[0]/(1024*1024*1024)), end=' ')
-                        stdout.flush()
+                        # print('\r' + (format(current_size[0]/(1024*1024*1024), '.1f')), end=' ')
+                        progress_bar.update(float(format(current_size[0]/(1024*1024*1024), '.1f')))
+                        # float(format(current_size[0]/(1024*1024*1024), '.2f'))
+                        # stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE
 
     # From https://stackoverflow.com/questions/1094841/reusable-library-to-get-human-readable-version-of-file-size
