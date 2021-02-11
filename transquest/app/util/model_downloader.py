@@ -102,7 +102,9 @@ class GoogleDriveDownloader:
                     if showsize:
                         # print('\r' + str(float(GoogleDriveDownloader.sizeof_fmt(current_size[0]))/total_size), end=' ')
                         # print('\r' + (format(current_size[0]/(1024*1024*1024), '.1f')), end=' ')
-                        progress_bar.update(float(format(current_size[0]/(1024*1024*1024), '.1f')))
+                        gib_value = float(format(current_size[0]/(1024*1024*1024), '.1f'))
+                        print('\r' + str(gib_value), end=' ')
+                        # progress_bar.update(float(format(current_size[0]/(1024*1024*1024), '.1f')))
                         # float(format(current_size[0]/(1024*1024*1024), '.2f'))
                         # stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE
