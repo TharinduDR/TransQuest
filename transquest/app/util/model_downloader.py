@@ -68,10 +68,11 @@ class GoogleDriveDownloader:
                 params = {'id': file_id, 'confirm': token}
                 response = session.get(GoogleDriveDownloader.DOWNLOAD_URL, params=params, stream=True)
 
-            if showsize:
-                logger.info("\n")  # Skip to the next line
+            # if showsize:
+            #     logger.info("\n")  # Skip to the next line
 
             current_download_size = [0]
+
             GoogleDriveDownloader._save_response_content(response, dest_path, showsize, current_download_size, size)
             logger.info('Done.')
 
@@ -94,7 +95,7 @@ class GoogleDriveDownloader:
 
     @staticmethod
     def _save_response_content(response, destination, showsize, current_size, total_size):
-        progress_bar = tqdm(total=float(total_size))
+        progress_bar = tqdm(total=total_size)
         with open(destination, 'wb') as f:
             for chunk in response.iter_content(GoogleDriveDownloader.CHUNK_SIZE):
                 if chunk:  # filter out keep-alive new chunks
@@ -103,8 +104,8 @@ class GoogleDriveDownloader:
                         # print('\r' + str(float(GoogleDriveDownloader.sizeof_fmt(current_size[0]))/total_size), end=' ')
                         # print('\r' + (format(current_size[0]/(1024*1024*1024), '.1f')), end=' ')
                         gib_value = float(format(current_size[0]/(1024*1024*1024), '.1f'))
-                        print('\r' + str(gib_value), end=' ')
-                        # progress_bar.update(float(format(current_size[0]/(1024*1024*1024), '.1f')))
+                        # print('\r' + str(gib_value), end=' ')
+                        progress_bar.update(gib_value)
                         # float(format(current_size[0]/(1024*1024*1024), '.2f'))
                         # stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE
