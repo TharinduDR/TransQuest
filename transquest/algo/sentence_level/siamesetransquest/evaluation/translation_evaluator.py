@@ -8,8 +8,8 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from transquest.algo.sentence_level.siamesetransquest.evaluation import SimilarityFunction
 from transquest.algo.sentence_level.siamesetransquest.evaluation import SentenceEvaluator
+from transquest.algo.sentence_level.siamesetransquest.evaluation import SimilarityFunction
 from transquest.algo.sentence_level.siamesetransquest.util import batch_to_device
 
 
@@ -40,7 +40,7 @@ class TranslationEvaluator(SentenceEvaluator):
 
         if show_progress_bar is None:
             show_progress_bar = (
-                        logging.getLogger().getEffectiveLevel() == logging.INFO or logging.getLogger().getEffectiveLevel() == logging.DEBUG)
+                    logging.getLogger().getEffectiveLevel() == logging.INFO or logging.getLogger().getEffectiveLevel() == logging.DEBUG)
         self.show_progress_bar = show_progress_bar
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

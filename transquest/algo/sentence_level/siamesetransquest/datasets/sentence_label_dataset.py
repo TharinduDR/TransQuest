@@ -7,8 +7,8 @@ import torch
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
-from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
 from transquest.algo.sentence_level.siamesetransquest.readers.input_example import InputExample
+from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
 
 
 class SentenceLabelDataset(Dataset):
@@ -84,7 +84,7 @@ class SentenceLabelDataset(Dataset):
 
             if hasattr(model,
                        'max_seq_length') and model.max_seq_length is not None and model.max_seq_length > 0 and len(
-                    tokenized_text) >= model.max_seq_length:
+                tokenized_text) >= model.max_seq_length:
                 too_long += 1
             if example.label in label_sent_mapping:
                 label_sent_mapping[example.label].append(ex_index)

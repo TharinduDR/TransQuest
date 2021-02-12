@@ -18,12 +18,9 @@
 from __future__ import absolute_import, division, print_function
 
 import linecache
-import logging
-import os
 from io import open
 from multiprocessing import Pool, cpu_count
 
-import pandas as pd
 import torch
 from torch.functional import split
 from torch.nn import CrossEntropyLoss
@@ -161,7 +158,7 @@ def get_examples_from_df(data, bbox=False):
         ]
     else:
         return [
-            InputExample(guid=sentence_id, words=sentence_df["words"].tolist(), labels=sentence_df["labels"].tolist(),)
+            InputExample(guid=sentence_id, words=sentence_df["words"].tolist(), labels=sentence_df["labels"].tolist(), )
             for sentence_id, sentence_df in data.groupby(["sentence_id"])
         ]
 
@@ -290,29 +287,29 @@ def convert_example_to_feature(example_row):
             input_ids=input_ids, input_mask=input_mask, segment_ids=segment_ids, label_ids=label_ids, bboxes=bboxes
         )
     else:
-        return InputFeatures(input_ids=input_ids, input_mask=input_mask, segment_ids=segment_ids, label_ids=label_ids,)
+        return InputFeatures(input_ids=input_ids, input_mask=input_mask, segment_ids=segment_ids, label_ids=label_ids, )
 
 
 def convert_examples_to_features(
-    examples,
-    label_list,
-    max_seq_length,
-    tokenizer,
-    cls_token_at_end=False,
-    cls_token="[CLS]",
-    cls_token_segment_id=1,
-    sep_token="[SEP]",
-    sep_token_extra=False,
-    pad_on_left=False,
-    pad_token=0,
-    pad_token_segment_id=0,
-    pad_token_label_id=-1,
-    sequence_a_segment_id=0,
-    mask_padding_with_zero=True,
-    process_count=cpu_count() - 2,
-    chunksize=500,
-    silent=False,
-    use_multiprocessing=True,
+        examples,
+        label_list,
+        max_seq_length,
+        tokenizer,
+        cls_token_at_end=False,
+        cls_token="[CLS]",
+        cls_token_segment_id=1,
+        sep_token="[SEP]",
+        sep_token_extra=False,
+        pad_on_left=False,
+        pad_token=0,
+        pad_token_segment_id=0,
+        pad_token_label_id=-1,
+        sequence_a_segment_id=0,
+        mask_padding_with_zero=True,
+        process_count=cpu_count() - 2,
+        chunksize=500,
+        silent=False,
+        use_multiprocessing=True,
 ):
     """ Loads a data file into a list of `InputBatch`s
         `cls_token_at_end` define the location of the CLS token:

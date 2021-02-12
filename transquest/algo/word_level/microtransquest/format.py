@@ -9,7 +9,8 @@ def prepare_data(raw_df, args):
 
     sentence_id = 0
     data = []
-    for source_sentence, source_tag_line, target_sentence, target_tag_lind in zip(source_sentences, source_tags, target_sentences, target_tags):
+    for source_sentence, source_tag_line, target_sentence, target_tag_lind in zip(source_sentences, source_tags,
+                                                                                  target_sentences, target_tags):
         for word, tag in zip(source_sentence.split(), source_tag_line.split()):
             data.append([sentence_id, word, tag])
 
@@ -17,7 +18,6 @@ def prepare_data(raw_df, args):
 
         target_words = target_sentence.split()
         target_tags = target_tag_lind.split()
-
 
         data.append([sentence_id, args["tag"], target_tags.pop(0)])
 
@@ -31,7 +31,6 @@ def prepare_data(raw_df, args):
 
 
 def prepare_testdata(raw_df, args):
-
     source_sentences = raw_df[args["source_column"]].tolist()
     target_sentences = raw_df[args["target_column"]].tolist()
 
@@ -77,14 +76,14 @@ def post_process(predicted_sentences, test_sentences, args):
         assert len(source_tags) == len(source_sentence.split())
 
         if len(target_sentence.split()) > len(target_tags):
-            target_tags = target_tags + [args["default_quality"] for x in range(len(target_sentence.split()) - len(target_tags))]
+            target_tags = target_tags + [args["default_quality"] for x in
+                                         range(len(target_sentence.split()) - len(target_tags))]
 
         assert len(target_tags) == len(target_sentence.split())
         sources_tags.append(source_tags)
         targets_tags.append(target_tags)
 
     return sources_tags, targets_tags
-
 
 # def post_process(predicted_sentences, test_sentences):
 #     sources_tags = []
@@ -108,7 +107,3 @@ def post_process(predicted_sentences, test_sentences, args):
 #         targets_tags.append(target_tags)
 #
 #     return sources_tags, targets_tags
-
-
-
-

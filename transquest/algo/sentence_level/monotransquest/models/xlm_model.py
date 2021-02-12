@@ -1,5 +1,3 @@
-import torch
-import torch.nn as nn
 from torch.nn import CrossEntropyLoss, MSELoss
 from transformers.models.xlm.modeling_xlm import SequenceSummary, XLMModel, XLMPreTrainedModel
 
@@ -43,17 +41,17 @@ class XLMForSequenceClassification(XLMPreTrainedModel):
         self.init_weights()
 
     def forward(
-        self,
-        input_ids=None,
-        attention_mask=None,
-        langs=None,
-        token_type_ids=None,
-        position_ids=None,
-        lengths=None,
-        cache=None,
-        head_mask=None,
-        inputs_embeds=None,
-        labels=None,
+            self,
+            input_ids=None,
+            attention_mask=None,
+            langs=None,
+            token_type_ids=None,
+            position_ids=None,
+            lengths=None,
+            cache=None,
+            head_mask=None,
+            inputs_embeds=None,
+            labels=None,
     ):
         transformer_outputs = self.transformer(
             input_ids,
