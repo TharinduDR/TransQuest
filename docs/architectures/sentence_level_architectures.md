@@ -1,5 +1,5 @@
 # TransQuest Architectures
-We have introduced two architectures in the TransQuest framework, both relies on the XLM-R transformer model.
+We have introduced two architectures for the sentence level QE in the TransQuest framework, both relies on the XLM-R transformer model.
 
 ##MonoTransQuest
 

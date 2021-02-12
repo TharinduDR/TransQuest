@@ -2,9 +2,9 @@ site_name: TransQuest
 
 nav:
     - Home: index.md
-    - TransQuest Architectures: architectures.md
-    - Pre-trained Models: pretrained.md
-    - Examples: examples.md
+    - TransQuest Architectures: sentence_level_architectures.md
+    - Pre-trained Models: sentence_level_pretrained.md
+    - Examples: sentence_level_examples.md
     - Contact: contact.md
 theme: material
 

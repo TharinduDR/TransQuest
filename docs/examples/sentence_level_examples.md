@@ -1,5 +1,5 @@
 # Examples
-We have provided several examples on how to use TransQuest in recent WMT sentence-level quality estimation shared tasks. They are included in the repository but are not shipped with the library. Therefore, if you need to run the examples, please clone the repository. 
+We have provided several examples on how to use TransQuest in recent WMT sentence-level quality estimation shared tasks. They are included in the repository but are not shipped with the library. Therefore, if you need to run the examples, please clone the repository. Please don't use the same environment you used to install transquest to run the examples. Create a new environment. 
 
 ```bash
 git clone https://github.com/TharinduDR/TransQuest.git
@@ -15,17 +15,17 @@ The participants were predict the direct assessment of a source and a target. Th
 To run the experiments for each language please run this command from the root directory of TransQuest.  
 
 ```bash
-python -m examples.wmt_2020.<language-pair>.<architecture>
+python -m examples.sentence_level.wmt_2020.<language-pair>.<architecture>
 ```
 
 Language Pair options :  ro_en (Romanian-English), ru_en (Russian-English), et_en (Estonian-English), en_zh (English-Chinese), ne_en (Nepalese-English), en_de (English-German), si_en(Sinhala-English)
 
-Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (SiameseTransQuest).
+Architecture Options : monotransquest (MonoTransQuest), siamesetransquest (SiameseTransQuest).
 
 As an example to run the experiments on Romanian-English with MonoTransQuest architecture, run the following command. 
 
 ```bash
-python -m examples.wmt_2020.ro_en.trans_quest
+python -m examples.sentence_level.wmt_2020.ro_en.monotransquest
 ```
 
 ### Results
@@ -62,17 +62,17 @@ This task consists predicting Sentence-level HTER (Human Translation Error Rate)
 To run the experiments for each language please run this command from the root directory of TransQuest.  
 
 ```bash
-python -m examples.wmt_2020_task2.<language-pair>.<architecture>
+python -m examples.sentence_level.wmt_2020_task2.<language-pair>.<architecture>
 ```
 
 Language Pair options :  en_zh (English-Chinese), en_de (English-German)
 
-Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (SiameseTransQuest).
+Architecture Options : monotransquest (MonoTransQuest), siamesetransquest (SiameseTransQuest).
 
 As an example to run the experiments on English-Chinese with MonoTransQuest architecture, run the following command. 
 
 ```bash
-python -m examples.wmt_2020_task2.en_zh.trans_quest
+python -m examples.sentence_level.wmt_2020_task2.en_zh.monotransquest
 ```
 
 ### Results
@@ -93,17 +93,17 @@ The participating systems are expected to predict the sentence-level HTER score 
 To run the experiments for each language, please run this command from the root directory of TransQuest.  
 
 ```bash
-python -m examples.wmt_2019.<language-pair>.<architecture>
+python -m examples.sentence_level.wmt_2019.<language-pair>.<architecture>
 ```
 
 Language Pair options :  en_ru (English-Russian), en_de (English-German)
 
-Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (SiameseTransQuest).
+Architecture Options : monotransquest (MonoTransQuest), siamesetransquest (SiameseTransQuest).
 
 As an example to run the experiments on English-Russian with MonoTransQuest architecture, run the following command. 
 
 ```bash
-python -m examples.wmt_2019.en_ru.trans_quest
+python -m examples.sentence_level.wmt_2019.en_ru.trans_quest
 ```
 
 ### Results
@@ -124,23 +124,23 @@ The participating systems are expected to predict the sentence-level HTER score 
 To run the experiments for each language, please run this command from the root directory of TransQuest. If both NMT and SMT is available for a certain language pair, specify that too.  
 
 ```bash
-python -m examples.wmt_2019.<language-pair>.<nmt/smt><architecture>
+python -m examples.sentence_level.wmt_2019.<language-pair>.<nmt/smt><architecture>
 ```
 
 Language Pair options :  en_de (English-German) (both NMT and SMT), en_lv(English-Latvian) (both NMT and SMT), en_cs(English-Czech), de_en 
 
-Architecture Options : trans_quest (MonoTransQuest), siamese_trans_quest (SiameseTransQuest).
+Architecture Options : monotransquest (MonoTransQuest), siamesetransquest (SiameseTransQuest).
 
 As an example to run the experiments on English-Latvian NMT with MonoTransQuest architecture, run the following command. 
 
 ```bash
-python -m examples.wmt_2018.en_lv.nmt.trans_quest
+python -m examples.sentence_level.wmt_2018.en_lv.nmt.monotransquest
 ```
 
 To run the English-Czech experiments with MonoTransQuest architecture,, run the following command
 
 ```bash
-python -m examples.wmt_2018.en_cs.trans_quest
+python -m examples.sentence_level.wmt_2018.en_cs.monotransquest
 ```
 
 
