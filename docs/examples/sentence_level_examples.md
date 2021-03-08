@@ -1,5 +1,8 @@
 # Examples
-We have provided several examples on how to use TransQuest in recent WMT sentence-level quality estimation shared tasks. They are included in the repository but are not shipped with the library. Therefore, if you need to run the examples, please clone the repository. Please don't use the same environment you used to install transquest to run the examples. Create a new environment. 
+We have provided several examples on how to use TransQuest in recent WMT sentence-level quality estimation shared tasks. They are included in the repository but are not shipped with the library. Therefore, if you need to run the examples, please clone the repository.
+
+!!! note
+Please don't use the same environment you used to install transquest to run the examples. Create a new environment. 
 
 ```bash
 git clone https://github.com/TharinduDR/TransQuest.git
