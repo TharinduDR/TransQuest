@@ -5,8 +5,8 @@ import torch
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
-from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
 from transquest.algo.sentence_level.siamesetransquest.readers.input_example import InputExample
+from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
 
 
 class SentencesDataset(Dataset):
@@ -23,7 +23,7 @@ class SentencesDataset(Dataset):
         """
         if show_progress_bar is None:
             show_progress_bar = (
-                        logging.getLogger().getEffectiveLevel() == logging.INFO or logging.getLogger().getEffectiveLevel() == logging.DEBUG)
+                    logging.getLogger().getEffectiveLevel() == logging.INFO or logging.getLogger().getEffectiveLevel() == logging.DEBUG)
         self.show_progress_bar = show_progress_bar
 
         self.convert_input_examples(examples, model)

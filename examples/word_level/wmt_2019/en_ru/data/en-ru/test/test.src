@@ -1,0 +1,1023 @@
+rate this build
+please tell us why you chose that answer .
+how would you rate the quality of the latest update of Microsoft Power Point ?
+how would you rate the quality of the latest update of Microsoft Office ?
+URL ZAP
+users have reported when replying to mail that contains a table , the content is being wrapped and looks incorrect . engineering is aware of the issue and investigating the change that caused the issue .
+table Formatting is wrapped
+sent from Outlook
+privacy and data
+Azure Deprecated
+Azure Enterprise
+Azure General Symbols
+Azure Intune
+Azure OMS
+Azure Operations Manager
+Azure Other Microsoft Products
+Azure System Center
+Azure VMs by Function
+enter column header point value
+enter column header name
+document viewers
+last viewed moments ago
+last viewed 1 day ago
+last viewed 1 hour ago
+last viewed more than a year ago
+loading document views
+1 viewer
+the database copy Active Directory object has an invalid parent database object . the parent database object may be marked as DEL ( deleted ) , CNF ( conflict ) , or may not be found .
+the database Active Directory object has been marked as CNF ( i.e. it was chosen as a conflict victim ) . this usually happens due to multiple objects being created with the same name on different Domain Controllers . the Remove @-@ MailboxDatabase and New @-@ MailboxDatabase cmdlets can be used to remove or fix the invalid database copy object .
+the database copy Active Directory object has been marked as CNF ( i.e. it was chosen as a conflict victim ) . this usually happens due to multiple objects being created with the same name on different Domain Controllers . the Remove @-@ MailboxDatabaseCopy and Add @-@ MailboxDatabaseCopy cmdlets can be used to remove or fix the invalid database copy object .
+choose others
+no email address was found for the accessing user . meeting messages will not be copied to the sent items folder .
+when you work on OneDrive or SharePoint files , you can see which of those documents are getting read .
+top contributors
+show Collaborations
+people in this chat with this link can view .
+people in this chat with this link can review .
+people in this chat
+people in this chat with this link can edit .
+enter text to filter options
+Azure Drawing
+enter quality description
+comparison is running . this should take less than 5 minutes .
+domain registration failed
+document sync to iCloud
+activity continuation
+shared photo stream
+Premium dashboard
+suggested attachments
+apps with account access
+storage Scheduling Requests Rejected
+if you turn this on , all real @-@ time media traffic for meetings will be marked . if they have this marking , the network packets can be prioritized .
+teams user activity
+teams device usage
+teams usage
+Skype ( version 7 ) for Windows desktop will stop working soon . get Skype ( version 8 ) to enjoy a familiar look and feel , exceptional HD video calling and much more .
+notice any problems with this build ?
+viewing access
+notes you take are shared with others and are accessible before , during and after the meeting
+go ahead and start taking notes !
+celebrity Filter
+color Filter
+face Swap Filter
+how Old Filter
+location Filter
+photo Booth Filter
+photo Frame Filter
+style transfer Filter
+teleport Filter
+weather Filter
+create request
+logs from multiple parties on the call can help us solve the issue . just click " Create request " to get started .
+request logs from other contacts
+if you can 't see a " Send logs " button below , please disregard this message . your client doesn 't support multi @-@ party log sharing .
+share your logs to help us fix an issue
+please send the following request to the contacts you want to get logs from by clicking the send icon next to the card .
+I am uploading your file ...
+I am uploading your files ...
+black and White Filter
+captions Filter
+change app language
+video player
+PowerSchool sync
+my Popular Documents
+last updated today
+document Sharing
+Azure Cloud
+file attachments are disabled
+chat connection lost , messages may be missed while reconnecting
+modifying network interface
+you \ ’ re all caught up now !
+add @-@ in pinned to the email and calendar items for easy access
+add @-@ in pinned to the email items for easy access
+add @-@ in unpinned . find it in the " more actions " menu on your email and calendar items .
+add @-@ in unpinned . find it in the " more actions " menu on your email items .
+autosave HAS BEEN DISABLED
+please select a group or participant before attaching a file
+autosave is now off , because you are running a script or add @-@ in that does not support this feature .
+click the document title to rename , or browse the version history of files saved on the cloud .
+has an image attachment
+message is longer than 1024 characters
+outlook customize actions settings
+see a full list of available ink gestures .
+launch the add @-@ in to save content or take an action
+tables & charts
+there are too many objects ( charts , shapes , pictures , etc . ) to display . since these objects are attached to cells , we don 't recommend deleting any cells . if you do , you might delete an attached object as well .
+this add @-@ in is available only for Outlook for Windows and Mac . you will find it below the message header .
+this file has been moved since you last opened it . do you want to open it from the new location ?
+this file has been moved . we recommend saving it now to finish moving it .
+we could not generate data from your image . please try again .
+number of Likes
+show Carousel
+use a semicolon to separate multiple email addresses .
+you need to delete an existing cutover migration batch before you can start this migration .
+Apple ID
+Apple Push Notification certificate
+I grant Microsoft permission to send both user and device information to Apple .
+go back to the previous step and select a mail system connection ( endpoint ) and your migration report recipient ( s ) to proceed .
+this will help us with suggesting times and understanding your after @-@ hours .
+we 're looking for times that are in your working hours :
+these settings apply to Office 365 groups and SharePoint sites that have this label applied .
+office 365 Group and SharePoint settings
+allow external users to have access to groups
+let users outside this organization be added as member of this group .
+let users outside this organization send emails to the group with this label .
+let users access group team site content from unmanaged devices
+allow limited web only access
+define external user access , sharing , privacy and unmanaged device access .
+private - Membership requires approval by site owner and only then can a member view the content .
+public - Anyone in the organization can view content and become member
+config organization route through Application Proxy
+performing Exchange scenario test directly ...
+performing Exchange scenario test via Application Proxy ...
+perform Exchange scenario test via Application Proxy
+connecting to Test Listner via Application Proxy ...
+connect to Test Listner via Application Proxy
+connecting to Test Listner via localhost ...
+connect to Test Listner via localhost
+configuring test route through Application Proxy ...
+config test route through Application Proxy
+you need to close an existing IMAP connection before you can start this migration .
+you can pin or unpin add @-@ ins from
+too Many Objects
+show Detailed Changes
+cancel Table Insertion ?
+this evening
+setup Onboarding
+select a Company Admin from below to send an email requesting access .
+need to Confirm
+once Devices are enrolled you are ready to experience M365 Analytics . the devidce enrollment might take few days .
+setup Device Enrollment Now
+congratulations ! ready to Go
+below are the details of Service Agreement .
+need to Review
+have E3 + SKU ?
+select user to assign role
+people Picker Suggestions available
+for easy management of M365 Analytics workspace and delegation of roles , we will automatically create the following Security Groups in your AAD .
+configure User Access
+existing Contributors :
+need to Configure
+this will take an hour to read back to the system .
+you must create an Azure ID to have a workspace .
+to get an Azure ID to create a workspace .
+your Azure ID has 'nt made it back to the system this will take up to an hour . it looks like
+set as Workspace
+need to Prepare
+your ID is still generating .
+messages can be canceled for up to 10 seconds . you can choose how long Outlook will wait to send your messages .
+intent text for save button
+contact your admin ( s ) for access
+select which Azure ID you would like to use
+confirm your Microsoft SKU
+setup Update Readiness
+setup Later . go to M365 Analytics Now
+select your admin ( s ) to contact for setup
+if you have E3 + this includes more features in Update Readiness .
+read here
+benefits of E3 + SKU ?
+existing Owners :
+welcome to Update Readiness
+you can choose one workspace from below or Create a New one with Azure ID .
+people added under this security group will be able to create and manage deployment plans within the workspace . they do not need to have owner / co @-@ owner level access to the Azure subscription .
+people added under this security group will be able to create and manage the workspace . in order to be able to create a workspace , they need to have owner / co @-@ owner level access to an Azure subscription .
+creating an Azure ID is free and will be available to anyone granted with owner access .
+you 're ID is still generating
+ha Noi
+greater Accra
+Tunis Ariana Ben Arous Carthage
+Dodoma Iringa Singida and Tabora
+Gran Caracas
+Dependencias Federales
+attend a live event meeting
+transfer a call immediately , or consult with the recipient over chat first
+share a PowerPoint file in a call or meeting
+* Requires Phone System license
+call queue and auto attendant support
+view meeting notes
+copy a channel 's email address
+you may not be able to use your keyboard to return to Microsoft Teams after entering the following area . open this live event in Microsoft Stream .
+preview ringtone
+hide completed to @-@ dos
+save task subject
+your mic is unmuted .
+image Uploaded
+edit password field
+when more tabs are added , they 'll show up here .
+set Availability
+edit phone field
+Congo ( Democratic Republic of the Congo )
+share videos in messages
+create meetings
+you are connected to a network that does not allow sending files . please try again later .
+add a to @-@ do
+property name to be filtered on
+marketing Material
+why this matters
+hide Carousel
+added new filter .
+location Not Enabled
+forward calls to your call group *
+candidate 's email is not valid .
+interviewer 's email is not valid .
+join via phone
+you 've been chatting on Skype for Business
+immersive Reader
+send email updates to parents / guardians
+send a weekly email about assignments to parents / guardians
+parent / guardian emails
+conversations were deleted .
+generic Filters option to specify All in the particular Filter
+what type of login account is this ?
+click here for more information and actions for this item
+when more tabs are added , they \ ' ll show up here .
+text to decribe a button that navigates to a previous state
+text to name a button that navigates to a previous state
+plural noun for image
+singular noun for image
+singular item for Remix3D
+plural for items in Remix3D
+scheduling updates
+teams needs to detect your GPS location to confirm you 're at work when you clock in or out for your shift .
+Browse more places
+group members will receive an invite in their inbox .
+search all rooms by name or city
+search refiners
+move contacts and contact lists to another folder
+something went wrong and we couldn 't move selected items .
+something went wrong . try refreshing the page or come back later .
+help us Improve !
+thank you for your feedback . we 'll use it to improve Outlook .
+please help us improve by clicking on the button or hit enter to open default email client
+does any of this feedback describe your idea ? if not , select New feedback .
+trending feedback
+you can vote on others ' feedback or create your own . if you don 't see your idea below , enter it in the box and select Search .
+please enter valid file path
+commercial crash rate
+ready for Windows
+your org crash rate
+manage how to receive updates
+choose an option for managing Office client updates
+manage updates using Configuration Manager
+retrieve updates from the Microsoft Office CDN
+retrieve updates from a local source
+can 't find the persona you requested .
+the label is SEC17 @-@ a Record label , it cannot be converted to non @-@ record label .
+apply real @-@ time URL scanning for suspicious links and links that point to files .
+wait for URL scanning to complete before delivering the message .
+wait for URL scanning to complete before delivering the message
+the provided ID is not a valid Persona ID : too short .
+the provided ID is not a valid Persona ID : too long .
+your team has moved to Microsoft Teams . go to the app store to download now .
+your team has moved to Microsoft Teams . go to the play store to download now .
+play store
+we fixed bugs preventing some users from removing dates and attaching photos to tasks .
+this is the text of the button that will migrate the user from the previous version of announcements to the new one
+there was an error during upgrade
+sorry , we had trouble getting your notebooks .
+near Duplicates
+note : this insight is based on messages reported to Microsoft by users in your organization as spam , phish or not junk .
+include numbers in themes :
+how we 're blocking by IP
+number of the Count for Skip Lists
+include List of Skip Lists
+number of Skip Listing IPs
+move contact list to another folder
+move contact lists to another folder
+ignore Text ( s ) :
+configure pilot
+signature Preview
+signature Preview Body
+side Section 1 of 1
+the comment you replied to has been deleted .
+the document you replied to has been deleted .
+sorry , something is wrong on the server .
+your reply was not added to the document .
+zoom reset
+unable to display the message . try again later .
+information pane
+you are creating an event on the group calendar .
+active devices
+click to clear the selection .
+automatically check for updates
+ant @-@ MAN AND THE WASP
+list of users without access
+create Appointment
+show / Hide Triggers and Actions Pane .
+view group email .
+& Encrypt this item
+notify me when many files are deleted
+a new VMSS cannot be added to the backend pool until deletion of the previous VMSS has completed and all of its instances updated .
+delete virtual network connection successful
+delete virtual network connection unsuccessful
+resource cleanup in progress
+resource cleanup successful
+resource cleanup unsuccessful
+rows , columns , cells
+topology diagram
+delete Virtual Network connection
+delete virtual network connection in progress
+load Comparison
+edit with natural gestures : circle to select , scribble to delete , make a caret to insert text . see all the gestures by selecting the Ink Editor drop @-@ down list and choosing Ink Gesture Help .
+protection labels
+encrypt with S & / MIME
+list on this site
+© Microsoft Corp 2016 . all rights reserved .
+sorry , we failed to fetch the list of accruals .
+add Shift
+you can enable access in privacy settings .
+already have one ? tap here
+announcements from your company will show up here
+sent from Yammer
+Microsoft StaffHub . the freedom to manage work .
+Microsoft StaffHub is a cloud @-@ based platform that slips work ( and the tools to manage it ) into everyone ’ s back pocket . with Microsoft StaffHub , desk @-@ free workers can view schedules , swap shifts , and request time off . managers can create schedules , approve requests , and share information . on mobile or web , it ’ s the one @-@ stop app for scheduling , sharing , and communicating . Microsoft StaffHub gives everyone the freedom to manage work . and get on with life . Microsoft StaffHub is available to customers that have an Office 365 Enterprise F1 , E1 , E3 , E5 , or Education subscription plan .
+Microsoft StaffHub is a cloud @-@ based platform that slips work ( and the tools to manage it ) into everyone ’ s back pocket . with Microsoft StaffHub , staff workers can view schedules , swap shifts , and request time off . managers can create schedules , approve requests , and share information . on mobile or web , it ’ s the one @-@ stop app for scheduling , sharing , and communicating . Microsoft StaffHub gives everyone the freedom to manage work . and get on with life . Microsoft StaffHub is available to customers that have an Office 365 Enterprise K1 , E1 , E3 , E5 , or Education subscription plan .
+Microsoft StaffHub is a cloud @-@ based platform that slips work ( and the tools to manage it ) into everyone ’ s back pocket . with Microsoft StaffHub , firstline workers can view schedules , swap shifts , and request time off . managers can create schedules , approve requests , and share information . on mobile or web , it ’ s the one @-@ stop app for scheduling , sharing , and communicating . Microsoft StaffHub gives everyone the freedom to manage work . and get on with life . Microsoft StaffHub is available to customers that have an Office 365 Enterprise K1 , E1 , E3 , E5 , or Education subscription plan .
+bug Fixes and Improvements : " bug fixes and improvements . "
+manage . communicate ! share .
+we are happy to announce StaffHub is officially open to use for any work accounts linked to an O365 license ! — Get quicker responses from support . we ’ ve moved over to HelpShift . if you have any issues with our app , you can quickly chat with a real life person to get help . ( not that we weren ’ t real before , but this will be faster ) . — " Hello " to our Danish speakers . we now support Danish on our mobile and web apps .
+we are happy to announce StaffHub is officially open to use for any work accounts linked to an O365 license ! — " Hello " to our Danish speakers . we now support Danish on our mobile and web apps . — Feeling chatty ? chat it up with even more people using StaffHub ! you can now have converations with anyone in your organization using StaffHub , even if they 're on a different team
+archiving Conversation
+data is in bad state . please sign out and sign back in .
+can 't , Sorry
+offer Shift
+reload Requests
+view Shift
+you don 't have a shift scheduled
+your team doesn 't have any shifts scheduled for this day
+you have shifts scheduled
+please grant camera permission by navigating to : settings > Privacy > Camera .
+camera Permission Required
+switch Team
+switching Team
+find out what 's up with your team in the team chat . or , start a new conversation by tapping compose .
+offer my shift
+select Your Shift
+to this team member
+select Team Member
+please select at least 1 recipient for the request .
+I need to handoff my shift . would you be interested in taking it ?
+create Your Work Account
+credentials expired . tap here to sign in again .
+it ’ s almost time to clock out !
+it ’ s almost time to clock in .
+no notes for the day .
+deleting a team member will remove them from the schedule where they have no shifts
+delete Team Member
+delete failed message
+edit Shift
+( optional ) Add a reason to your response
+no requests currently in progress
+enter a new group name
+current version not supported . app needs to be updated .
+your app version is no longer supported . please download the latest version from the App Store .
+error fetching activity feed
+error fetching conversations
+you are not connected to the internet , open your browser to finish connecting to the internet or try a different connection .
+select people to have a conversation with .
+to send a message , you need text or image .
+sorry , we couldn 't send your request just now . please try again .
+feature coming soon ...
+feature is in the works .
+sorry , this feature has been disabled by your admin .
+shared files will show up here .
+nothing Shared
+this file was removed .
+this file type cannot be shown on your device .
+for this day
+for this Shift
+I 'm Out On
+how do you want to set your profile picture ?
+team Files
+working This Day
+leaving Conversation
+employee Resources
+accepting Request ...
+denying Request ...
+to start using Time Clock , go to Settings > Privacy > Location Services and turn on .
+location Services are turned off .
+to start using Time Clock , go to Settings > Privacy > Location Services > Allow access for StaffHub .
+enter a phone number for us to help you recover your account .
+to complete signing in , tap the invite link that was given to you via SMS or email .
+don 't have a link ? ask your manager to resend it or create a new team at http : / / aka.ms / staffhub
+or use your work account
+forgot it ?
+work Account
+enter your work account to get started
+please sign in with this account on the next screen .
+call Me Instead
+a Lowercase
+this conversation has been archived . exiting chat .
+this conversation has been archived
+just a moment , we 're updating things for you .
+you 're not a member of any teams yet . ask your manager to add you to a team .
+you have new messages . scroll to bottom .
+all shifts displayed in your team time zone
+the Office 365 Group backing this team has been deleted , so Team Chat is not available for this team . please contact your IT admin to restore the deleted Office 365 Group and Team Chat . if this is not expected , please contact support .
+more unread messages
+your app version is no longer supported . download " StaffHub " from the App Store and click " I need a work account . "
+failed . tap to resend .
+mute For 1 Min ( TEST )
+mute For 24 Hours
+mute Permanently
+time Clock
+you 're on the clock !
+clocking in !
+let 's get you clocked in .
+your shift starts in 5 minutes
+clock In
+you 're off the clock !
+tap and hold
+clocking out !
+your shift is ending now .
+ready to clock out ?
+clock Out
+you ’ re off the clock .
+you ’ re off the clock , but weren ’ t on location .
+you ’ re on break .
+you ’ re on the clock .
+you ’ re on the clock , but not on location .
+currently offline . please check your connection .
+always switch to other team
+switch team
+switch Team ?
+no unread notifications .
+you 're not in any conversations right now . message a coworker !
+no people working this day
+no Positions
+you have no shifts in the current schedule .
+you currently have no team . find an invite !
+time Clock now available for your team
+attachments updated
+due Date updated
+note updated
+title updated
+swap or Offer Shift
+add a reason for your offer request
+add a reason for your swap offer request
+open Shift
+nothing 's available
+password should be 8 to 16 characters long
+please Include
+employee resources , collapsed
+employee resources , expanded
+very Likely
+what 's the main reason for your score ?
+thank you ! help spread the word by rating us in the app store .
+thank you ! help us improve by suggesting an idea , we 'd love to hear from you .
+I 'm Requesting
+you can request time off here or offer your shift to a coworker . tap the plus button to start .
+need a Schedule Change ?
+another request for this shift has been approved .
+this shift request has expired because the shift was deleted .
+waiting for a manager to approve or deny .
+tap the Plus button at the top to start a request .
+declined Request
+requesting To Offer Shift
+response Not Applicable
+Manager Response
+schedule Updated
+team Response
+resend failed message
+can you take my shift ?
+your Schedule tab
+find your shifts and requests here .
+type a name or choose from the list .
+finding people in other teams ...
+outside your team
+select Contacts to Continue .
+type a name or choose from the list
+you can also shake your phone to contact support
+refresh Data
+set shift reminder
+shift Reminder
+when you schedule a shift reminder , Teams will send you a notification before your shift .
+show shifts in team time zone
+notification before shift
+time Zone Display
+when turned off , all shifts will be displayed in your local time zone , even if it is different than your team 's .
+show shifts in local time zone ?
+show shifts in team time zone ?
+shared from Teams :
+share schedule
+I 'm using StaffHub to manage my schedule and communicate with my coworkers . check it out :
+custom Label
+delete Shift
+your manager has deleted this shift
+shift will be deleted permanently
+your manager hasn 't added any upcoming shifts for you .
+take a Break !
+the selected team member is not a part of this group .
+please select a start time that is before the end time .
+the selected time range must be less than 24 hours in length .
+dark Purple
+dark Yellow
+Microsoft StaffHub is turned off for your company . contact someone in your IT department to get access .
+all my team members
+anyone ( not assigned )
+updating your notifications
+loading file
+loading files
+loading requests
+no coworkers working this day .
+no position assigned .
+pending Approval
+sending response
+time off
+to My Managers
+updates in progress
+your Manager
+you cannot offer your time off to others .
+tap to Reveal Password
+each person is assigned this to @-@ do
+open to any one person to do
+see completion report
+completion Report
+to @-@ do will be deleted permanently .
+you can now create , assign , and track to @-@ do lists your managers can see .
+team To @-@ Do list
+marking this to @-@ do only tracks your response
+for others
+assign To @-@ do
+update in progress . please wait for it to finish .
+team Chat
+your team has been deleted . please sign in again .
+team Deleted
+select a Team To View
+you 're On Multiple Teams .
+set Up Time Clock
+detecting your location ...
+jury Duty
+parental Leave
+sick Day
+time off balances
+time Off
+add a reason for your time off request
+no start date selected
+no time off type selected
+start date cannot be later than end date
+view time off balance
+recorded hours will appear here
+no hours recorded
+request Time Off
+offer Request
+create Member
+shift Details
+shift handoff
+shift Swap
+swap Request
+new Time Off Request
+time Off Request
+StaffHub Now
+device Time Zone Changed
+everyone Working Now
+shifts , to @-@ dos , and important announcements will appear here as soon as your manager adds them .
+no notes have been shared for today .
+no one is working today .
+no one else has been added to the team .
+not Working Today
+working Now
+working Today
+swap my shift
+for this shift
+select a Team Member 's Shift
+updating your client
+an Uppercase
+we 've partnered with UserVoice , a third party service to host customer suggestions and support requests . when you request a feature to our feedback forum , others will be able to subscribe to it and make comments .
+your account does not have access to StaffHub . please contact your system administrator to get assigned a valid license .
+collapse to week .
+color dark pink
+expand to month .
+has notes
+tap and hold to clock in
+tap and hold to clock out
+previous week
+step completed
+step denied
+step pending
+waiting for previous step
+double tap to see more
+select team member
+select theme
+shift details
+Staffhub invitations
+time off shift
+work account
+indicate when you 're free to work and get a schedule that fits .
+time tracking made simple and sweet — Introducing Time Clock .
+teams needs to detect your GPS location to confirm you 're at work when you clock in or out for your shift . location services must be turned on .
+clock in . clock out .
+clock in and out with Time Clock
+to use Time Clock , Teams needs to know your GPS location . location services must be turned on .
+clock In and Out with Teams !
+try Later
+- You can now swap or offer your time off to anyone in your team using our swap or offer feature . - Catch up on the latest conversation quickly with our ' Jump to last unread ' and new messages indicators - View the profiles of coworkers who are in a different team - Bug fixes and stability improvements
+- Customize StaffHub notifications by visiting ' Settings ' in the left menu . you can easily change your shift reminder - Don 't miss a thing ! now you can quickly jump to the latest messages and see which messages are new - Bug fixes and stability improvements
+- Accessibility : we now support dynamic font sizes based on your device accessibility settings . - Bug fixes and stability improvements .
+- Easily stay up @-@ to @-@ date with all the changes that are happening with your schedule and team ! tap on the bell icon in the upper right corner to check out the new notification feed . - Bug fixes and stability improvements
+- With this update , StaffHub will only be supported on iOS 9 and above . - Bug fixes and stability improvements .
+- All your shifts will now be in your team 's time zone instead of your device time zone . you will also have the option to change this in the settings . this is now consistent with the experience on the web platform . - Bug fixes and stability improvements
+- StaffHub now supports management of to @-@ dos . teams can now easily create , manage , and track action items that come up at work - no more forgotten action items ! - Bug fixes and improvements
+- StaffHub now supports management of to @-@ dos . teams can now easily create , manage , and track action items that come up at work - no more forgotten action items ! - You can now receive announcements on your mobile device . if your app has a tab called " Inbox , " your organization has turned on this feature . check it out to read news from your organization . - Bug fixes and improvements
+- iPhone X support - Bug fixes and improvements
+- Support for Intune Mobile Application Management - Bug fixes and improvements
+- You can now clock in and out using StaffHub ! once your manager enables time clocking on StaffHub web , you will be prompted to set up on the app . - Support for Intune Mobile Application Management - Bug fixes and improvements
+remove this time range
+clock in
+clock in or clock out
+clock out
+select team members .
+mark as incomplete .
+clock in successful
+clock out successful
+end break successful
+start break successful
+time clock has not started yet
+announcements from your company will show up here .
+the announcement you selected could not be found .
+the announcement pictures could not be loaded . please try again .
+the announcement you were viewing was removed by your company .
+please select a start and end time .
+chat with everyone in team
+chat with everyone working now
+no members on your current team . search for someone at your company .
+type to search across your company
+add Time Off
+the data you were trying to access no longer exists .
+deleting a team member will remove them from the schedule where they have no shifts .
+Shiftr Dev Settings
+sorry , you must choose the date before you can pick the time .
+the PowerApp could not be opened .
+the end time must be after the start time .
+your app version is no longer supported . please download the latest version from the Play Store .
+feature is not enabled by your admin .
+start a request
+cancel start request
+error downloading the file , please try later
+no apps were found to open the selected file . \ NDO you still want to download it ?
+the file could not be found . it may have been deleted by your manager .
+error opening the file . we \ ' re looking into it .
+come back in a few minutes to begin viewing shared files from your team .
+we \ ' re Setting Things Up
+we had some trouble getting your information . please check your Internet connection .
+\ nCurrently disabled . click to enable .
+\ nCurrently enable . click to disable .
+would you like to save your changes ?
+\ nCurrently selected . click to deselect .
+\ nCurrently unselected . click to select .
+no apps found to open this file type .
+error loading the page , please try later
+open calendar button
+calendar collapsed
+collapse calendar button
+edit this shift button
+calendar expanded
+expand calendar button
+expand calendar
+offer this shift button
+swap for this shift button
+swap for this shift
+you don \ ' t have any shifts scheduled for this day .
+a manager hasn \ ' t added any shifts for you in Teams .
+take a break !
+teams needs to detect your GPS location to confirm you \ ' re at work when you clock in or out for your shift . location services must be turned on .
+clock In and Out with Time Clock
+time tracking made simple and sweet - Introducing Time Clock .
+swap Or Offer Shift
+a manager has not invited you to a schedule .
+your account does not have access to Teams . please contact your system administrator to get assigned a valid license .
+notes included
+offer shift
+open profile button
+no upcoming shifts
+more schedule options
+set availability
+your next shift is starting soon .
+join New Team
+login With Existing Account
+your settings have been changed on another device .
+turn Do Not Disturb On
+teams won \ ' t send you push notifications when you have Do Not Disturb turned on .
+teams won \ ' t send you notifications outside your work hours . you will not receive shift reminders or important alerts and updates .
+teams won \ ' t send you notifications during your work hours . you may miss important alerts and updates .
+unable to fetch your settings , check your network and try again .
+shift Reminders
+notification Before Shift
+scheduled Shift Reminders
+when turned off , all shifts will be displayed in your device time zone , even if it is different than your team \ ' s .
+time Off Gray
+no people on this shift
+the details of this shift have been updated .
+all shifts displayed in your team time zone .
+the shift could not be found .
+this shift has notes
+shift Offer Request
+the shift you were viewing was removed by a manager .
+need a schedule change ?
+to my managers
+offer My Shift
+select team members
+to these team members
+select your shift
+I want to swap my shift
+select a team member \ ' s shift
+swap My Shift
+the shift request you were viewing was removed by a manager .
+accepted request
+declined request
+you cancelled this request
+waiting for a manager to approve or deny
+response not applicable
+pending approval
+add a reason for your swap request
+view shift
+shift Swap Request
+your IT admin has disabled copying information from this application .
+Microsoft Teams is turned off for your company . please contact your system administrator to enable Teams .
+swap Shift
+share Task Completion Report via
+everyone on my team
+disabled - someone has already completed this task
+anyone on my team
+sorry , someone else made changes . please try again .
+error loading this to @-@ do . please try again later .
+the details of this to @-@ do has been updated by someone else on the team .
+your team doesn \ ' t have any shifts scheduled for this day .
+no joined teams
+set UP TIME CLOCK
+clock IN / OUT
+h : mm aa
+if you would like to use this feature , please turn on Location Services inside Settings .
+location Permissions denied
+to start using Time Clock , turn Location Services on .
+location Services are turned off
+clock failed . try again in a few minutes .
+it \ ' s almost time to clock in .
+you \ ' re off the clock .
+you \ ' re on the clock .
+clock failed . location Permissions have not been granted .
+clock failed . the device could not be located .
+add a reason to your response
+add a note to the manager
+recorded hours will appear here .
+shifts , to @-@ do \ ' s , and important announcements will appear here as soon as your manager adds them .
+time CLOCK
+we \ ' re undergoing maintenance right now . please try again later .
+everyone working now
+I want to offer this shift
+approved request
+pending response
+to @-@ do is completed .
+create a to @-@ do
+attachment will be removed .
+add a To @-@ do
+for me
+for anyone
+to @-@ do is incomplete .
+who \ ' s Working
+time Sheet
+Unknown User
+task Details
+select a file
+no group
+offer this shift
+no upcoming shifts to share .
+collapse calendar
+your phone does not support downloading files .
+error Downloading
+close calendar
+add ANOTHER TIME
+remove Image
+no groups assigned .
+you have a new notification for another team .
+request This Shift
+tap below
+" when I \ ' m not working
+dark Pink
+new To @-@ do
+mark as complete .
+create a to @-@ do .
+no News Yet !
+I want to swap this shift
+add request .
+color blue
+color dark blue
+request Details
+color dark green
+select Time
+color dark purple
+color green
+color gray
+color orange
+show Past Requests
+color pink
+color purple
+send Approval
+permission denied for camera .
+please provide a message .
+can 't load results .
+network unavailable . please check your connection .
+color dark yellow
+no end time selected
+operation cancelled .
+tap Below
+task updated
+delete attachment
+attachment deleted
+delete To @-@ do
+abandon unsaved changes ?
+unsaved Changes
+clock failed . please try again in a moment .
+add another time
+clock failed . looks like you 're not on location yet .
+no start time selected
+feature is unavailable
+suggest Idea
+color white
+password meets requirements
+select Date
+write a Message ...
+tap a number from 0 to 10
+request was declined .
+request Cancelled
+pending Response
+got an Idea ?
+set Up Later
+approved Request
+a Special
+StaffHub invitations
+share StaffHub
+copied password
+request a Feature
+notification test .
+PDF doc
+missing Data ?
+failed to load image
+invalid Request
+approving Request ...
+color yellow
+create new message
+file Content
+my shifts
+new notifications available
+cancelling Request ...
+not clocked in
+enable GPS for StaffHub .
+failed to properly accept invite .
+or use your phone number
+copy Password
+write a Message
+need an account ?
+name This Group
+a Number
+reason ( Optional )
+feature not supported .
+monitor Health
+finding your shifts …
+user defined permissions
+identify Pilot
+whiteboard Picker
+whiteboard Canvas
+view schedule
+enter weight
+outlook Quick Poll
+export user 's data
+current invitation
+are you sure that you want to copy the data from the existing group ?
+converting image to text ...
+Skype , mystery , selfie , photo , photograph , image , snapshot , self , classroom , class , game , fun , learning , challenge , social , special , call , someone special
+mystery Skype
+Moji Love
+Moji Minions
+headline text
+add supportive elements
+keyword List
+add Supportive Elements
+this site only
+ant @-@ Man Grow
+ant @-@ Man Run
+ant @-@ Man Salt
+ant @-@ Man Truck
+pigeon Building
+wasp & Ant @-@ Man
+wasp Blaster
+wasp Flying
+ant Drummer
+configuring organization route through Application Proxy ...
+perform Exchange scenario test directly
+resources for end users
+items to Fix :
+programs detected :
+explore a variety of ideas for this slide
+see ideas similar to one you 've used recently
+select an Azure ID
+select all items on the page
+drivers Needing Mitigation
+there was a problem opening the file . reopening may fix the problem .
+save as Lead
+prepare Your Workspace
+don 't have Azure ID ?
+generate Azure ID
+no Contributors
+review Service Agreement
+enter Workspace Name
+workspace Contributors
+hide Sheet
+section emphasis
+search for Pictures
+bottom Double Borders
+create & Manage Forms
+freeze Portion of Sheet
+insert Filters
+merge & unmerge Cells
+don 't have Excel ?
+edit the Title ...
+a Date occuring ...
+thick Bottom Borders
+top and Bottom Borders
+top and Double Bottom Borders
+top and Thick Bottom Borders
+highlight Cell Rules
+apply Shape Styles
+text Aligment
+large files now open faster !
+people List
+select OS disk and add data disks .
+failed to refresh your OneDrive account status .
+select approvers ' group
+, / stg2 =
+close to @-@ do
+copy selected to @-@ do
+enable sounds when completing a to @-@ do
+sort to @-@ dos
+show completed to @-@ dos
+incomplete to @-@ dos
+delete selected to @-@ do
+delete selected to @-@ dos
+to @-@ do title
+hide suggested to @-@ dos
+tap to edit the to @-@ do title
+completed to @-@ dos
+to @-@ do completion
+press to hide completed to @-@ dos .
+completed to @-@ dos are now hidden
+to @-@ do options
+tap to hide completed to @-@ dos
+press to show completed to @-@ dos .
+as individual to @-@ dos
+paste to @-@ do
+workspace Owners
+advanced settings and properties
+Browse Places
+at Risk
+( no age filter )
+Microsoft Office 2016
+Microsoft Office 2016 component
+edit task folder name
+save task folder name
+Browse Version History
+connector Names
+alias Resource Type
+domain ( BasicAuth )
+definition details
+more schedule preferences
+choose your team
+minimize window
+select the VSTS project
+new Recommendations
+deployment Setting
+the content can 't be displayed
+export data completed
+change microphone volume
+exported Data :
+created Date :
+enable reminder notifications
+enable context menus
+delete section
+printing Tips
+header emphasis
+fix It
+running Late
+super Dad
+fathers day , father , dad , daddy , parent , at work , computer , bored
+fathers day , father , dad , daddy , parent , confused , puzzled , huh
+fathers day , father , dad , daddy , parent , fix it , help , diy , building
+fathers day , father , dad , daddy , parent , hello , goodbye , welcome , see you soon
+fathers day , father , dad , daddy , parent , funny , laughing , happy
+fathers day , father , dad , daddy , parent , late , on my way , got to run
+fathers day , father , dad , daddy , parent , party , celebration , happy , birthday
+fathers day , father , dad , daddy , parent , sad , unhappy , missing you
+fathers day , father , dad , daddy , parent , sick , ill , in bed
+fathers day , father , dad , daddy , parent , sleepy , tired , snooze
+fathers day , father , dad , daddy , parent , fun , super hero , supper dad , playing
+fathers day , father , dad , daddy , parent , well done , congratulations
+cool Dad
+fathers day , father , dad , daddy , parent , cool dad , funny , embarrassing
+at Work
+hide In & k
+data has headers
+important Assets
+business contact
+standard SSD
+other Flagged

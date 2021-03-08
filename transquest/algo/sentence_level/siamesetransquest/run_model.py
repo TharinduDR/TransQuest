@@ -116,7 +116,7 @@ class SiameseTransQuestModel(nn.Sequential):
         self.eval()
         if show_progress_bar is None:
             show_progress_bar = (
-                        logging.getLogger().getEffectiveLevel() == logging.INFO or logging.getLogger().getEffectiveLevel() == logging.DEBUG)
+                    logging.getLogger().getEffectiveLevel() == logging.INFO or logging.getLogger().getEffectiveLevel() == logging.DEBUG)
 
         all_embeddings = []
         length_sorted_idx = np.argsort([len(sen) for sen in sentences])

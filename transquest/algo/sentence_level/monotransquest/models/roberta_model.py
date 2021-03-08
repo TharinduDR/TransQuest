@@ -1,14 +1,11 @@
-import torch
-import torch.nn as nn
 from torch.nn import CrossEntropyLoss, MSELoss
+from transformers import BertPreTrainedModel
 from transformers.models.roberta.modeling_roberta import (
     ROBERTA_PRETRAINED_MODEL_ARCHIVE_LIST,
     RobertaClassificationHead,
     RobertaConfig,
     RobertaModel,
 )
-
-from transformers import BertPreTrainedModel
 
 
 class RobertaForSequenceClassification(BertPreTrainedModel):
@@ -51,14 +48,14 @@ class RobertaForSequenceClassification(BertPreTrainedModel):
         self.weight = weight
 
     def forward(
-        self,
-        input_ids=None,
-        attention_mask=None,
-        token_type_ids=None,
-        position_ids=None,
-        head_mask=None,
-        inputs_embeds=None,
-        labels=None,
+            self,
+            input_ids=None,
+            attention_mask=None,
+            token_type_ids=None,
+            position_ids=None,
+            head_mask=None,
+            inputs_embeds=None,
+            labels=None,
     ):
         outputs = self.roberta(
             input_ids,

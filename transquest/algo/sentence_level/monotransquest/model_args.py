@@ -1,7 +1,7 @@
 import json
 import os
 import sys
-from dataclasses import asdict, dataclass, field, fields
+from dataclasses import asdict, dataclass, field
 from multiprocessing import cpu_count
 
 
@@ -142,5 +142,3 @@ class MonoTransQuestArgs(TransQuestArgs):
     special_tokens_list: list = field(default_factory=list)
     stride: float = 0.8
     tie_value: int = 1
-
-
