@@ -250,8 +250,6 @@ class MicroTransQuestModel:
             training_details: Average training loss if evaluate_during_training is False or full training progress scores if evaluate_during_training is True
         """  # noqa: ignore flake8"
 
-        train_data = prepare_data(train_data, args)
-        eval_data = prepare_data(eval_data, args)
 
         if args:
             self.args.update_from_dict(args)
@@ -280,6 +278,9 @@ class MicroTransQuestModel:
                 "Output directory ({}) already exists and is not empty."
                 " Use --overwrite_output_dir to overcome.".format(output_dir)
             )
+
+        train_data = prepare_data(train_data, self.args)
+        eval_data = prepare_data(eval_data, self.args)
 
         self._move_model_to_device()
 
