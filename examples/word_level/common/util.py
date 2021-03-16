@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 
-def reader(path, args, source_file, target_file, source_tags_file=None, target_tags_file=None):
+def reader(path, source_file, target_file, source_tags_file=None, target_tags_file=None):
 
     with open(os.path.join(path, source_file)) as f:
         source_sentences = f.read().splitlines()
@@ -19,27 +19,27 @@ def reader(path, args, source_file, target_file, source_tags_file=None, target_t
 
         df = pd.DataFrame(
             {
-                args["source_column"]: source_sentences,
-                args["target_column"]: target_sentences,
-                args["source_tags_column"]: source_tags,
-                args["target_tags_column"]: target_tags
+                "source": source_sentences,
+                "target": target_sentences,
+                "source_tags": source_tags,
+                "target_tags": target_tags
             }
         )
 
     else:
         df = pd.DataFrame(
             {
-                args["source_column"]: source_sentences,
-                args["target_column"]: target_sentences
+                "source": source_sentences,
+                "target": target_sentences
             }
         )
 
     return df
 
 
-def prepare_testdata(raw_df, args):
-    source_sentences = raw_df[args["source_column"]].tolist()
-    target_sentences = raw_df[args["target_column"]].tolist()
+def prepare_testdata(raw_df):
+    source_sentences = raw_df["source"].tolist()
+    target_sentences = raw_df["target"].tolist()
 
     test_sentences = []
     for source_sentence, target_sentence in zip(source_sentences, target_sentences):

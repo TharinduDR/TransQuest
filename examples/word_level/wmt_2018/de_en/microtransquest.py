@@ -16,15 +16,15 @@ from transquest.algo.word_level.microtransquest.run_model import MicroTransQuest
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-raw_train_df = reader(TRAIN_PATH, microtransquest_config, TRAIN_SOURCE_FILE, TRAIN_TARGET_FILE, TRAIN_SOURCE_TAGS_FILE,
+raw_train_df = reader(TRAIN_PATH, TRAIN_SOURCE_FILE, TRAIN_TARGET_FILE, TRAIN_SOURCE_TAGS_FILE,
                       TRAIN_TARGET_TAGS_FLE)
-raw_dev_df = reader(DEV_PATH, microtransquest_config, DEV_SOURCE_FILE, DEV_TARGET_FILE, DEV_SOURCE_TAGS_FILE,
+raw_dev_df = reader(DEV_PATH, DEV_SOURCE_FILE, DEV_TARGET_FILE, DEV_SOURCE_TAGS_FILE,
                     DEV_TARGET_TAGS_FLE)
 raw_test_df = reader(TEST_PATH, microtransquest_config, TEST_SOURCE_FILE, TEST_TARGET_FILE)
 
 
-test_sentences = prepare_testdata(raw_test_df, args=microtransquest_config)
-dev_sentences = prepare_testdata(raw_dev_df, args=microtransquest_config)
+test_sentences = prepare_testdata(raw_test_df)
+dev_sentences = prepare_testdata(raw_dev_df)
 
 fold_sources_tags = []
 fold_targets_tags = []

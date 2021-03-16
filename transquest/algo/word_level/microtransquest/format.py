@@ -2,10 +2,10 @@ import pandas as pd
 
 
 def prepare_data(raw_df, args):
-    source_sentences = raw_df[args["source_column"]].tolist()
-    source_tags = raw_df[args["source_tags_column"]].tolist()
-    target_sentences = raw_df[args["target_column"]].tolist()
-    target_tags = raw_df[args["target_tags_column"]].tolist()
+    source_sentences = raw_df["source"].tolist()
+    source_tags = raw_df["source_tags"].tolist()
+    target_sentences = raw_df["target"].tolist()
+    target_tags = raw_df["target_tags"].tolist()
 
     sentence_id = 0
     data = []
@@ -19,11 +19,11 @@ def prepare_data(raw_df, args):
         target_words = target_sentence.split()
         target_tags = target_tag_lind.split()
 
-        data.append([sentence_id, args["tag"], target_tags.pop(0)])
+        data.append([sentence_id, args.tag, target_tags.pop(0)])
 
         for word in target_words:
             data.append([sentence_id, word, target_tags.pop(0)])
-            data.append([sentence_id, args["tag"], target_tags.pop(0)])
+            data.append([sentence_id, args.tag, target_tags.pop(0)])
 
         sentence_id += 1
 
@@ -63,17 +63,17 @@ def post_process(predicted_sentences, test_sentences, args):
                 if idx < len(predicted_sentence):
                     source_tags.append(list(predicted_sentence[idx].values())[0])
                 else:
-                    source_tags.append(args["default_quality"])
+                    source_tags.append(args.default_quality)
             else:
                 if idx < len(predicted_sentence):
                     target_tags.append(list(predicted_sentence[idx].values())[0])
                 else:
-                    target_tags.append(args["default_quality"])
+                    target_tags.append(args.default_quality)
 
         assert len(source_tags) == len(source_sentence.split())
 
         if len(target_sentence.split()) > len(target_tags):
-            target_tags = target_tags + [args["default_quality"] for x in
+            target_tags = target_tags + [args.default_quality for x in
                                          range(len(target_sentence.split()) - len(target_tags))]
 
         assert len(target_tags) == len(target_sentence.split())
