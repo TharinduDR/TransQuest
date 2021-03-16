@@ -3,7 +3,7 @@ import shutil
 
 from sklearn.model_selection import train_test_split
 
-from examples.word_level.common.util import reader
+from examples.word_level.common.util import reader, prepare_testdata
 from examples.word_level.wmt_2018.de_en.microtransquest_config import TRAIN_PATH, TRAIN_SOURCE_FILE, \
     TRAIN_SOURCE_TAGS_FILE, \
     TRAIN_TARGET_FILE, \
@@ -11,7 +11,6 @@ from examples.word_level.wmt_2018.de_en.microtransquest_config import TRAIN_PATH
     TEST_TARGET_FILE, TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE, SEED, TEST_TARGET_TAGS_FILE, TEST_TARGET_GAPS_FILE, \
     DEV_PATH, DEV_SOURCE_FILE, DEV_TARGET_FILE, DEV_SOURCE_TAGS_FILE, DEV_TARGET_TAGS_FLE, DEV_SOURCE_TAGS_FILE_SUB, \
     DEV_TARGET_TAGS_FILE_SUB, DEV_TARGET_GAPS_FILE_SUB
-from transquest.algo.word_level.microtransquest.format import prepare_data, prepare_testdata, post_process
 from transquest.algo.word_level.microtransquest.run_model import MicroTransQuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
@@ -40,27 +39,20 @@ for i in range(microtransquest_config["n_fold"]):
 
     if microtransquest_config["evaluate_during_training"]:
         raw_train, raw_eval = train_test_split(raw_train_df, test_size=0.1, random_state=SEED * i)
-        train_df = prepare_data(raw_train, args=microtransquest_config)
-        eval_df = prepare_data(raw_eval, args=microtransquest_config)
-        tags = train_df['labels'].unique().tolist()
-        model = MicroTransQuestModel(MODEL_TYPE, MODEL_NAME, labels=tags, args=microtransquest_config)
-        model.train_model(train_df, eval_df=eval_df)
-        model = MicroTransQuestModel(MODEL_TYPE, microtransquest_config["best_model_dir"], labels=tags,
+        model = MicroTransQuestModel(MODEL_TYPE, MODEL_NAME, labels=["OK", "BAD"], args=microtransquest_config)
+        model.train_model(raw_train, eval_df=raw_eval)
+        model = MicroTransQuestModel(MODEL_TYPE, microtransquest_config["best_model_dir"], labels=["OK", "BAD"],
                                      args=microtransquest_config)
 
     else:
-        train_df = prepare_data(raw_train_df, args=microtransquest_config)
-        tags = train_df['labels'].unique().tolist()
-        model = MicroTransQuestModel(MODEL_TYPE, MODEL_NAME, labels=tags, args=microtransquest_config)
-        model.train_model(train_df)
+        model = MicroTransQuestModel(MODEL_TYPE, MODEL_NAME, labels=["OK", "BAD"], args=microtransquest_config)
+        model.train_model(raw_train_df)
 
-    predicted_labels, raw_predictions = model.predict(test_sentences, split_on_space=True)
-    sources_tags, targets_tags = post_process(predicted_labels, test_sentences, args=microtransquest_config)
+    sources_tags, targets_tags = model.predict(test_sentences, split_on_space=True)
     fold_sources_tags.append(sources_tags)
     fold_targets_tags.append(targets_tags)
 
-    dev_predicted_labels, dev_raw_predictions = model.predict(dev_sentences, split_on_space=True)
-    dev_sources_tags, dev_targets_tags = post_process(dev_predicted_labels, dev_sentences, args=microtransquest_config)
+    dev_sources_tags, dev_targets_tags = model.predict(dev_sentences, split_on_space=True)
     dev_fold_sources_tags.append(dev_sources_tags)
     dev_fold_targets_tags.append(dev_targets_tags)
 

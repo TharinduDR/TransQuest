@@ -1,17 +1,26 @@
-# TransQuest Architectures
+# Sentence Level TransQuest Architectures
 We have introduced two architectures for the sentence level QE in the TransQuest framework, both relies on the XLM-R transformer model.
 
-##MonoTransQuest
+### Data Preparation
+First read your data in to a pandas dataframe and format it so that it has three columns with headers text_a, text_b and labels. text_a is the source text, text_b is the target text and labels are the quality scores as in the following table.
 
-The first architecture proposed uses a single XLM-R transformer model. The input of this model is a concatenation of the original sentence and its translation, separated by the *[SEP]* token. Then the output of the 
+| text_a                                                                    | text_b                                                                                       | labels |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------|--------|
+| 	නමුත් 1170 සිට 1270 දක්වා රජය පාලනය කරන ලද්දේ යුධ නායකයින් විසිනි.         | But from 1170 to 1270 the government was controlled by warlords.                             | 0.8833 |
+|   ව්‍යංගයෙන් ගිවිසුමක් යනු කොන්දේසි වචනයෙන් විස්තර නොකරන ලද එක් අවස්ථාවකි.  | A contract from the constitution is one of the occasions in which the term is not described. | 0.6667 |
+
+
+Now, you can consider following architectures to build the QE model.
+
+## MonoTransQuest
+
+The first architecture proposed uses a single XLM-R transformer model. The input of this model is a concatenation of the original sentence and its translation, separated by the *[SEP]* token. Then the output of the *[CLS]* token is passed through a softmax layer to reflect the quality scores.
 
 ![MonoTransQuest Architecture](../images/TransQuest.png)
 
 ### Minimal Start for a MonoTransQuest Model
 
-First read your data in to a pandas dataframe and format it so that it has three columns with headers text_a, text_b and labels. text_a is the source text, text_b is the target text and labels are the quality scores. 
-
-Then initiate and train the model like in the following code. train_df and eval_df are the pandas dataframes prepared with the above instructions.
+Initiate and train the model like in the following code. train_df and eval_df are the pandas dataframes prepared with the instructions in Data Preparation section.
 
 ```python
 from transquest.algo.sentence_level.monotransquest.evaluation import pearson_corr, spearman_corr
@@ -24,7 +33,7 @@ model = MonoTransQuestModel("xlmroberta", "xlm-roberta-large", num_labels=1, use
 model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
 ```
-An example monotransquest_config is available [here.](https://github.com/TharinduDR/TransQuest/blob/master/examples/wmt_2020/ro_en/transformer_config.py). The best model will be saved to the path specified in the "best_model_dir" in monotransquest_config. Then you can load it and do the predictions like this. 
+An example monotransquest_config is available [here.](https://github.com/TharinduDR/TransQuest/blob/master/examples/sentence_level/wmt_2020/ro_en/monotransquest_config.py). The best model will be saved to the path specified in the "best_model_dir" in monotransquest_config. Then you can load it and do the predictions like this. 
 
 ```python
 from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
@@ -48,7 +57,7 @@ Then the output of all the word embeddings goes through a mean pooling layer. Af
 
 ### Minimal Start for a SiameseTransQuest Model
 
-First save your train/dev csv files in a single folder. We refer the path to that folder as "path" in the code below. You have to provide the indices of source, target and quality labels when reading with the QEDataReader class. 
+First save your train/dev pandas dataframes to csv files in a single folder. We refer the path to that folder as "path" in the code below. You have to provide the indices of source, target and quality labels when reading with the QEDataReader class. 
 
 ```python
 from transquest.algo.sentence_level.siamesetransquest import  LoggingHandler, SentencesDataset, \
@@ -112,4 +121,4 @@ test_data = SentencesDataset(examples=qe_reader.get_examples("test.tsv", test_fi
                            verbose=False)
 ```
 
-You will find the predictions in the test_result.txt file in the siamesetransquest_config['cache_dir'] folder. You will find more examples in [here.](https://tharindudr.github.io/TransQuest/examples/sentence_level)
+You will find the predictions in the test_result.txt file in the siamesetransquest_config['cache_dir'] folder. You can find more examples in [here.](https://tharindudr.github.io/TransQuest/examples/sentence_level)

@@ -44,6 +44,7 @@ from transformers.optimization import (
     get_polynomial_decay_schedule_with_warmup,
 )
 
+from transquest.algo.word_level.microtransquest.format import post_process, prepare_data, format_to_test
 from transquest.algo.word_level.microtransquest.model_args import MicroTransQuestArgs
 from transquest.algo.word_level.microtransquest.utils import sweep_config_to_sweep_values, InputExample, \
     read_examples_from_file, get_examples_from_df, convert_examples_to_features, LazyQEDataset
@@ -248,6 +249,9 @@ class MicroTransQuestModel:
             global_step: Number of global steps trained
             training_details: Average training loss if evaluate_during_training is False or full training progress scores if evaluate_during_training is True
         """  # noqa: ignore flake8"
+
+        train_data = prepare_data(train_data, args)
+        eval_data = prepare_data(eval_data, args)
 
         if args:
             self.args.update_from_dict(args)
@@ -955,6 +959,8 @@ class MicroTransQuestModel:
         pad_token_label_id = self.pad_token_label_id
         preds = None
 
+        to_predict = format_to_test(to_predict, self.args)
+
         if split_on_space:
             if self.args.model_type == "layoutlm":
                 predict_examples = [
@@ -1104,7 +1110,9 @@ class MicroTransQuestModel:
                 for i, sentence in enumerate(to_predict)
             ]
 
-        return preds, model_outputs
+        sources_tags, targets_tags = post_process(preds, to_predict, args=self.args)
+
+        return sources_tags, targets_tags
 
     def _convert_tokens_to_word_logits(self, input_ids, label_ids, attention_mask, logits):
 

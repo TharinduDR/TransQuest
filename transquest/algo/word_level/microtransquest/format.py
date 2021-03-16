@@ -30,17 +30,14 @@ def prepare_data(raw_df, args):
     return pd.DataFrame(data, columns=['sentence_id', 'words', 'labels'])
 
 
-def prepare_testdata(raw_df, args):
-    source_sentences = raw_df[args["source_column"]].tolist()
-    target_sentences = raw_df[args["target_column"]].tolist()
-
+def format_to_test(to_test, args):
     test_sentences = []
-    for source_sentence, target_sentence in zip(source_sentences, target_sentences):
+    for source_sentence, target_sentence in to_test:
         test_sentence = source_sentence + " " + "[SEP]"
         target_words = target_sentence.split()
         for target_word in target_words:
-            test_sentence = test_sentence + " " + args["tag"] + " " + target_word
-        test_sentence = test_sentence + " " + args["tag"]
+            test_sentence = test_sentence + " " + args.tag + " " + target_word
+        test_sentence = test_sentence + " " + args.tag
         test_sentences.append(test_sentence)
 
     return test_sentences

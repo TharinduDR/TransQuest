@@ -37,6 +37,18 @@ def reader(path, args, source_file, target_file, source_tags_file=None, target_t
     return df
 
 
+def prepare_testdata(raw_df, args):
+    source_sentences = raw_df[args["source_column"]].tolist()
+    target_sentences = raw_df[args["target_column"]].tolist()
+
+    test_sentences = []
+    for source_sentence, target_sentence in zip(source_sentences, target_sentences):
+        test_sentences.append([source_sentence, target_sentence])
+
+    return test_sentences
+
+
+
 
 
 
