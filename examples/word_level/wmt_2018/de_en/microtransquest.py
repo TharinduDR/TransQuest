@@ -102,22 +102,23 @@ with open(os.path.join(TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE), 'w') as f:
 
 with open(os.path.join(TEMP_DIRECTORY, TEST_TARGET_TAGS_FILE), 'w') as target_f, open(
         os.path.join(TEMP_DIRECTORY, TEST_TARGET_GAPS_FILE), 'w') as gap_f:
-    for sentence_id, (test_sentence, target_prediction) in enumerate(zip(test_sentences, target_predictions)):
-        target_sentence = test_sentence.split("[SEP]")[1]
-        words = target_sentence.split()
+    for sentence_id, (test_target_sentence, target_prediction) in enumerate(zip(test_target_sentences, target_predictions)):
+        # target_sentence = test_sentence.split("[SEP]")[1]
+        words = test_target_sentence.split()
         # word_predictions = target_prediction.split()
         gap_index = 0
         word_index = 0
-        for word_id, (word, word_prediction) in enumerate(zip(words, target_prediction)):
-            if word_id % 2 == 0:
+
+        for prediction_id, prediction in enumerate(target_prediction):
+            if prediction_id % 2 == 0:
                 gap_f.write("MicroTransQuest" + "\t" + "gap" + "\t" +
                             str(sentence_id) + "\t" + str(gap_index) + "\t"
-                            + "gap" + "\t" + word_prediction + '\n')
+                            + "gap" + "\t" + prediction + '\n')
                 gap_index += 1
             else:
                 target_f.write("MicroTransQuest" + "\t" + "mt" + "\t" +
                                str(sentence_id) + "\t" + str(word_index) + "\t"
-                               + word + "\t" + word_prediction + '\n')
+                               + words[word_index] + "\t" + prediction + '\n')
                 word_index += 1
 
 # Predictions for dev file
@@ -172,22 +173,21 @@ with open(os.path.join(TEMP_DIRECTORY, DEV_SOURCE_TAGS_FILE_SUB), 'w') as f:
 with open(os.path.join(TEMP_DIRECTORY, DEV_TARGET_TAGS_FILE_SUB), 'w') as target_f, open(
         os.path.join(TEMP_DIRECTORY, DEV_TARGET_GAPS_FILE_SUB), 'w') as gap_f:
     for sentence_id, (dev_sentence, dev_target_prediction, dev_target_gold_tag) in enumerate(
-            zip(dev_sentences, dev_target_predictions, dev_target_gold_tags)):
-        dev_target_sentence = dev_sentence.split("[SEP]")[1]
-        words = dev_target_sentence.split()
-        gold_predictions = source_gold_tag.split()
-        # word_predictions = target_prediction.split()
+            zip(dev_target_sentences, dev_target_predictions, dev_target_gold_tags)):
+        words = dev_sentence.split()
+        gold_predictions = dev_target_gold_tag.split()
         gap_index = 0
         word_index = 0
-        for word_id, (word, word_prediction, gold_prediction) in enumerate(
-                zip(words, target_prediction, gold_predictions)):
-            if word_id % 2 == 0:
+
+        for prediction_id, (prediction, gold_prediction) in enumerate(zip(dev_target_prediction, gold_predictions)):
+            if prediction_id % 2 == 0:
                 gap_f.write("MicroTransQuest" + "\t" + "gap" + "\t" +
                             str(sentence_id) + "\t" + str(gap_index) + "\t"
-                            + "gap" + "\t" + word_prediction + "\t" + gold_prediction + '\n')
+                            + "gap" + "\t" + prediction + "\t" + gold_prediction + '\n')
                 gap_index += 1
             else:
                 target_f.write("MicroTransQuest" + "\t" + "mt" + "\t" +
                                str(sentence_id) + "\t" + str(word_index) + "\t"
-                               + word + "\t" + word_prediction + "\t" + gold_prediction + '\n')
+                               + words[word_index] + "\t" + prediction + "\t" + gold_prediction + '\n')
                 word_index += 1
+
