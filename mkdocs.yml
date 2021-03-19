@@ -4,7 +4,7 @@ nav:
     - Home: index.md
     - TransQuest Architectures:
       - Sentence-level: architectures/sentence_level_architectures.md
-      - Word-level: architectures/word_level_architectures.md
+      - Word-level: architectures/word_level_architecture.md
     - Examples:
       - Sentence-level: examples/sentence_level_examples.md
       - Word-level: examples/word_level_examples.md
