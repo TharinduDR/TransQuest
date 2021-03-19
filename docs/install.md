@@ -21,7 +21,8 @@ cd TransQuest
 pip install -r requirements.txt
 ```
 
-Now that you have installed TransQuest, it is time to check our architectures in [sentence-level](https://tharindudr.github.io/TransQuest/architectures/sentence_level_architectures/) and [word-level.](https://tharindudr.github.io/TransQuest/architectures/word_level_architecture/)
+!!! tip
+    Now that you have installed TransQuest, it is time to check our architectures in [sentence-level](https://tharindudr.github.io/TransQuest/architectures/sentence_level_architectures/) and [word-level.](https://tharindudr.github.io/TransQuest/architectures/word_level_architecture/)
 
 
 

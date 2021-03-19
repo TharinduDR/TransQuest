@@ -119,4 +119,4 @@ MicroTransQuest architecture in TransQuest outperforms Marmot in all the languag
     Please note that the baseline used in WMT 2018; Marmot does not support predicting quality for words in source and gaps in target. Hence, those values are set to 0.0000 in all the language pairs.
 
 !!! tip
-Too tired to train QE models? Checkout our [model zoo.](https://tharindudr.github.io/TransQuest/models/word_level_pretrained/)
+    Too tired to train QE models? Checkout our [model zoo.](https://tharindudr.github.io/TransQuest/models/word_level_pretrained/)
