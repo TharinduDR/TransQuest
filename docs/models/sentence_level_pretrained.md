@@ -10,26 +10,26 @@ We have released several quality estimation models for this aspect. We have also
 
 | Language Pair   | NMT/SMT        |  Domain      |     Algorithm       |  Model Link                          | 
 |:---------------:|:--------------:|:------------:|:-------------------:|:------------------------------------:|
-| Romanian-English| NMT            |  Wikipedia   | MonoTransQuest      | [model.zip](https://bit.ly/2AfuXwb)  |
+| Romanian-English| NMT            |  Wikipedia   | MonoTransQuest      | [model.zip](http://bit.ly/3s7WOnS)  |
 |                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/37vT4mt)  |
-| Estonian-English| NMT            | Wikipedia    | MonoTransQuest      | [model.zip](https://bit.ly/2YjXIAa)  | 
+| Estonian-English| NMT            | Wikipedia    | MonoTransQuest      | [model.zip](http://bit.ly/3tD5Jhm)  | 
 |                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/30mO5mW)  | 
-| Nepalese-English| NMT            | Wikipedia    | MonoTransQuest      | [model.zip](https://bit.ly/2MHnCZc)  | 
+| Nepalese-English| NMT            | Wikipedia    | MonoTransQuest      | [model.zip](http://bit.ly/3lwvsVT)  | 
 |                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/3h674bc)  | 
-| Sinhala-English | NMT            |  Wikipedia   | MonoTransQuest      | [model.zip](https://bit.ly/3dKM3ki)  | 
+| Sinhala-English | NMT            |  Wikipedia   | MonoTransQuest      | [model.zip](http://bit.ly/3cMXdpf)  | 
 |                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/3foBSlP)  | 
-| Russian-English | NMT            | Wikipedia    | MonoTransQuest      | [model.zip](https://bit.ly/30lMA8c)  | 
+| Russian-English | NMT            | Wikipedia    | MonoTransQuest      | [model.zip](http://bit.ly/3lx5L7H)  | 
 |                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/2B3UM2D)  | 
-| English-German  | NMT            | Wikipedia    | MonoTransQuest      | [model.zip](https://bit.ly/2UpFiwF)  | 
+| English-German  | NMT            | Wikipedia    | MonoTransQuest      | [model.zip](http://bit.ly/3bZmr4y)  | 
 |                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/3d8gT5n)  | 
-| English-Chinese | NMT            | Wikipedia    | MonoTransQuest      | [model.zip](https://bit.ly/2XGAx3Q)  | 
+| English-Chinese | NMT            | Wikipedia    | MonoTransQuest      | [model.zip](http://bit.ly/3vGrApX)  | 
 |                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/3h4WSQ8)  | 
-| English-\*      | Any            | Any          | MonoTransQuest      |                                      | 
+| English-\*      | Any            | Any          | MonoTransQuest      | [model.zip](http://bit.ly/38Vp6KG)   | 
 |                 |                |              | SiameseTransQuest   |                                      | 
-| \*-English      | Any            | Any          | MonoTransQuest      |                                      | 
+| \*-English      | Any            | Any          | MonoTransQuest      | [model.zip](http://bit.ly/3vKgX5u)  | 
 |                 |                |              | SiameseTransQuest   |                                      | 
 | \*-\*           | Any            | Any          | MonoTransQuest      |                                      | 
-|                 |                |              | SiameseTransQuest   |                                      | 
+|                 |                |              | SiameseTransQuest   | [model.zip](http://bit.ly/3eVOS5n)  | 
 
 !!! note
 \* denotes any language. (\*-\* means any language to any language)
