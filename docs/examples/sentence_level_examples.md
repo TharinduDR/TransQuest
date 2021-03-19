@@ -171,3 +171,5 @@ Both architectures in TransQuest outperforms QuEst++ in all the language pairs.
 |                         |  SiameseTransQuest   |  0.7524  | 0.1194   |  0.1502   |
 |                         |  QuEst++             |  0.3323  | 0.1508   |  0.1928   |
 
+
+

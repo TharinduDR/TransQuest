@@ -3,7 +3,9 @@ You first need to install PyTorch. The recommended PyTorch version is 1.8.
 Please refer to [PyTorch installation page](https://pytorch.org/get-started/locally/#start-locally) regarding the specific install command for your platform.
 
 When PyTorch has been installed, you can install TransQuest from source or from pip.
-If you are training models, we highly recommend using a GPU. We used a NVIDIA TESLA K80 GPU to train the models.
+
+!!! note
+    If you are training models, we highly recommend using a GPU. We used a NVIDIA TESLA K80 GPU to train the models.
 
 ### From pip
 
