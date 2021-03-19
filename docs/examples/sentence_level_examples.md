@@ -2,7 +2,7 @@
 We have provided several examples on how to use TransQuest in recent WMT sentence-level quality estimation shared tasks. They are included in the repository but are not shipped with the library. Therefore, if you need to run the examples, please clone the repository.
 
 !!! note
-Please don't use the same environment you used to install transquest to run the examples. Create a new environment. 
+Please don't use the same environment you used to install TransQuest to run the examples. Create a new environment. 
 
 ```bash
 git clone https://github.com/TharinduDR/TransQuest.git
@@ -10,7 +10,7 @@ cd TransQuest
 pip install -r requirements.txt
 ```
 
-In the examples folder you will find the following tasks.
+In the examples/sentence_level folder you will find the following tasks.
 
 ## [WMT 2020 QE Task 1: Sentence-Level Direct Assessment](http://www.statmt.org/wmt20/quality-estimation-task.html)
 The participants were predict the direct assessment of a source and a target. There were seven language-pairs released by the organisers. 
@@ -106,7 +106,7 @@ Architecture Options : monotransquest (MonoTransQuest), siamesetransquest (Siame
 As an example to run the experiments on English-Russian with MonoTransQuest architecture, run the following command. 
 
 ```bash
-python -m examples.sentence_level.wmt_2019.en_ru.trans_quest
+python -m examples.sentence_level.wmt_2019.en_ru.monotransquest
 ```
 
 ### Results
