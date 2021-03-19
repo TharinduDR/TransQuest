@@ -44,4 +44,5 @@ sources_tags, targets_tags = model.predict([[source, target]], split_on_space=Tr
 
 ```
 
-Now that you know about the word-level architecture in TransQuest, check how we can apply it in WMT QE shared tasks [here.](https://tharindudr.github.io/TransQuest/examples/word_level_examples/)
+!!! tip
+    Now that you know about the word-level architecture in TransQuest, check how we can apply it in WMT QE shared tasks [here.](https://tharindudr.github.io/TransQuest/examples/word_level_examples/)

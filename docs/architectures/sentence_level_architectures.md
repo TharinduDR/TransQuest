@@ -123,4 +123,5 @@ test_data = SentencesDataset(examples=qe_reader.get_examples("test.tsv", test_fi
 
 You will find the predictions in the test_result.txt file in the siamesetransquest_config['cache_dir'] folder. 
 
-Now that you know about the architectures in TransQuest, check how we can apply it in WMT QE shared tasks [here.](https://tharindudr.github.io/TransQuest/examples/sentence_level_examples/)
+!!! tip
+    Now that you know about the architectures in TransQuest, check how we can apply it in WMT QE shared tasks [here.](https://tharindudr.github.io/TransQuest/examples/sentence_level_examples/)

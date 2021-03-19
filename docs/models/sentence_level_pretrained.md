@@ -32,7 +32,7 @@ We have released several quality estimation models for this aspect. We have also
 |                 |                |              | SiameseTransQuest   | [model.zip](http://bit.ly/3eVOS5n)  | 
 
 !!! note
-\* denotes any language. (\*-\* means any language to any language)
+    \* denotes any language. (\*-\* means any language to any language)
 
 ## Predicting HTER
 The performance of QE systems has typically been assessed using the semiautomatic HTER (Human-mediated Translation Edit Rate). HTER is an edit-distance-based measure which captures the distance between the automatic translation and a reference translation in terms of the number of modifications required to transform one into another. In light of this, a QE system should be able to predict the percentage of edits required in the translation. 
@@ -63,4 +63,4 @@ We have released several quality estimation models for this aspect. We have also
 |                 |                |              | SiameseTransQuest   |                                      | 
 
 !!! note
-\* denotes any language. (\*-\* means any language to any language)
+    \* denotes any language. (\*-\* means any language to any language)

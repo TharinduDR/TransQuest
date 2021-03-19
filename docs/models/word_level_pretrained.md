@@ -18,4 +18,4 @@ We have released several pre-trained TransQuest models on word-level quality est
 | \*-\*           | Any            | Any          | MicroTransQuest      |                                     | 
 
 !!! note
-\* denotes any language. (\*-\* means any language to any language)
+    \* denotes any language. (\*-\* means any language to any language)

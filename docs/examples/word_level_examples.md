@@ -1,8 +1,8 @@
 # Word Level Examples
 We have provided several examples on how to use TransQuest in recent WMT word-level quality estimation shared tasks. They are included in the repository but are not shipped with the library. Therefore, if you need to run the examples, please clone the repository.
 
-!!! note
-Please don't use the same environment you used to install TransQuest to run the examples. Create a new environment. 
+!!! warning
+    Please don't use the same environment you used to install TransQuest to run the examples. Create a new environment. 
 
 ```bash
 git clone https://github.com/TharinduDR/TransQuest.git
@@ -113,7 +113,10 @@ MicroTransQuest architecture in TransQuest outperforms Marmot in all the languag
 |                         |  Marmot              |  0.0000                  | 0.4373                  |  0.0000   |
 
 !!! note
-Please note that in WMT 2018 the organisers evaluated the gaps and the words in MT separately. This is different from WMT 2019 and WMT 2020.
+    Please note that in WMT 2018 the organisers evaluated the gaps and the words in MT separately. This is different from WMT 2019 and WMT 2020.
 
 !!! note
-Please note that the baseline used in WMT 2018; Marmot does not support predicting quality for words in source and gaps in target. Hence, those values are set to 0.0000 in all the language pairs.
+    Please note that the baseline used in WMT 2018; Marmot does not support predicting quality for words in source and gaps in target. Hence, those values are set to 0.0000 in all the language pairs.
+
+!!! tip
+Too tired to train QE models? Checkout our [model zoo.](https://tharindudr.github.io/TransQuest/models/word_level_pretrained/)
