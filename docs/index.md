@@ -3,30 +3,29 @@ The goal of quality estimation (QE) is to evaluate the quality of a translation 
 
 With TransQuest, we have opensourced our research in translation quality estimation which also won the sentence-level direct assessment quality estimation shared task in [WMT 2020](http://www.statmt.org/wmt20/quality-estimation-task.html). TransQuest outperforms current open-source quality estimation frameworks such as [OpenKiwi](https://github.com/Unbabel/OpenKiwi) and [DeepQuest](https://github.com/sheffieldnlp/deepQuest).
 
+## Features
+- Sentence-level translation quality estimation on both aspects: predicting post editing efforts and direct assessment.
+- Word-level translation quality estimation capable of predicting quality of source words, target words and target gaps.
+- Perform significantly better than current state-of-the-art quality estimation methods like DeepQuest and OpenKiwi in all the languages experimented. 
+- Pre-trained quality estimation models for fifteen language pairs.  
 
-## Installation
-You first need to install PyTorch. The recommended PyTorch version is 1.6.
-Please refer to [PyTorch installation page](https://pytorch.org/get-started/locally/#start-locally) regarding the specific install command for your platform.
-
-When PyTorch has been installed, you can install TransQuest from source or from pip.
-
-
-### From pip
-
-```bash
-pip install transquest
-```
-
-### From Source
-
-```bash
-git clone https://github.com/TharinduDR/TransQuest.git
-cd TransQuest
-pip install -r requirements.txt
-```
-
-!!! warning 
-We recommend installing TransQuest with pip since it will be more stable. Also make sure that you are working with the latest version available in pip. 
+## Table of Contents
+1. [Installation](https://tharindudr.github.io/TransQuest/install/) 
+Install TransQuest locally using pip. 
+2. Architectures
+Checkout the architectures implemented in TransQuest
+    1. [Sentence-level Architectures](https://tharindudr.github.io/TransQuest/sentence_level_architectures/) - We have released two architectures; MonoTransQuest and SiameseTransQuest to perform sentence level quality estimation.
+    2. [Word-level Architecture](https://tharindudr.github.io/TransQuest/word_level_architecture/) - We have released MicroTransQuest to perform word level quality estimation. 
+3. Examples
+We have provided several examples on how to use TransQuest in recent WMT quality estimation shared tasks.
+    1. [Sentence-level Examples](https://tharindudr.github.io/TransQuest/sentence_level_examples/)
+    2. [Word-level Examples](https://tharindudr.github.io/TransQuest/word_level_examples/)
+4. Pre-trained Models
+We have provided pretrained quality estimation models for fifteen language pairs covering both sentence-level and word-level
+    1. [Sentence-level Models](https://tharindudr.github.io/TransQuest/sentence_level_pretrained/)
+    2. [Sentence-level Models](https://tharindudr.github.io/TransQuest/sentence_level_pretrained/)
+5. [Contact](https://tharindudr.github.io/TransQuest/contact/)
+Contact us for any issues with TransQuest
 
 ## Resources
 - [Research Seminar](https://youtu.be/xbsbHUVVF3s) done on 1st of October 2020 in [RGCL](http://rgcl.wlv.ac.uk/2020/09/24/research-seminar/) and the [slides](https://www.slideshare.net/TharinduRanasinghe1/transquest-238713809).
