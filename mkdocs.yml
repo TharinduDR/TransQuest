@@ -2,6 +2,7 @@ site_name: TransQuest
 
 nav:
     - Home: index.md
+    - Install: install.md
     - TransQuest Architectures:
       - Sentence-level: architectures/sentence_level_architectures.md
       - Word-level: architectures/word_level_architecture.md
