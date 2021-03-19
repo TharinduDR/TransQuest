@@ -39,13 +39,13 @@ An example monotransquest_config is available [here.](https://github.com/Tharind
 from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
 
 model = MonoTransQuestModel("xlmroberta", monotransquest_config["best_model_dir"], num_labels=1,
-                               use_cuda=torch.cuda.is_available(), args=monotransquest_config)
+                               use_cuda=torch.cuda.is_available())
 
 predictions, raw_outputs = model.predict([[source, target]])
 print(predictions)
 
 ```
-Predictions are the predicted quality scores. You will find more examples in [here.](https://tharindudr.github.io/TransQuest/examples/sentence_level/)
+Predictions are the predicted quality scores.
 
 ##SiameseTransQuest 
 The second approach proposed in this framework relies on a Siamese architecture where we feed the original text and the translation into two separate XLM-R transformer models. 
@@ -121,4 +121,6 @@ test_data = SentencesDataset(examples=qe_reader.get_examples("test.tsv", test_fi
                            verbose=False)
 ```
 
-You will find the predictions in the test_result.txt file in the siamesetransquest_config['cache_dir'] folder. You can find more examples in [here.](https://tharindudr.github.io/TransQuest/examples/sentence_level)
+You will find the predictions in the test_result.txt file in the siamesetransquest_config['cache_dir'] folder. 
+
+Now that you know about the architectures in TransQuest, check how we can apply it in WMT QE shared tasks [here.](https://tharindudr.github.io/TransQuest/examples/sentence_level_examples/)

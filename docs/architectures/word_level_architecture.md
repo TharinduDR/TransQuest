@@ -4,7 +4,7 @@ WE have one architecture that is capable of providing word level quality estimat
 ### Data Preparation
 Please have your data as a pandas dataframe in this format. 
 
-| source_column                           | target_column                     | source_tags_column | target_tags_column                  |
+| source                                  | target                            | source_tags        | target_tags                         |
 | ----------------------------------------| ----------------------------------|--------------------|-------------------------------------|
 | 	52 mg wasserfreie Lactose .           | 52 mg anhydrous lactose .         | [OK OK OK OK OK]   | [OK OK OK OK OK OK OK OK OK OK OK]  |
 |  România sanofi-aventis România S.R.L.  | Sanofi-Aventis România S. R. L.   | [BAD OK OK OK]     | [BAD BAD OK OK OK OK OK OK OK OK OK]|
@@ -36,10 +36,12 @@ An example microtransquest_config is available [here.](https://github.com/Tharin
 ```python
 from transquest.algo.word_level.microtransquest.run_model import MicroTransQuestModel
 
-model = MonoTransQuestModel("xlmroberta", monotransquest_config["best_model_dir"], 
+model = MicroTransQuestModel("xlmroberta", microtransquest_config["best_model_dir"], 
                                use_cuda=torch.cuda.is_available() )
 
 sources_tags, targets_tags = model.predict([[source, target]], split_on_space=True)
 
 
 ```
+
+Now that you know about the word-level architecture in TransQuest, check how we can apply it in WMT QE shared tasks [here.](https://tharindudr.github.io/TransQuest/examples/word_level_examples/)
