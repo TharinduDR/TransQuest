@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="transquest",
-    version="1.0.1-beta",
+    version="1.0.2-beta",
     author="Tharindu Ranasinghe",
     author_email="rhtdranasinghe@gmail.com",
     description="Transformer based translation quality estimation",
@@ -25,7 +25,7 @@ setup(
         "requests",
         "tqdm>=4.47.0",
         "regex",
-        "transformers>=4.0.0",
+        "transformers>=4.2.0",
         "scipy",
         "scikit-learn",
         "tensorboardx",
@@ -33,5 +33,8 @@ setup(
         "tokenizers",
         "matplotlib",
         "wandb",
+        "sentencepiece",
+        "onnxruntime",
+        "seqeval",
     ],
 )
