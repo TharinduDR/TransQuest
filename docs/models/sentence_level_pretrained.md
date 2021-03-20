@@ -28,8 +28,8 @@ We have released several quality estimation models for this aspect. We have also
 |                 |                |              | SiameseTransQuest   |                                      | 
 | \*-English      | Any            | Any          | MonoTransQuest      | [model.zip](http://bit.ly/3vKgX5u)  | 
 |                 |                |              | SiameseTransQuest   |                                      | 
-| \*-\*           | Any            | Any          | MonoTransQuest      |                                      | 
-|                 |                |              | SiameseTransQuest   | [model.zip](http://bit.ly/3eVOS5n)  | 
+| \*-\*           | Any            | Any          | MonoTransQuest      | [model.zip](http://bit.ly/3eVOS5n)                                     | 
+|                 |                |              | SiameseTransQuest   |                                     | 
 
 !!! note
     \* denotes any language. (\*-\* means any language to any language)
