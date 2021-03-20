@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="transquest",
-    version="1.0.2-beta",
+    version="1.0.0",
     author="Tharindu Ranasinghe",
     author_email="rhtdranasinghe@gmail.com",
     description="Transformer based translation quality estimation",
