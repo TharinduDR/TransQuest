@@ -22,7 +22,7 @@ With TransQuest, we have opensourced our research in translation quality estimat
     2. [Word-level Examples](https://tharindudr.github.io/TransQuest/examples/word_level_examples/)
 4. **Pre-trained Models** - We have provided pretrained quality estimation models for fifteen language pairs covering both sentence-level and word-level
     1. [Sentence-level Models](https://tharindudr.github.io/TransQuest/models/sentence_level_pretrained/)
-    2. [Sentence-level Models](https://tharindudr.github.io/TransQuest/models/word_level_pretrained/)
+    2. [Word-level Models](https://tharindudr.github.io/TransQuest/models/word_level_pretrained/)
 5. **[Contact](https://tharindudr.github.io/TransQuest/contact/)** - Contact us for any issues with TransQuest
 
 ## Resources
