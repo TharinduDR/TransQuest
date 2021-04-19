@@ -16,11 +16,21 @@ from examples.sentence_level.wmt_2020.common.util.postprocess import format_subm
 from examples.sentence_level.wmt_2020.common.util.reader import read_annotated_file, read_test_file
 from examples.sentence_level.wmt_2020.ro_en.siamesetransquest_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
     siamesetransquest_config, SEED, RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
-from transquest.algo.sentence_level.siamesetransquest import LoggingHandler, SentencesDataset, \
-    SiameseTransQuestModel
-from transquest.algo.sentence_level.siamesetransquest import models, losses
-from transquest.algo.sentence_level.siamesetransquest.evaluation import EmbeddingSimilarityEvaluator
-from transquest.algo.sentence_level.siamesetransquest.readers import QEDataReader
+# from transquest.algo.sentence_level.siamesetransquest import LoggingHandler, SentencesDataset, \
+#     SiameseTransQuestModel
+# from transquest.algo.sentence_level.siamesetransquest import models, losses
+# from transquest.algo.sentence_level.siamesetransquest.evaluation import EmbeddingSimilarityEvaluator
+# from transquest.algo.sentence_level.siamesetransquest.readers import QEDataReader
+from transquest.algo.sentence_level.siamesetransquest import models
+from transquest.algo.sentence_level.siamesetransquest.datasets.sentences_dataset import SentencesDataset
+from transquest.algo.sentence_level.siamesetransquest.evaluation.embedding_similarity_evaluator import \
+    EmbeddingSimilarityEvaluator
+from transquest.algo.sentence_level.siamesetransquest.logging_handler import LoggingHandler
+from transquest.algo.sentence_level.siamesetransquest.losses.cosine_similarity_loss import CosineSimilarityLoss
+from transquest.algo.sentence_level.siamesetransquest.models.Pooling import Pooling
+from transquest.algo.sentence_level.siamesetransquest.models.Transformer import Transformer
+from transquest.algo.sentence_level.siamesetransquest.readers.qe_data_reader import QEDataReader
+from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
 
 logging.basicConfig(format='%(asctime)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
@@ -84,10 +94,10 @@ if siamesetransquest_config["evaluate_during_training"]:
                                       score_col_idx=2,
                                       normalize_scores=False, min_score=0, max_score=1, header=True)
 
-            word_embedding_model = models.Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
+            word_embedding_model = Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
                 'max_seq_length'])
 
-            pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
+            pooling_model = Pooling(word_embedding_model.get_word_embedding_dimension(),
                                            pooling_mode_mean_tokens=True,
                                            pooling_mode_cls_token=False,
                                            pooling_mode_max_tokens=False)
@@ -96,7 +106,7 @@ if siamesetransquest_config["evaluate_during_training"]:
             train_data = SentencesDataset(sts_reader.get_examples('train.tsv'), model)
             train_dataloader = DataLoader(train_data, shuffle=True,
                                           batch_size=siamesetransquest_config['train_batch_size'])
-            train_loss = losses.CosineSimilarityLoss(model=model)
+            train_loss = CosineSimilarityLoss(model=model)
 
             eval_data = SentencesDataset(examples=sts_reader.get_examples('eval_df.tsv'), model=model)
             eval_dataloader = DataLoader(eval_data, shuffle=False,
