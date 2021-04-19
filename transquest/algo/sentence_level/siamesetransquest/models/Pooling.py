@@ -1,10 +1,9 @@
-import json
-import os
-from typing import Dict
-
 import torch
 from torch import Tensor
 from torch import nn
+from typing import Union, Tuple, List, Iterable, Dict
+import os
+import json
 
 
 class Pooling(nn.Module):
@@ -12,8 +11,13 @@ class Pooling(nn.Module):
 
     Using pooling, it generates from a variable sized sentence a fixed sized sentence embedding. This layer also allows to use the CLS token if it is returned by the underlying word embedding model.
     You can concatenate multiple poolings together.
-    """
 
+    :param word_embedding_dimension: Dimensions for the word embeddings
+    :param pooling_mode_cls_token: Use the first token (CLS token) as text representations
+    :param pooling_mode_max_tokens: Use max in each dimension over all tokens.
+    :param pooling_mode_mean_tokens: Perform mean-pooling
+    :param pooling_mode_mean_sqrt_len_tokens: Perform mean-pooling, but devide by sqrt(input_length).
+    """
     def __init__(self,
                  word_embedding_dimension: int,
                  pooling_mode_cls_token: bool = False,
@@ -23,8 +27,7 @@ class Pooling(nn.Module):
                  ):
         super(Pooling, self).__init__()
 
-        self.config_keys = ['word_embedding_dimension', 'pooling_mode_cls_token', 'pooling_mode_mean_tokens',
-                            'pooling_mode_max_tokens', 'pooling_mode_mean_sqrt_len_tokens']
+        self.config_keys = ['word_embedding_dimension',  'pooling_mode_cls_token', 'pooling_mode_mean_tokens', 'pooling_mode_max_tokens', 'pooling_mode_mean_sqrt_len_tokens']
 
         self.word_embedding_dimension = word_embedding_dimension
         self.pooling_mode_cls_token = pooling_mode_cls_token
@@ -32,8 +35,7 @@ class Pooling(nn.Module):
         self.pooling_mode_max_tokens = pooling_mode_max_tokens
         self.pooling_mode_mean_sqrt_len_tokens = pooling_mode_mean_sqrt_len_tokens
 
-        pooling_mode_multiplier = sum([pooling_mode_cls_token, pooling_mode_max_tokens, pooling_mode_mean_tokens,
-                                       pooling_mode_mean_sqrt_len_tokens])
+        pooling_mode_multiplier = sum([pooling_mode_cls_token, pooling_mode_max_tokens, pooling_mode_mean_tokens, pooling_mode_mean_sqrt_len_tokens])
         self.pooling_output_dimension = (pooling_mode_multiplier * word_embedding_dimension)
 
     def forward(self, features: Dict[str, Tensor]):
@@ -54,7 +56,7 @@ class Pooling(nn.Module):
             input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
             sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
 
-            # If tokens are weighted (by WordWeights layer), feature 'token_weights_sum' will be present
+            #If tokens are weighted (by WordWeights layer), feature 'token_weights_sum' will be present
             if 'token_weights_sum' in features:
                 sum_mask = features['token_weights_sum'].unsqueeze(-1).expand(sum_embeddings.size())
             else:
