@@ -4,7 +4,7 @@ This file contains sampler functions, that can be used to sample mini-batches wi
 import numpy as np
 from torch.utils.data import Sampler
 
-from transquest.algo.sentence_level.siamesetransquest.datasets import SentenceLabelDataset
+from transquest.algo.sentence_level.siamesetransquest.datasets.sentence_label_dataset import SentenceLabelDataset
 
 
 class LabelSampler(Sampler):

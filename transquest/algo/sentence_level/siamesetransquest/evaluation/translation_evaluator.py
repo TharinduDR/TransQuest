@@ -8,8 +8,8 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from transquest.algo.sentence_level.siamesetransquest.evaluation import SentenceEvaluator
-from transquest.algo.sentence_level.siamesetransquest.evaluation import SimilarityFunction
+from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
+from transquest.algo.sentence_level.siamesetransquest.evaluation.similarity_function import SimilarityFunction
 from transquest.algo.sentence_level.siamesetransquest.util import batch_to_device
 
 
