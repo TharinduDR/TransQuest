@@ -27,8 +27,8 @@ from transquest.algo.sentence_level.siamesetransquest.evaluation.embedding_simil
     EmbeddingSimilarityEvaluator
 from transquest.algo.sentence_level.siamesetransquest.logging_handler import LoggingHandler
 from transquest.algo.sentence_level.siamesetransquest.losses.cosine_similarity_loss import CosineSimilarityLoss
-from transquest.algo.sentence_level.siamesetransquest.models.Pooling import Pooling
-from transquest.algo.sentence_level.siamesetransquest.models.Transformer import Transformer
+from transquest.algo.sentence_level.siamesetransquest.models.pooling import Pooling
+from transquest.algo.sentence_level.siamesetransquest.models.transformer import Transformer
 from transquest.algo.sentence_level.siamesetransquest.readers.qe_data_reader import QEDataReader
 from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
 
