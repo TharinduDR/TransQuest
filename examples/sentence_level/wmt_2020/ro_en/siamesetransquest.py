@@ -92,7 +92,7 @@ if siamesetransquest_config["evaluate_during_training"]:
 
             sts_reader = QEDataReader(siamesetransquest_config['cache_dir'], s1_col_idx=0, s2_col_idx=1,
                                       score_col_idx=2,
-                                      normalize_scores=False, min_score=0, max_score=1)
+                                      normalize_scores=False, min_score=0, max_score=1,  header=True)
 
             word_embedding_model = Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
                 'max_seq_length'])
