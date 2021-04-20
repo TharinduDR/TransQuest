@@ -5,7 +5,7 @@ class SentenceEvaluator:
     Extend this class and implement __call__ for custom evaluators.
     """
 
-    def __call__(self, model, output_path: str = None, epoch: int = -1, steps: int = -1) -> float:
+    def __call__(self, model, output_path: str = None, verbose: bool = False, epoch: int = -1, steps: int = -1) -> float:
         """
         This is called during training to evaluate the model.
         It returns a score for the evaluation with a higher score indicating a better result.

@@ -591,18 +591,20 @@ class SiameseTransQuestModel(nn.Sequential):
         if evaluator is None and output_path is not None:   #No evaluator, but output path: save final model version
             self.save(output_path)
 
-    def evaluate(self, evaluator: SentenceEvaluator, output_path: str = None):
+    def evaluate(self, evaluator: SentenceEvaluator, output_path: str = None, verbose: bool = True):
         """
         Evaluate the model
 
         :param evaluator:
             the evaluator
+        :param verbose:
+            print the results
         :param output_path:
             the evaluator can write the results to this path
         """
         if output_path is not None:
             os.makedirs(output_path, exist_ok=True)
-        return evaluator(self, output_path)
+        return evaluator(self, output_path, verbose)
 
     def _eval_during_training(self, evaluator, output_path, save_best_model, epoch, steps, callback):
         """Runs evaluation during the training"""

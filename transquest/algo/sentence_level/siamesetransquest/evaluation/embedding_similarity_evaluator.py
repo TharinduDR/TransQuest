@@ -66,7 +66,7 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
             scores.append(example.label)
         return cls(sentences1, sentences2, scores, **kwargs)
 
-    def __call__(self, model, output_path: str = None, epoch: int = -1, steps: int = -1) -> float:
+    def __call__(self, model, output_path: str = None, verbose: bool = True, epoch: int = -1, steps: int = -1) -> float:
         if epoch != -1:
             if steps == -1:
                 out_txt = " after epoch {}:".format(epoch)
@@ -98,14 +98,15 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
         eval_pearson_dot, _ = pearsonr(labels, dot_products)
         eval_spearman_dot, _ = spearmanr(labels, dot_products)
 
-        logger.info("Cosine-Similarity :\tPearson: {:.4f}\tSpearman: {:.4f}".format(
-            eval_pearson_cosine, eval_spearman_cosine))
-        logger.info("Manhattan-Distance:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
-            eval_pearson_manhattan, eval_spearman_manhattan))
-        logger.info("Euclidean-Distance:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
-            eval_pearson_euclidean, eval_spearman_euclidean))
-        logger.info("Dot-Product-Similarity:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
-            eval_pearson_dot, eval_spearman_dot))
+        if verbose:
+            logger.info("Cosine-Similarity :\tPearson: {:.4f}\tSpearman: {:.4f}".format(
+                eval_pearson_cosine, eval_spearman_cosine))
+            logger.info("Manhattan-Distance:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
+                eval_pearson_manhattan, eval_spearman_manhattan))
+            logger.info("Euclidean-Distance:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
+                eval_pearson_euclidean, eval_spearman_euclidean))
+            logger.info("Dot-Product-Similarity:\tPearson: {:.4f}\tSpearman: {:.4f}".format(
+                eval_pearson_dot, eval_spearman_dot))
 
         if output_path is not None and self.write_csv:
             csv_path = os.path.join(output_path, self.csv_file)

@@ -92,15 +92,15 @@ if siamesetransquest_config["evaluate_during_training"]:
 
             sts_reader = QEDataReader(siamesetransquest_config['cache_dir'], s1_col_idx=0, s2_col_idx=1,
                                       score_col_idx=2,
-                                      normalize_scores=False, min_score=0, max_score=1, header=True)
+                                      normalize_scores=False, min_score=0, max_score=1)
 
             word_embedding_model = Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
                 'max_seq_length'])
 
             pooling_model = Pooling(word_embedding_model.get_word_embedding_dimension(),
-                                           pooling_mode_mean_tokens=True,
-                                           pooling_mode_cls_token=False,
-                                           pooling_mode_max_tokens=False)
+                                    pooling_mode_mean_tokens=True,
+                                    pooling_mode_cls_token=False,
+                                    pooling_mode_max_tokens=False)
 
             model = SiameseTransQuestModel(modules=[word_embedding_model, pooling_model])
             train_data = SentencesDataset(sts_reader.get_examples('train.tsv'), model)
@@ -138,7 +138,7 @@ if siamesetransquest_config["evaluate_during_training"]:
             evaluator = EmbeddingSimilarityEvaluator(dev_dataloader)
             start = time.time()
             model.evaluate(evaluator,
-                           result_path=os.path.join(siamesetransquest_config['cache_dir'], "dev_result.txt"))
+                           output_path=os.path.join(siamesetransquest_config['cache_dir'], "dev_result.txt"))
 
             end = time.time()
             print("Testing time")
@@ -149,7 +149,7 @@ if siamesetransquest_config["evaluate_during_training"]:
             evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
 
             model.evaluate(evaluator,
-                           result_path=os.path.join(siamesetransquest_config['cache_dir'], "test_result.txt"),
+                           output_path=os.path.join(siamesetransquest_config['cache_dir'], "test_result.txt"),
                            verbose=False)
 
             with open(os.path.join(siamesetransquest_config['cache_dir'], "dev_result.txt")) as f:
