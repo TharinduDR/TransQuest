@@ -17,15 +17,15 @@ from examples.sentence_level.wmt_2020.common.util.postprocess import format_subm
 from examples.sentence_level.wmt_2020.common.util.reader import read_annotated_file, read_test_file
 from examples.sentence_level.wmt_2020.ro_en.siamesetransquest_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
     siamesetransquest_config, SEED, RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
+from transquest.algo.sentence_level.siamesetransquest import models
 
 from transquest.algo.sentence_level.siamesetransquest.evaluation.embedding_similarity_evaluator import \
     EmbeddingSimilarityEvaluator
 from transquest.algo.sentence_level.siamesetransquest.logging_handler import LoggingHandler
 from transquest.algo.sentence_level.siamesetransquest.losses.cosine_similarity_loss import CosineSimilarityLoss
-from transquest.algo.sentence_level.siamesetransquest.models.pooling import Pooling
-from transquest.algo.sentence_level.siamesetransquest.models.transformer import Transformer
 from transquest.algo.sentence_level.siamesetransquest.readers.input_example import InputExample
 from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
+
 
 logging.basicConfig(format='%(asctime)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
@@ -77,11 +77,10 @@ if siamesetransquest_config["evaluate_during_training"]:
 
             train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
 
-
-            word_embedding_model = Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
+            word_embedding_model = models.Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
                 'max_seq_length'])
 
-            pooling_model = Pooling(word_embedding_model.get_word_embedding_dimension(),
+            pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
                                     pooling_mode_mean_tokens=True,
                                     pooling_mode_cls_token=False,
                                     pooling_mode_max_tokens=False)

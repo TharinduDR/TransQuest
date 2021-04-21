@@ -19,13 +19,12 @@ from tqdm.autonotebook import trange
 import math
 import queue
 
-from . import __DOWNLOAD_SERVER__
+from . import __DOWNLOAD_SERVER__, models
 
 from . import __version__
 from transquest.algo.sentence_level.siamesetransquest.util import http_get, import_from_string, batch_to_device
-from transquest.algo.sentence_level.siamesetransquest.models.pooling import Pooling
-from transquest.algo.sentence_level.siamesetransquest.models.transformer import Transformer
 from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
+from transquest.algo.sentence_level.siamesetransquest.models import Transformer, Pooling
 
 logger = logging.getLogger(__name__)
 
