@@ -10,6 +10,7 @@ import numpy as np
 from numpy import ndarray
 import transformers
 import torch
+from sklearn.metrics.pairwise import paired_cosine_distances
 from torch import nn, Tensor, device
 from torch.optim.optimizer import Optimizer
 
@@ -227,7 +228,20 @@ class SiameseTransQuestModel(nn.Sequential):
 
         return all_embeddings
 
+    def predict(self, to_predict):
+        sentences1 = []
+        sentences2 = []
 
+        for text_1, text_2 in to_predict:
+            sentences1.append(text_1)
+            sentences2.append(text_2)
+
+        embeddings1 = self.encode(sentences1, show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
+        embeddings2 = self.encode(sentences2, show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
+
+        cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
+
+        return cosine_scores
 
     def start_multi_process_pool(self, target_devices: List[str] = None):
         """
@@ -259,7 +273,6 @@ class SiameseTransQuestModel(nn.Sequential):
 
         return {'input': input_queue, 'output': output_queue, 'processes': processes}
 
-
     @staticmethod
     def stop_multi_process_pool(pool):
         """
@@ -274,7 +287,6 @@ class SiameseTransQuestModel(nn.Sequential):
 
         pool['input'].close()
         pool['output'].close()
-
 
     def encode_multi_process(self, sentences: List[str], pool: Dict[str, object], batch_size: int = 32, chunk_size: int = None):
         """
@@ -615,7 +627,6 @@ class SiameseTransQuestModel(nn.Sequential):
                 self.best_score = score
                 if save_best_model:
                     self.save(output_path)
-
 
     @staticmethod
     def _get_scheduler(optimizer, scheduler: str, warmup_steps: int, t_total: int):
