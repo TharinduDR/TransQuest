@@ -85,7 +85,7 @@ class Pooling(nn.Module):
 
     @staticmethod
     def load(input_path):
-        with open(os.path.join(input_path, 'config.json')) as fIn:
+        with open(os.path.join(input_path, 'pooling_config.json')) as fIn:
             config = json.load(fIn)
 
         return Pooling(**config)

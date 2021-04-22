@@ -401,8 +401,8 @@ class SiameseTransQuestModel(nn.Sequential):
         with open(os.path.join(path, 'modules.json'), 'w') as fOut:
             json.dump(contained_modules, fOut, indent=2)
 
-        # with open(os.path.join(path, 'config.json'), 'w') as fOut:
-        #     json.dump({'__version__': __version__}, fOut, indent=2)
+        with open(os.path.join(path, 'siamese_config.json'), 'w') as fOut:
+            json.dump({'__version__': __version__}, fOut, indent=2)
 
     def smart_batching_collate(self, batch):
         """
