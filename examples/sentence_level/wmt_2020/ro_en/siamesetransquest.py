@@ -80,15 +80,15 @@ if siamesetransquest_config["evaluate_during_training"]:
 
             train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
 
-            word_embedding_model = models.Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
-                'max_seq_length'])
+            # word_embedding_model = models.Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
+            #     'max_seq_length'])
+            #
+            # pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
+            #                         pooling_mode_mean_tokens=True,
+            #                         pooling_mode_cls_token=False,
+            #                         pooling_mode_max_tokens=False)
 
-            pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
-                                    pooling_mode_mean_tokens=True,
-                                    pooling_mode_cls_token=False,
-                                    pooling_mode_max_tokens=False)
-
-            model = SiameseTransQuestModel(modules=[word_embedding_model, pooling_model])
+            model = SiameseTransQuestModel(MODEL_NAME)
 
             train_samples = []
             eval_samples = []
