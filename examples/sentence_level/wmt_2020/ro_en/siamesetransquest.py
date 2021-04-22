@@ -61,7 +61,6 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
-
 assert (len(test_index) == 1000)
 if siamesetransquest_config["evaluate_during_training"]:
     if siamesetransquest_config["n_fold"] > 0:
@@ -137,12 +136,6 @@ if siamesetransquest_config["evaluate_during_training"]:
 
         dev['predictions'] = dev_preds.mean(axis=1)
         test['predictions'] = test_preds.mean(axis=1)
-
-# # random_list = random.sample(range(0, 1000), 1000)
-# # newList = list(map(lambda x: x/1000, random_list))
-#
-# dev['predictions'] = newList
-# test['predictions'] = newList
 
 dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
