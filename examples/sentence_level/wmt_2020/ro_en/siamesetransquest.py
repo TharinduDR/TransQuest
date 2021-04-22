@@ -61,81 +61,86 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
-assert (len(index) == 1000)
-if siamesetransquest_config["evaluate_during_training"]:
-    if siamesetransquest_config["n_fold"] > 0:
-        dev_preds = np.zeros((len(dev), siamesetransquest_config["n_fold"]))
-        test_preds = np.zeros((len(test), siamesetransquest_config["n_fold"]))
-        for i in range(siamesetransquest_config["n_fold"]):
+print(index)
 
-            if os.path.exists(siamesetransquest_config['best_model_dir']) and os.path.isdir(
-                    siamesetransquest_config['best_model_dir']):
-                shutil.rmtree(siamesetransquest_config['best_model_dir'])
+# assert (len(index) == 1000)
+# if siamesetransquest_config["evaluate_during_training"]:
+#     if siamesetransquest_config["n_fold"] > 0:
+#         dev_preds = np.zeros((len(dev), siamesetransquest_config["n_fold"]))
+#         test_preds = np.zeros((len(test), siamesetransquest_config["n_fold"]))
+#         for i in range(siamesetransquest_config["n_fold"]):
+#
+#             if os.path.exists(siamesetransquest_config['best_model_dir']) and os.path.isdir(
+#                     siamesetransquest_config['best_model_dir']):
+#                 shutil.rmtree(siamesetransquest_config['best_model_dir'])
+#
+#             if os.path.exists(siamesetransquest_config['cache_dir']) and os.path.isdir(
+#                     siamesetransquest_config['cache_dir']):
+#                 shutil.rmtree(siamesetransquest_config['cache_dir'])
+#
+#             os.makedirs(siamesetransquest_config['cache_dir'])
+#
+#             train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
+#
+#             word_embedding_model = models.Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
+#                 'max_seq_length'])
+#
+#             pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
+#                                     pooling_mode_mean_tokens=True,
+#                                     pooling_mode_cls_token=False,
+#                                     pooling_mode_max_tokens=False)
+#
+#             model = SiameseTransQuestModel(modules=[word_embedding_model, pooling_model])
+#
+#             train_samples = []
+#             eval_samples = []
+#             dev_samples = []
+#             test_samples = []
+#
+#             for index, row in train_df.iterrows():
+#                 score = float(row["labels"])
+#                 inp_example = InputExample(texts=[row['text_a'], row['text_b']], label=score)
+#                 train_samples.append(inp_example)
+#
+#             for index, row in eval_df.iterrows():
+#                 score = float(row["labels"])
+#                 inp_example = InputExample(texts=[row['text_a'], row['text_b']], label=score)
+#                 eval_samples.append(inp_example)
+#
+#             train_dataloader = DataLoader(train_samples, shuffle=True, batch_size=siamesetransquest_config['train_batch_size'])
+#             train_loss = CosineSimilarityLoss(model=model)
+#
+#             evaluator = EmbeddingSimilarityEvaluator.from_input_examples(eval_samples, name='eval')
+#             warmup_steps = math.ceil(len(train_dataloader) * siamesetransquest_config["num_train_epochs"] * 0.1)
+#
+#             model.fit(train_objectives=[(train_dataloader, train_loss)],
+#                       evaluator=evaluator,
+#                       epochs=siamesetransquest_config['num_train_epochs'],
+#                       evaluation_steps=100,
+#                       optimizer_params={'lr': siamesetransquest_config["learning_rate"],
+#                                         'eps': siamesetransquest_config["adam_epsilon"],
+#                                         'correct_bias': False},
+#                       warmup_steps=warmup_steps,
+#                       output_path=siamesetransquest_config['best_model_dir'])
+#
+#             model = SiameseTransQuestModel(siamesetransquest_config['best_model_dir'])
+#
+#             for index, row in dev.iterrows():
+#                 score = float(row["labels"])
+#                 inp_example = InputExample(texts=[row['text_a'], row['text_b']], label=score)
+#                 dev_samples.append(inp_example)
+#
+#             evaluator = EmbeddingSimilarityEvaluator.from_input_examples(dev_samples)
+#             model.evaluate(evaluator,
+#                            output_path=siamesetransquest_config['cache_dir'])
+#             dev_preds[:, i] = model.predict(dev_sentence_pairs)
+#             test_preds[:, i] = model.predict(test_sentence_pairs)
+#
+        # dev['predictions'] = dev_preds.mean(axis=1)
+        # test['predictions'] = test_preds.mean(axis=1)
 
-            if os.path.exists(siamesetransquest_config['cache_dir']) and os.path.isdir(
-                    siamesetransquest_config['cache_dir']):
-                shutil.rmtree(siamesetransquest_config['cache_dir'])
-
-            os.makedirs(siamesetransquest_config['cache_dir'])
-
-            train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
-
-            word_embedding_model = models.Transformer(MODEL_NAME, max_seq_length=siamesetransquest_config[
-                'max_seq_length'])
-
-            pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
-                                    pooling_mode_mean_tokens=True,
-                                    pooling_mode_cls_token=False,
-                                    pooling_mode_max_tokens=False)
-
-            model = SiameseTransQuestModel(modules=[word_embedding_model, pooling_model])
-
-            train_samples = []
-            eval_samples = []
-            dev_samples = []
-            test_samples = []
-
-            for index, row in train_df.iterrows():
-                score = float(row["labels"])
-                inp_example = InputExample(texts=[row['text_a'], row['text_b']], label=score)
-                train_samples.append(inp_example)
-
-            for index, row in eval_df.iterrows():
-                score = float(row["labels"])
-                inp_example = InputExample(texts=[row['text_a'], row['text_b']], label=score)
-                eval_samples.append(inp_example)
-
-            train_dataloader = DataLoader(train_samples, shuffle=True, batch_size=siamesetransquest_config['train_batch_size'])
-            train_loss = CosineSimilarityLoss(model=model)
-
-            evaluator = EmbeddingSimilarityEvaluator.from_input_examples(eval_samples, name='eval')
-            warmup_steps = math.ceil(len(train_dataloader) * siamesetransquest_config["num_train_epochs"] * 0.1)
-
-            model.fit(train_objectives=[(train_dataloader, train_loss)],
-                      evaluator=evaluator,
-                      epochs=siamesetransquest_config['num_train_epochs'],
-                      evaluation_steps=100,
-                      optimizer_params={'lr': siamesetransquest_config["learning_rate"],
-                                        'eps': siamesetransquest_config["adam_epsilon"],
-                                        'correct_bias': False},
-                      warmup_steps=warmup_steps,
-                      output_path=siamesetransquest_config['best_model_dir'])
-
-            model = SiameseTransQuestModel(siamesetransquest_config['best_model_dir'])
-
-            for index, row in dev.iterrows():
-                score = float(row["labels"])
-                inp_example = InputExample(texts=[row['text_a'], row['text_b']], label=score)
-                dev_samples.append(inp_example)
-
-            evaluator = EmbeddingSimilarityEvaluator.from_input_examples(dev_samples)
-            model.evaluate(evaluator,
-                           output_path=siamesetransquest_config['cache_dir'])
-            dev_preds[:, i] = model.predict(dev_sentence_pairs)
-            test_preds[:, i] = model.predict(test_sentence_pairs)
-
-        dev['predictions'] = dev_preds.mean(axis=1)
-        test['predictions'] = test_preds.mean(axis=1)
+dev['predictions'] = random.sample(range(1), 1000)
+test['predictions'] = random.sample(range(1), 1000)
 
 dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
