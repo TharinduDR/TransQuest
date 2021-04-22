@@ -139,8 +139,11 @@ print(index)
         # dev['predictions'] = dev_preds.mean(axis=1)
         # test['predictions'] = test_preds.mean(axis=1)
 
-dev['predictions'] = random.sample(range(1), 1000)
-test['predictions'] = random.sample(range(1), 1000)
+random_list = random.sample(range(0, 1000), 1000)
+newList = list(map(lambda x: x/1000, random_list))
+
+dev['predictions'] = newList
+test['predictions'] = newList
 
 dev = un_fit(dev, 'labels')
 dev = un_fit(dev, 'predictions')
