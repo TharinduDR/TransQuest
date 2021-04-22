@@ -228,7 +228,7 @@ class SiameseTransQuestModel(nn.Sequential):
 
         return all_embeddings
 
-    def predict(self, to_predict):
+    def predict(self, to_predict, verbose=True):
         sentences1 = []
         sentences2 = []
 
@@ -236,8 +236,8 @@ class SiameseTransQuestModel(nn.Sequential):
             sentences1.append(text_1)
             sentences2.append(text_2)
 
-        embeddings1 = self.encode(sentences1, show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
-        embeddings2 = self.encode(sentences2, show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
+        embeddings1 = self.encode(sentences1, show_progress_bar=verbose, convert_to_numpy=True)
+        embeddings2 = self.encode(sentences2, show_progress_bar=verbose, convert_to_numpy=True)
 
         cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
 
