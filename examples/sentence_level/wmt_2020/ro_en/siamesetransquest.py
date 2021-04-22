@@ -134,26 +134,6 @@ if siamesetransquest_config["evaluate_during_training"]:
             dev_preds[:, i] = model.predict(dev_sentence_pairs)
             test_preds[:, i] = model.predict(test_sentence_pairs)
 
-            # test_data = SentencesDataset(examples=sts_reader.get_examples("test.tsv", test_file=True), model=model)
-            # test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
-
-            # for index, row in test.iterrows():
-            #     score = random.uniform(0, 1)
-            #     inp_example = InputExample(texts=[row['text_a'], row['text_b']], label=score)
-            #     test_samples.append(inp_example)
-            #
-            # evaluator = EmbeddingSimilarityEvaluator.from_input_examples(test_samples)
-            #
-            # model.evaluate(evaluator,
-            #                output_path=siamesetransquest_config['cache_dir'],
-            #                verbose=False)
-
-            # with open(os.path.join(siamesetransquest_config['cache_dir'], "dev_result.txt")) as f:
-            #     dev_preds[:, i] = list(map(float, f.read().splitlines()))
-            #
-            # with open(os.path.join(siamesetransquest_config['cache_dir'], "test_result.txt")) as f:
-            #     test_preds[:, i] = list(map(float, f.read().splitlines()))
-
         dev['predictions'] = dev_preds.mean(axis=1)
         test['predictions'] = test_preds.mean(axis=1)
 
