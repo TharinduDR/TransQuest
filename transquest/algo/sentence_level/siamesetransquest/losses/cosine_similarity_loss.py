@@ -3,7 +3,7 @@ from typing import Iterable, Dict
 import torch
 from torch import nn, Tensor
 
-from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
+from transquest.algo.sentence_level.siamesetransquest.models.siamese_transformer import SiameseTransformer
 
 
 class CosineSimilarityLoss(nn.Module):
@@ -31,7 +31,7 @@ class CosineSimilarityLoss(nn.Module):
 
     """
 
-    def __init__(self, model: SiameseTransQuestModel, loss_fct=nn.MSELoss(), cos_score_transformation=nn.Identity()):
+    def __init__(self, model: SiameseTransformer, loss_fct=nn.MSELoss(), cos_score_transformation=nn.Identity()):
         super(CosineSimilarityLoss, self).__init__()
         self.model = model
         self.loss_fct = loss_fct
