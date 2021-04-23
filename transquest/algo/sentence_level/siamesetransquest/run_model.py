@@ -83,7 +83,7 @@ class SiameseTransQuestModel:
 
         train_dataloader = DataLoader(train_samples, shuffle=True,
                                       batch_size=self.args.train_batch_size)
-        train_loss = CosineSimilarityLoss(model=self)
+        train_loss = CosineSimilarityLoss(model=self.model)
 
         evaluator = EmbeddingSimilarityEvaluator.from_input_examples(eval_samples, name='eval')
         warmup_steps = math.ceil(len(train_dataloader) * self.args.num_train_epochs * 0.1)
