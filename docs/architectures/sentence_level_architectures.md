@@ -16,7 +16,7 @@ Now, you can consider following architectures to build the QE model.
 
 The first architecture proposed uses a single XLM-R transformer model. The input of this model is a concatenation of the original sentence and its translation, separated by the *[SEP]* token. Then the output of the *[CLS]* token is passed through a softmax layer to reflect the quality scores.
 
-![MonoTransQuest Architecture](../images/TransQuest.png)
+![MonoTransQuest Architecture](../images/MonoTransQuest.png)
 
 ### Minimal Start for a MonoTransQuest Model
 
