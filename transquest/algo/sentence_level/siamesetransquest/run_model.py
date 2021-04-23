@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import random
 import shutil
 from collections import OrderedDict
 from typing import List, Dict, Tuple, Iterable, Type, Union, Callable
@@ -20,12 +21,16 @@ from tqdm.autonotebook import trange
 import math
 import queue
 
-from . import __DOWNLOAD_SERVER__, models
+
 
 from . import __version__
 from transquest.algo.sentence_level.siamesetransquest.util import http_get, import_from_string, batch_to_device
 from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
 from transquest.algo.sentence_level.siamesetransquest.models import Transformer, Pooling
+from .evaluation.embedding_similarity_evaluator import EmbeddingSimilarityEvaluator
+from .losses.cosine_similarity_loss import CosineSimilarityLoss
+from .model_args import SiameseTransQuestArgs
+from .readers.input_example import InputExample
 
 logger = logging.getLogger(__name__)
 
@@ -35,103 +40,33 @@ class SiameseTransQuestModel(nn.Sequential):
     Loads or create a SentenceTransformer model, that can be used to map sentences / text to embeddings.
 
     :param model_name_or_path: If it is a filepath on disc, it loads the model from that path. If it is not a path, it first tries to download a pre-trained SentenceTransformer model. If that fails, tries to construct a model from Huggingface models repository with that name.
-    :param modules: This parameter can be used to create custom SentenceTransformer models from scratch.
     :param device: Device (like 'cuda' / 'cpu') that should be used for computation. If None, checks if a GPU can be used.
     """
-    def __init__(self, model_name_or_path: str = None, device: str = None):
-        save_model_to = None
+    def __init__(self, model_name: str = None, args=None, device: str = None):
 
-        transformer_model = Transformer(model_name_or_path, max_seq_length=80)
+        self.args = self._load_model_args(model_name)
+
+        if isinstance(args, dict):
+            self.args.update_from_dict(args)
+        elif isinstance(args, SiameseTransQuestArgs):
+            self.args = args
+
+        if self.args.thread_count:
+            torch.set_num_threads(self.args.thread_count)
+
+        if self.args.manual_seed:
+            random.seed(self.args.manual_seed)
+            np.random.seed(self.args.manual_seed)
+            torch.manual_seed(self.args.manual_seed)
+            if self.args.n_gpu > 0:
+                torch.cuda.manual_seed_all(self.args.manual_seed)
+
+        transformer_model = Transformer(model_name, max_seq_length=80)
         pooling_model = Pooling(transformer_model.get_word_embedding_dimension(), pooling_mode_mean_tokens=True,
                                 pooling_mode_cls_token=False,
                                 pooling_mode_max_tokens=False)
         modules = [transformer_model, pooling_model]
 
-        # if model_name_or_path is not None and model_name_or_path != "":
-        #     logger.info("Load pretrained SentenceTransformer: {}".format(model_name_or_path))
-        #     model_path = model_name_or_path
-        #
-        #     if not os.path.isdir(model_path) and not model_path.startswith('http://') and not model_path.startswith('https://'):
-        #         logger.info("Did not find folder {}".format(model_path))
-        #
-        #         if '\\' in model_path or model_path.count('/') > 1:
-        #             raise AttributeError("Path {} not found".format(model_path))
-        #
-        #         model_path = __DOWNLOAD_SERVER__ + model_path + '.zip'
-        #         logger.info("Search model on server: {}".format(model_path))
-        #
-        #     if model_path.startswith('http://') or model_path.startswith('https://'):
-        #         model_url = model_path
-        #         folder_name = model_url.replace("https://", "").replace("http://", "").replace("/", "_")[:250][0:-4] #remove .zip file end
-        #
-        #         cache_folder = os.getenv('SENTENCE_TRANSFORMERS_HOME')
-        #         if cache_folder is None:
-        #             try:
-        #                 from torch.hub import _get_torch_home
-        #                 torch_cache_home = _get_torch_home()
-        #             except ImportError:
-        #                 torch_cache_home = os.path.expanduser(os.getenv('TORCH_HOME', os.path.join(os.getenv('XDG_CACHE_HOME', '~/.cache'), 'torch')))
-        #
-        #             cache_folder = os.path.join(torch_cache_home, 'sentence_transformers')
-        #
-        #         model_path = os.path.join(cache_folder, folder_name)
-        #
-        #         if not os.path.exists(model_path) or not os.listdir(model_path):
-        #             if os.path.exists(model_path):
-        #                 os.remove(model_path)
-        #
-        #             model_url = model_url.rstrip("/")
-        #             logger.info("Downloading sentence transformer model from {} and saving it at {}".format(model_url, model_path))
-        #
-        #             model_path_tmp = model_path.rstrip("/").rstrip("\\")+"_part"
-        #             try:
-        #                 zip_save_path = os.path.join(model_path_tmp, 'model.zip')
-        #                 http_get(model_url, zip_save_path)
-        #                 with ZipFile(zip_save_path, 'r') as zip:
-        #                     zip.extractall(model_path_tmp)
-        #                 os.remove(zip_save_path)
-        #                 os.rename(model_path_tmp, model_path)
-        #             except requests.exceptions.HTTPError as e:
-        #                 shutil.rmtree(model_path_tmp)
-        #                 if e.response.status_code == 429:
-        #                     raise Exception("Too many requests were detected from this IP for the model {}. Please contact info@nils-reimers.de for more information.".format(model_name_or_path))
-        #
-        #                 if e.response.status_code == 404:
-        #                     logger.warning('SentenceTransformer-Model {} not found. Try to create it from scratch'.format(model_url))
-        #                     logger.warning('Try to create Transformer Model {} with mean pooling'.format(model_name_or_path))
-        #
-        #                     save_model_to = model_path
-        #                     model_path = None
-        #                     transformer_model = Transformer(model_name_or_path)
-        #                     pooling_model = Pooling(transformer_model.get_word_embedding_dimension())
-        #                     modules = [transformer_model, pooling_model]
-        #                 else:
-        #                     raise e
-        #             except Exception as e:
-        #                 shutil.rmtree(model_path)
-        #                 raise e
-        #
-        #
-        # #     #### Load from disk
-        #     if model_path is not None:
-        #         logger.info("Load SentenceTransformer from folder: {}".format(model_path))
-        #
-        #         if os.path.exists(os.path.join(model_path, 'config.json')):
-        #             with open(os.path.join(model_path, 'config.json')) as fIn:
-        #                 config = json.load(fIn)
-        #                 if config['__version__'] > __version__:
-        #                     logger.warning("You try to use a model that was created with version {}, however, your version is {}. This might cause unexpected behavior or errors. In that case, try to update to the latest version.\n\n\n".format(config['__version__'], __version__))
-        #
-        #         with open(os.path.join(model_path, 'modules.json')) as fIn:
-        #             contained_modules = json.load(fIn)
-        #
-        #         modules = OrderedDict()
-        #         for module_config in contained_modules:
-        #             module_class = import_from_string(module_config['type'])
-        #             module = module_class.load(os.path.join(model_path, module_config['path']))
-        #             modules[module_config['name']] = module
-        #
-        #
         if modules is not None and not isinstance(modules, OrderedDict):
             modules = OrderedDict([(str(idx), module) for idx, module in enumerate(modules)])
 
@@ -141,10 +76,6 @@ class SiameseTransQuestModel(nn.Sequential):
             logger.info("Use pytorch device: {}".format(device))
 
         self._target_device = torch.device(device)
-
-        #We created a new model from scratch based on a Transformer model. Save the SBERT model in the cache folder
-        if save_model_to is not None:
-            self.save(save_model_to)
 
     def encode(self, sentences: Union[str, List[str], List[int]],
                batch_size: int = 32,
@@ -345,7 +276,6 @@ class SiameseTransQuestModel(nn.Sequential):
             except queue.Empty:
                 break
 
-
     def get_max_seq_length(self):
         """
         Returns the maximal sequence length for input the model accepts. Longer inputs will be truncated
@@ -449,6 +379,40 @@ class SiameseTransQuestModel(nn.Sequential):
             return len(text)
         else:
             return sum([len(t) for t in text])      #Sum of length of individual strings
+
+    def train_model(self, train_df, eval_df, args=None, output_dir=None, verbose=True):
+
+        train_samples = []
+        for index, row in train_df.iterrows():
+            score = float(row["labels"])
+            inp_example = InputExample(texts=[row['text_a'], row['text_b']], label=score)
+            train_samples.append(inp_example)
+
+        eval_samples = []
+        for index, row in eval_df.iterrows():
+            score = float(row["labels"])
+            inp_example = InputExample(texts=[row['text_a'], row['text_b']], label=score)
+            eval_samples.append(inp_example)
+
+        train_dataloader = DataLoader(train_samples, shuffle=True,
+                                      batch_size=self.args.train_batch_size)
+        train_loss = CosineSimilarityLoss(model=self)
+
+        evaluator = EmbeddingSimilarityEvaluator.from_input_examples(eval_samples, name='eval')
+        warmup_steps = math.ceil(len(train_dataloader) * self.args.num_train_epochs * 0.1)
+
+        self.fit(train_objectives=[(train_dataloader, train_loss)],
+                  evaluator=evaluator,
+                  epochs=self.args.num_train_epochs,
+                  evaluation_steps=self.args.evaluate_during_training_steps,
+                  optimizer_params={'lr': self.args.learning_rate,
+                                    'eps': self.args.adam_epsilon,
+                                    'correct_bias': False},
+                  warmup_steps=warmup_steps,
+                  weight_decay=self.args.weight_decay,
+                  max_grad_norm=self.args.max_grad_norm,
+                  output_path=self.args.best_model_dir)
+
 
     def fit(self,
             train_objectives: Iterable[Tuple[DataLoader, nn.Module]],
@@ -670,6 +634,15 @@ class SiameseTransQuestModel(nn.Sequential):
             gen = self._named_members(get_members_fn=find_tensor_attributes)
             first_tuple = next(gen)
             return first_tuple[1].device
+
+    def save_model_args(self, output_dir):
+        os.makedirs(output_dir, exist_ok=True)
+        self.args.save(output_dir)
+
+    def _load_model_args(self, input_dir):
+        args = SiameseTransQuestArgs()
+        args.load(input_dir)
+        return args
 
     @property
     def tokenizer(self):

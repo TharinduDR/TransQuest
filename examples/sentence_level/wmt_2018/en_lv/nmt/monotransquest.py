@@ -6,7 +6,6 @@ import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.sentence_level.wmt_2018.common.util.download import download_from_google_drive
 from examples.sentence_level.wmt_2018.common.util.draw import draw_scatterplot, print_stat
 from examples.sentence_level.wmt_2018.common.util.normalizer import fit, un_fit
 from examples.sentence_level.wmt_2018.common.util.postprocess import format_submission
@@ -18,9 +17,6 @@ from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQue
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
-
-if GOOGLE_DRIVE:
-    download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
 TRAIN_FOLDER = "examples/sentence_level/wmt_2018/en_lv/data/en_lv/"
 DEV_FOLDER = "examples/sentence_level/wmt_2018/en_lv/data/en_lv/"

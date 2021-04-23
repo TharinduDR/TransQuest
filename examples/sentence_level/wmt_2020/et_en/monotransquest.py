@@ -2,26 +2,22 @@ import os
 import shutil
 
 import numpy as np
-import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from examples.sentence_level.wmt_2020.common.util.download import download_from_google_drive
 from examples.sentence_level.wmt_2020.common.util.draw import draw_scatterplot, print_stat
 from examples.sentence_level.wmt_2020.common.util.normalizer import fit, un_fit
 from examples.sentence_level.wmt_2020.common.util.postprocess import format_submission
 from examples.sentence_level.wmt_2020.common.util.reader import read_annotated_file, read_test_file
 from examples.sentence_level.wmt_2020.et_en.monotransquest_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, monotransquest_config, SEED, \
-    RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE, GOOGLE_DRIVE, DRIVE_FILE_ID
+    RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
 from transquest.algo.sentence_level.monotransquest.evaluation import pearson_corr, spearman_corr
 from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-if GOOGLE_DRIVE:
-    download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
 TRAIN_FILE = "examples/sentence_level/wmt_2020/et_en/data/et-en/train.eten.df.short.tsv"
 DEV_FILE = "examples/sentence_level/wmt_2020/et_en/data/et-en/dev.eten.df.short.tsv"

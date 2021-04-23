@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from transquest.algo.sentence_level.monotransquest.model_args import TransQuestArgs
+from transquest.model_args import TransQuestArgs
 
 
 @dataclass

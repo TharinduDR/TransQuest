@@ -4,12 +4,12 @@ from transquest.model_args import TransQuestArgs
 
 
 @dataclass
-class MonoTransQuestArgs(TransQuestArgs):
+class SiameseTransQuestArgs(TransQuestArgs):
     """
-    Model args for a ClassificationModel
+    Model args for a SiameseTransQuest
     """
 
-    model_class: str = "MonoTransQuestModel"
+    model_class: str = "SiameseTransQuestModel"
     labels_list: list = field(default_factory=list)
     labels_map: dict = field(default_factory=dict)
     lazy_delimiter: str = "\t"
