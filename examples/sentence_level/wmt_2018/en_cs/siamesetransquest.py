@@ -1,12 +1,9 @@
-
 import logging
 import os
 import shutil
 
 import numpy as np
 from sklearn.model_selection import train_test_split
-
-
 
 from examples.sentence_level.wmt_2018.common.util.draw import draw_scatterplot, print_stat
 from examples.sentence_level.wmt_2018.common.util.normalizer import fit, un_fit
@@ -25,13 +22,14 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-
 TRAIN_FOLDER = "examples/sentence_level/wmt_2018/en_cs/data/en_cs/"
 DEV_FOLDER = "examples/sentence_level/wmt_2018/en_cs/data/en_cs/"
 TEST_FOLDER = "examples/sentence_level/wmt_2018/en_cs/data/en_cs/"
 
-train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.smt.src", translation_file="train.smt.mt", hter_file="train.smt.hter")
-dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.smt.src", translation_file="dev.smt.mt", hter_file="dev.smt.hter")
+train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.smt.src", translation_file="train.smt.mt",
+                            hter_file="train.smt.hter")
+dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.smt.src", translation_file="dev.smt.mt",
+                          hter_file="dev.smt.hter")
 test = read_test_file(path=TEST_FOLDER, original_file="test.smt.src", translation_file="test.smt.mt")
 
 index = test['index'].to_list()
@@ -49,7 +47,6 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
-
 
 if siamesetransquest_config["evaluate_during_training"]:
     if siamesetransquest_config["n_fold"] > 0:

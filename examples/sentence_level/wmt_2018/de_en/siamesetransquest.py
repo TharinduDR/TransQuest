@@ -9,12 +9,10 @@ from examples.sentence_level.wmt_2018.common.util.draw import draw_scatterplot, 
 from examples.sentence_level.wmt_2018.common.util.normalizer import fit, un_fit
 from examples.sentence_level.wmt_2018.common.util.postprocess import format_submission
 from examples.sentence_level.wmt_2018.common.util.reader import read_annotated_file, read_test_file
-from examples.sentence_level.wmt_2018.de_en.siamesetransquest_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
-    MODEL_NAME, siamesetransquest_config, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
+from examples.sentence_level.wmt_2018.de_en.siamesetransquest_config import TEMP_DIRECTORY, MODEL_NAME, \
+    siamesetransquest_config, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
 from transquest.algo.sentence_level.siamesetransquest.logging_handler import LoggingHandler
 from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
-
-
 
 logging.basicConfig(format='%(asctime)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
@@ -24,13 +22,14 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-
 TRAIN_FOLDER = "examples/sentence_level/wmt_2018/de_en/data/de_en/"
 DEV_FOLDER = "examples/sentence_level/wmt_2018/de_en/data/de_en/"
 TEST_FOLDER = "examples/sentence_level/wmt_2018/de_en/data/de_en/"
 
-train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.smt.src", translation_file="train.smt.mt", hter_file="train.smt.hter")
-dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.smt.src", translation_file="dev.smt.mt", hter_file="dev.smt.hter")
+train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.smt.src", translation_file="train.smt.mt",
+                            hter_file="train.smt.hter")
+dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.smt.src", translation_file="dev.smt.mt",
+                          hter_file="dev.smt.hter")
 test = read_test_file(path=TEST_FOLDER, original_file="test.smt.src", translation_file="test.smt.mt")
 
 index = test['index'].to_list()

@@ -1,15 +1,15 @@
-import requests
-from torch import Tensor, device
-from typing import List, Callable
-from tqdm.autonotebook import tqdm
-import sys
 import importlib
-import os
-import torch
-import numpy as np
-import queue
 import logging
+import os
+import queue
+import sys
+from typing import List, Callable
 
+import numpy as np
+import requests
+import torch
+from torch import Tensor, device
+from tqdm.autonotebook import tqdm
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ def normalize_embeddings(embeddings: Tensor):
 def paraphrase_mining(model,
                       sentences: List[str],
                       show_progress_bar: bool = False,
-                      batch_size:int = 32,
+                      batch_size: int = 32,
                       *args,
                       **kwargs):
     """
@@ -94,17 +94,18 @@ def paraphrase_mining(model,
     """
 
     # Compute embedding for the sentences
-    embeddings = model.encode(sentences, show_progress_bar=show_progress_bar, batch_size=batch_size, convert_to_tensor=True)
+    embeddings = model.encode(sentences, show_progress_bar=show_progress_bar, batch_size=batch_size,
+                              convert_to_tensor=True)
 
     return paraphrase_mining_embeddings(embeddings, *args, **kwargs)
 
 
 def paraphrase_mining_embeddings(embeddings: Tensor,
-                      query_chunk_size: int = 5000,
-                      corpus_chunk_size: int = 100000,
-                      max_pairs: int = 500000,
-                      top_k: int = 100,
-                      score_function: Callable[[Tensor, Tensor], Tensor] = cos_sim):
+                                 query_chunk_size: int = 5000,
+                                 corpus_chunk_size: int = 100000,
+                                 max_pairs: int = 500000,
+                                 top_k: int = 100,
+                                 score_function: Callable[[Tensor, Tensor], Tensor] = cos_sim):
     """
     Given a list of sentences / texts, this function performs paraphrase mining. It compares all sentences against all
     other sentences and returns a list with the pairs that have the highest cosine similarity score.
@@ -127,9 +128,11 @@ def paraphrase_mining_embeddings(embeddings: Tensor,
 
     for corpus_start_idx in range(0, len(embeddings), corpus_chunk_size):
         for query_start_idx in range(0, len(embeddings), query_chunk_size):
-            scores = score_function(embeddings[query_start_idx:query_start_idx+query_chunk_size], embeddings[corpus_start_idx:corpus_start_idx+corpus_chunk_size])
+            scores = score_function(embeddings[query_start_idx:query_start_idx + query_chunk_size],
+                                    embeddings[corpus_start_idx:corpus_start_idx + corpus_chunk_size])
 
-            scores_top_k_values, scores_top_k_idx = torch.topk(scores, min(top_k, len(scores[0])), dim=1, largest=True, sorted=False)
+            scores_top_k_values, scores_top_k_idx = torch.topk(scores, min(top_k, len(scores[0])), dim=1, largest=True,
+                                                               sorted=False)
             scores_top_k_values = scores_top_k_values.cpu().tolist()
             scores_top_k_idx = scores_top_k_idx.cpu().tolist()
 
@@ -199,8 +202,7 @@ def semantic_search(query_embeddings: Tensor,
     elif isinstance(corpus_embeddings, list):
         corpus_embeddings = torch.stack(corpus_embeddings)
 
-
-    #Check that corpus and queries are on the same device
+    # Check that corpus and queries are on the same device
     if corpus_embeddings.device != query_embeddings.device:
         query_embeddings = query_embeddings.to(corpus_embeddings.device)
 
@@ -210,10 +212,12 @@ def semantic_search(query_embeddings: Tensor,
         # Iterate over chunks of the corpus
         for corpus_start_idx in range(0, len(corpus_embeddings), corpus_chunk_size):
             # Compute cosine similarites
-            cos_scores = score_function(query_embeddings[query_start_idx:query_start_idx+query_chunk_size], corpus_embeddings[corpus_start_idx:corpus_start_idx+corpus_chunk_size])
+            cos_scores = score_function(query_embeddings[query_start_idx:query_start_idx + query_chunk_size],
+                                        corpus_embeddings[corpus_start_idx:corpus_start_idx + corpus_chunk_size])
 
             # Get top-k scores
-            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(cos_scores, min(top_k, len(cos_scores[0])), dim=1, largest=True, sorted=False)
+            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(cos_scores, min(top_k, len(cos_scores[0])),
+                                                                       dim=1, largest=True, sorted=False)
             cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
             cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
 
@@ -223,7 +227,7 @@ def semantic_search(query_embeddings: Tensor,
                     query_id = query_start_idx + query_itr
                     queries_result_list[query_id].append({'corpus_id': corpus_id, 'score': score})
 
-    #Sort and strip to top_k results
+    # Sort and strip to top_k results
     for idx in range(len(queries_result_list)):
         queries_result_list[idx] = sorted(queries_result_list[idx], key=lambda x: x['score'], reverse=True)
         queries_result_list[idx] = queries_result_list[idx][0:top_k]
@@ -244,13 +248,13 @@ def http_get(url, path):
         req.raise_for_status()
         return
 
-    download_filepath = path+"_part"
+    download_filepath = path + "_part"
     with open(download_filepath, "wb") as file_binary:
         content_length = req.headers.get('Content-Length')
         total = int(content_length) if content_length is not None else None
         progress = tqdm(unit="B", total=total, unit_scale=True)
         for chunk in req.iter_content(chunk_size=1024):
-            if chunk: # filter out keep-alive new chunks
+            if chunk:  # filter out keep-alive new chunks
                 progress.update(len(chunk))
                 file_binary.write(chunk)
 

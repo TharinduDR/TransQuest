@@ -1,19 +1,17 @@
-import csv
 import logging
-import math
+import logging
 import os
 import shutil
 
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-
-
 from examples.sentence_level.wmt_2018.common.util.draw import draw_scatterplot, print_stat
 from examples.sentence_level.wmt_2018.common.util.normalizer import fit, un_fit
 from examples.sentence_level.wmt_2018.common.util.postprocess import format_submission
 from examples.sentence_level.wmt_2018.common.util.reader import read_annotated_file, read_test_file
-from examples.sentence_level.wmt_2018.en_de.nmt.siamesetransquest_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, \
+from examples.sentence_level.wmt_2018.en_de.nmt.siamesetransquest_config import TEMP_DIRECTORY, GOOGLE_DRIVE, \
+    DRIVE_FILE_ID, \
     MODEL_NAME, siamesetransquest_config, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
 from transquest.algo.sentence_level.siamesetransquest.logging_handler import LoggingHandler
 from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
@@ -33,8 +31,10 @@ TRAIN_FOLDER = "examples/sentence_level/wmt_2018/en_de/data/en_de/"
 DEV_FOLDER = "examples/sentence_level/wmt_2018/en_de/data/en_de/"
 TEST_FOLDER = "examples/sentence_level/wmt_2018/en_de/data/en_de/"
 
-train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.nmt.src", translation_file="train.nmt.mt", hter_file="train.nmt.hter")
-dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.nmt.src", translation_file="dev.nmt.mt", hter_file="dev.nmt.hter")
+train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.nmt.src", translation_file="train.nmt.mt",
+                            hter_file="train.nmt.hter")
+dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.nmt.src", translation_file="dev.nmt.mt",
+                          hter_file="dev.nmt.hter")
 test = read_test_file(path=TEST_FOLDER, original_file="test.nmt.src", translation_file="test.nmt.mt")
 
 index = test['index'].to_list()
@@ -52,7 +52,6 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
-
 
 if siamesetransquest_config["evaluate_during_training"]:
     if siamesetransquest_config["n_fold"] > 0:

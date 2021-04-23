@@ -1,12 +1,11 @@
-
+import csv
 import logging
 import os
-import csv
-from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
-from scipy.stats import pearsonr, spearmanr
-import numpy as np
 from typing import List
 
+import numpy as np
+from scipy.stats import pearsonr, spearmanr
+from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
 
 from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
 from transquest.algo.sentence_level.siamesetransquest.evaluation.similarity_function import SimilarityFunction
@@ -24,7 +23,10 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
 
     The results are written in a CSV. If a CSV already exists, then values are appended.
     """
-    def __init__(self, sentences1: List[str], sentences2: List[str], scores: List[float], batch_size: int = 16, main_similarity: SimilarityFunction = None, name: str = '', show_progress_bar: bool = False, write_csv: bool = True):
+
+    def __init__(self, sentences1: List[str], sentences2: List[str], scores: List[float], batch_size: int = 16,
+                 main_similarity: SimilarityFunction = None, name: str = '', show_progress_bar: bool = False,
+                 write_csv: bool = True):
         """
         Constructs an evaluator based for the dataset
 
@@ -48,11 +50,14 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
 
         self.batch_size = batch_size
         if show_progress_bar is None:
-            show_progress_bar = (logger.getEffectiveLevel() == logging.INFO or logger.getEffectiveLevel() == logging.DEBUG)
+            show_progress_bar = (
+                        logger.getEffectiveLevel() == logging.INFO or logger.getEffectiveLevel() == logging.DEBUG)
         self.show_progress_bar = show_progress_bar
 
-        self.csv_file = "similarity_evaluation"+("_"+name if name else '')+"_results.csv"
-        self.csv_headers = ["epoch", "steps", "cosine_pearson", "cosine_spearman", "euclidean_pearson", "euclidean_spearman", "manhattan_pearson", "manhattan_spearman", "dot_pearson", "dot_spearman"]
+        self.csv_file = "similarity_evaluation" + ("_" + name if name else '') + "_results.csv"
+        self.csv_headers = ["epoch", "steps", "cosine_pearson", "cosine_spearman", "euclidean_pearson",
+                            "euclidean_spearman", "manhattan_pearson", "manhattan_spearman", "dot_pearson",
+                            "dot_spearman"]
 
     @classmethod
     def from_input_examples(cls, examples: List[InputExample], **kwargs):
@@ -77,8 +82,10 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
 
         logger.info("EmbeddingSimilarityEvaluator: Evaluating the model on " + self.name + " dataset" + out_txt)
 
-        embeddings1 = model.encode(self.sentences1, batch_size=self.batch_size, show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
-        embeddings2 = model.encode(self.sentences2, batch_size=self.batch_size, show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
+        embeddings1 = model.encode(self.sentences1, batch_size=self.batch_size,
+                                   show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
+        embeddings2 = model.encode(self.sentences2, batch_size=self.batch_size,
+                                   show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
         labels = self.scores
 
         cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
@@ -117,7 +124,8 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
                     writer.writerow(self.csv_headers)
 
                 writer.writerow([epoch, steps, eval_pearson_cosine, eval_spearman_cosine, eval_pearson_euclidean,
-                                 eval_spearman_euclidean, eval_pearson_manhattan, eval_spearman_manhattan, eval_pearson_dot, eval_spearman_dot])
+                                 eval_spearman_euclidean, eval_pearson_manhattan, eval_spearman_manhattan,
+                                 eval_pearson_dot, eval_spearman_dot])
 
         if self.main_similarity == SimilarityFunction.COSINE:
             return eval_spearman_cosine

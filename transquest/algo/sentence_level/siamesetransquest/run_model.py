@@ -1,36 +1,31 @@
 import json
 import logging
+import math
 import os
+import queue
 import random
-import shutil
 from collections import OrderedDict
 from typing import List, Dict, Tuple, Iterable, Type, Union, Callable
-from zipfile import ZipFile
-import requests
+
 import numpy as np
-from numpy import ndarray
-import transformers
 import torch
+import torch.multiprocessing as mp
+import transformers
+from numpy import ndarray
 from sklearn.metrics.pairwise import paired_cosine_distances
 from torch import nn, Tensor, device
 from torch.optim.optimizer import Optimizer
-
 from torch.utils.data import DataLoader
-import torch.multiprocessing as mp
 from tqdm.autonotebook import trange
-import math
-import queue
 
-
-
-from . import __version__
-from transquest.algo.sentence_level.siamesetransquest.util import http_get, import_from_string, batch_to_device
+from transquest.algo.sentence_level.siamesetransquest.evaluation.embedding_similarity_evaluator import \
+    EmbeddingSimilarityEvaluator
 from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
-from transquest.algo.sentence_level.siamesetransquest.models import Transformer, Pooling
-from transquest.algo.sentence_level.siamesetransquest.evaluation.embedding_similarity_evaluator import EmbeddingSimilarityEvaluator
 from transquest.algo.sentence_level.siamesetransquest.losses.cosine_similarity_loss import CosineSimilarityLoss
 from transquest.algo.sentence_level.siamesetransquest.model_args import SiameseTransQuestArgs
+from transquest.algo.sentence_level.siamesetransquest.models import Transformer, Pooling
 from transquest.algo.sentence_level.siamesetransquest.readers.input_example import InputExample
+from transquest.algo.sentence_level.siamesetransquest.util import batch_to_device
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +37,7 @@ class SiameseTransQuestModel(nn.Sequential):
     :param model_name_or_path: If it is a filepath on disc, it loads the model from that path. If it is not a path, it first tries to download a pre-trained SentenceTransformer model. If that fails, tries to construct a model from Huggingface models repository with that name.
     :param device: Device (like 'cuda' / 'cpu') that should be used for computation. If None, checks if a GPU can be used.
     """
+
     def __init__(self, model_name: str = None, args=None, device: str = None):
 
         self.args = self._load_model_args(model_name)
@@ -102,7 +98,8 @@ class SiameseTransQuestModel(nn.Sequential):
         """
         self.eval()
         if show_progress_bar is None:
-            show_progress_bar = (logger.getEffectiveLevel()==logging.INFO or logger.getEffectiveLevel()==logging.DEBUG)
+            show_progress_bar = (
+                    logger.getEffectiveLevel() == logging.INFO or logger.getEffectiveLevel() == logging.DEBUG)
 
         if convert_to_tensor:
             convert_to_numpy = False
@@ -112,7 +109,8 @@ class SiameseTransQuestModel(nn.Sequential):
             convert_to_numpy = False
 
         input_was_string = False
-        if isinstance(sentences, str) or not hasattr(sentences, '__len__'): #Cast an individual sentence to a list with length 1
+        if isinstance(sentences, str) or not hasattr(sentences,
+                                                     '__len__'):  # Cast an individual sentence to a list with length 1
             sentences = [sentences]
             input_was_string = True
 
@@ -126,7 +124,7 @@ class SiameseTransQuestModel(nn.Sequential):
         sentences_sorted = [sentences[idx] for idx in length_sorted_idx]
 
         for start_index in trange(0, len(sentences), batch_size, desc="Batches", disable=not show_progress_bar):
-            sentences_batch = sentences_sorted[start_index:start_index+batch_size]
+            sentences_batch = sentences_sorted[start_index:start_index + batch_size]
             features = self.tokenize(sentences_batch)
             features = batch_to_device(features, device)
 
@@ -136,12 +134,12 @@ class SiameseTransQuestModel(nn.Sequential):
                 if output_value == 'token_embeddings':
                     embeddings = []
                     for token_emb, attention in zip(out_features[output_value], out_features['attention_mask']):
-                        last_mask_id = len(attention)-1
+                        last_mask_id = len(attention) - 1
                         while last_mask_id > 0 and attention[last_mask_id].item() == 0:
                             last_mask_id -= 1
 
-                        embeddings.append(token_emb[0:last_mask_id+1])
-                else:   #Sentence embeddings
+                        embeddings.append(token_emb[0:last_mask_id + 1])
+                else:  # Sentence embeddings
                     embeddings = out_features[output_value]
                     embeddings = embeddings.detach()
                     if normalize_embeddings:
@@ -194,7 +192,7 @@ class SiameseTransQuestModel(nn.Sequential):
                 target_devices = ['cuda:{}'.format(i) for i in range(torch.cuda.device_count())]
             else:
                 logger.info("CUDA is not available. Start 4 CPU worker")
-                target_devices = ['cpu']*4
+                target_devices = ['cpu'] * 4
 
         logger.info("Start multi-process pool on devices: {}".format(', '.join(map(str, target_devices))))
 
@@ -204,7 +202,8 @@ class SiameseTransQuestModel(nn.Sequential):
         processes = []
 
         for cuda_id in target_devices:
-            p = ctx.Process(target=SiameseTransQuestModel._encode_multi_process_worker, args=(cuda_id, self, input_queue, output_queue), daemon=True)
+            p = ctx.Process(target=SiameseTransQuestModel._encode_multi_process_worker,
+                            args=(cuda_id, self, input_queue, output_queue), daemon=True)
             p.start()
             processes.append(p)
 
@@ -225,7 +224,8 @@ class SiameseTransQuestModel(nn.Sequential):
         pool['input'].close()
         pool['output'].close()
 
-    def encode_multi_process(self, sentences: List[str], pool: Dict[str, object], batch_size: int = 32, chunk_size: int = None):
+    def encode_multi_process(self, sentences: List[str], pool: Dict[str, object], batch_size: int = 32,
+                             chunk_size: int = None):
         """
         This method allows to run encode() on multiple GPUs. The sentences are chunked into smaller packages
         and sent to individual processes, which encode these on the different GPUs. This method is only suitable
@@ -271,7 +271,8 @@ class SiameseTransQuestModel(nn.Sequential):
         while True:
             try:
                 id, batch_size, sentences = input_queue.get()
-                embeddings = model.encode(sentences, device=target_device,  show_progress_bar=False, convert_to_numpy=True, batch_size=batch_size)
+                embeddings = model.encode(sentences, device=target_device, show_progress_bar=False,
+                                          convert_to_numpy=True, batch_size=batch_size)
                 results_queue.put([id, embeddings])
             except queue.Empty:
                 break
@@ -326,13 +327,11 @@ class SiameseTransQuestModel(nn.Sequential):
             # model_path = os.path.join(path, str(idx)+"_"+type(module).__name__)
             os.makedirs(path, exist_ok=True)
             module.save(path)
-            contained_modules.append({'idx': idx, 'name': name, 'path': os.path.basename(path), 'type': type(module).__module__})
+            contained_modules.append(
+                {'idx': idx, 'name': name, 'path': os.path.basename(path), 'type': type(module).__module__})
 
         with open(os.path.join(path, 'modules.json'), 'w') as fOut:
             json.dump(contained_modules, fOut, indent=2)
-
-        with open(os.path.join(path, 'siamese_config.json'), 'w') as fOut:
-            json.dump({'__version__': __version__}, fOut, indent=2)
 
     def smart_batching_collate(self, batch):
         """
@@ -371,14 +370,14 @@ class SiameseTransQuestModel(nn.Sequential):
         (representing several text inputs to the model).
         """
 
-        if isinstance(text, dict):              #{key: value} case
+        if isinstance(text, dict):  # {key: value} case
             return len(next(iter(text.values())))
-        elif not hasattr(text, '__len__'):      #Object has no len() method
+        elif not hasattr(text, '__len__'):  # Object has no len() method
             return 1
-        elif len(text) == 0 or isinstance(text[0], int):    #Empty string or list of ints
+        elif len(text) == 0 or isinstance(text[0], int):  # Empty string or list of ints
             return len(text)
         else:
-            return sum([len(t) for t in text])      #Sum of length of individual strings
+            return sum([len(t) for t in text])  # Sum of length of individual strings
 
     def train_model(self, train_df, eval_df, args=None, output_dir=None, verbose=True):
 
@@ -402,27 +401,26 @@ class SiameseTransQuestModel(nn.Sequential):
         warmup_steps = math.ceil(len(train_dataloader) * self.args.num_train_epochs * 0.1)
 
         self.fit(train_objectives=[(train_dataloader, train_loss)],
-                  evaluator=evaluator,
-                  epochs=self.args.num_train_epochs,
-                  evaluation_steps=self.args.evaluate_during_training_steps,
-                  optimizer_params={'lr': self.args.learning_rate,
-                                    'eps': self.args.adam_epsilon,
-                                    'correct_bias': False},
-                  warmup_steps=warmup_steps,
-                  weight_decay=self.args.weight_decay,
-                  max_grad_norm=self.args.max_grad_norm,
-                  output_path=self.args.best_model_dir)
-
+                 evaluator=evaluator,
+                 epochs=self.args.num_train_epochs,
+                 evaluation_steps=self.args.evaluate_during_training_steps,
+                 optimizer_params={'lr': self.args.learning_rate,
+                                   'eps': self.args.adam_epsilon,
+                                   'correct_bias': False},
+                 warmup_steps=warmup_steps,
+                 weight_decay=self.args.weight_decay,
+                 max_grad_norm=self.args.max_grad_norm,
+                 output_path=self.args.best_model_dir)
 
     def fit(self,
             train_objectives: Iterable[Tuple[DataLoader, nn.Module]],
             evaluator: SentenceEvaluator = None,
             epochs: int = 1,
-            steps_per_epoch = None,
+            steps_per_epoch=None,
             scheduler: str = 'WarmupLinear',
             warmup_steps: int = 10000,
             optimizer_class: Type[Optimizer] = transformers.AdamW,
-            optimizer_params : Dict[str, object]= {'lr': 2e-5},
+            optimizer_params: Dict[str, object] = {'lr': 2e-5},
             weight_decay: float = 0.01,
             evaluation_steps: int = 0,
             output_path: str = None,
@@ -492,16 +490,17 @@ class SiameseTransQuestModel(nn.Sequential):
 
             no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
             optimizer_grouped_parameters = [
-                {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': weight_decay},
+                {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)],
+                 'weight_decay': weight_decay},
                 {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
             ]
 
             optimizer = optimizer_class(optimizer_grouped_parameters, **optimizer_params)
-            scheduler_obj = self._get_scheduler(optimizer, scheduler=scheduler, warmup_steps=warmup_steps, t_total=num_train_steps)
+            scheduler_obj = self._get_scheduler(optimizer, scheduler=scheduler, warmup_steps=warmup_steps,
+                                                t_total=num_train_steps)
 
             optimizers.append(optimizer)
             schedulers.append(scheduler_obj)
-
 
         global_step = 0
         data_iterators = [iter(dataloader) for dataloader in dataloaders]
@@ -530,9 +529,7 @@ class SiameseTransQuestModel(nn.Sequential):
                         data_iterators[train_idx] = data_iterator
                         data = next(data_iterator)
 
-
                     features, labels = data
-
 
                     if use_amp:
                         with autocast():
@@ -569,7 +566,7 @@ class SiameseTransQuestModel(nn.Sequential):
 
             self._eval_during_training(evaluator, output_path, save_best_model, epoch, -1, callback)
 
-        if evaluator is None and output_path is not None:   #No evaluator, but output path: save final model version
+        if evaluator is None and output_path is not None:  # No evaluator, but output path: save final model version
             self.save(output_path)
 
     def evaluate(self, evaluator: SentenceEvaluator, output_path: str = None, verbose: bool = True):
@@ -609,11 +606,15 @@ class SiameseTransQuestModel(nn.Sequential):
         elif scheduler == 'warmupconstant':
             return transformers.get_constant_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps)
         elif scheduler == 'warmuplinear':
-            return transformers.get_linear_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=t_total)
+            return transformers.get_linear_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps,
+                                                                num_training_steps=t_total)
         elif scheduler == 'warmupcosine':
-            return transformers.get_cosine_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=t_total)
+            return transformers.get_cosine_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps,
+                                                                num_training_steps=t_total)
         elif scheduler == 'warmupcosinewithhardrestarts':
-            return transformers.get_cosine_with_hard_restarts_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=t_total)
+            return transformers.get_cosine_with_hard_restarts_schedule_with_warmup(optimizer,
+                                                                                   num_warmup_steps=warmup_steps,
+                                                                                   num_training_steps=t_total)
         else:
             raise ValueError("Unknown scheduler {}".format(scheduler))
 
