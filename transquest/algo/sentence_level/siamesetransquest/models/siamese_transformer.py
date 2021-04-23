@@ -26,9 +26,9 @@ logger = logging.getLogger(__name__)
 
 class SiameseTransformer(nn.Sequential):
 
-    def __init__(self, model_name: str = None, args=None, device: str = None):
+    def __init__(self, model_name: str = None, max_seq_length: int = 100, device: str = None):
 
-        transformer_model = Transformer(model_name, max_seq_length=args.max_seq_length)
+        transformer_model = Transformer(model_name, max_seq_length=max_seq_length)
         pooling_model = Pooling(transformer_model.get_word_embedding_dimension(), pooling_mode_mean_tokens=True,
                                 pooling_mode_cls_token=False,
                                 pooling_mode_max_tokens=False)

@@ -50,7 +50,7 @@ class SiameseTransQuestModel:
             if self.args.n_gpu > 0:
                 torch.cuda.manual_seed_all(self.args.manual_seed)
 
-        self.model = SiameseTransformer(model_name, args=args)
+        self.model = SiameseTransformer(model_name, max_seq_length=self.args.max_seq_length)
 
     def predict(self, to_predict, verbose=True):
         sentences1 = []
