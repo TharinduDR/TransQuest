@@ -5,8 +5,6 @@ import shutil
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-
-
 from examples.sentence_level.wmt_2018.common.util.draw import draw_scatterplot, print_stat
 from examples.sentence_level.wmt_2018.common.util.normalizer import fit, un_fit
 from examples.sentence_level.wmt_2018.common.util.postprocess import format_submission
