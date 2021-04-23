@@ -22,7 +22,6 @@ raw_dev_df = reader(DEV_PATH, DEV_SOURCE_FILE, DEV_TARGET_FILE, DEV_SOURCE_TAGS_
                     DEV_TARGET_TAGS_FLE)
 raw_test_df = reader(TEST_PATH, TEST_SOURCE_FILE, TEST_TARGET_FILE)
 
-
 test_sentences = prepare_testdata(raw_test_df)
 dev_sentences = prepare_testdata(raw_dev_df)
 
@@ -102,7 +101,8 @@ with open(os.path.join(TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE), 'w') as f:
 
 with open(os.path.join(TEMP_DIRECTORY, TEST_TARGET_TAGS_FILE), 'w') as target_f, open(
         os.path.join(TEMP_DIRECTORY, TEST_TARGET_GAPS_FILE), 'w') as gap_f:
-    for sentence_id, (test_target_sentence, target_prediction) in enumerate(zip(test_target_sentences, target_predictions)):
+    for sentence_id, (test_target_sentence, target_prediction) in enumerate(
+            zip(test_target_sentences, target_predictions)):
         # target_sentence = test_sentence.split("[SEP]")[1]
         words = test_target_sentence.split()
         # word_predictions = target_prediction.split()
@@ -190,4 +190,3 @@ with open(os.path.join(TEMP_DIRECTORY, DEV_TARGET_TAGS_FILE_SUB), 'w') as target
                                str(sentence_id) + "\t" + str(word_index) + "\t"
                                + words[word_index] + "\t" + prediction + "\t" + gold_prediction + '\n')
                 word_index += 1
-

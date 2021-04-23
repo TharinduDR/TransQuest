@@ -10,7 +10,7 @@ from examples.sentence_level.wmt_2020_task2.common.util.draw import draw_scatter
 from examples.sentence_level.wmt_2020_task2.common.util.normalizer import fit, un_fit
 from examples.sentence_level.wmt_2020_task2.common.util.postprocess import format_submission
 from examples.sentence_level.wmt_2020_task2.common.util.reader import read_annotated_file, read_test_file
-from examples.sentence_level.wmt_2020_task2.en_de.monotransquest_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
+from examples.sentence_level.wmt_2020_task2.en_de.monotransquest_config import TEMP_DIRECTORY, MODEL_NAME, \
     monotransquest_config, MODEL_TYPE, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
 from transquest.algo.sentence_level.monotransquest.evaluation import pearson_corr, spearman_corr
 from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
@@ -18,12 +18,12 @@ from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQue
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-
 TRAIN_FOLDER = "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/train"
 DEV_FOLDER = "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/dev"
 TEST_FOLDER = "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/test-blind"
 
-train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", translation_file="train.mt", hter_file="train.hter")
+train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", translation_file="train.mt",
+                            hter_file="train.hter")
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.src", translation_file="dev.mt", hter_file="dev.hter")
 test = read_test_file(path=TEST_FOLDER, original_file="test.src", translation_file="test.mt")
 
@@ -41,22 +41,24 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
-assert(len(index) == 1000)
+assert (len(index) == 1000)
 if monotransquest_config["evaluate_during_training"]:
     if monotransquest_config["n_fold"] > 1:
         dev_preds = np.zeros((len(dev), monotransquest_config["n_fold"]))
         test_preds = np.zeros((len(test), monotransquest_config["n_fold"]))
         for i in range(monotransquest_config["n_fold"]):
 
-            if os.path.exists(monotransquest_config['output_dir']) and os.path.isdir(monotransquest_config['output_dir']):
+            if os.path.exists(monotransquest_config['output_dir']) and os.path.isdir(
+                    monotransquest_config['output_dir']):
                 shutil.rmtree(monotransquest_config['output_dir'])
 
             model = MonoTransQuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                                         args=monotransquest_config)
-            train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED*i)
+            train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
             model.train_model(train_df, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                               mae=mean_absolute_error)
-            model = MonoTransQuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1, use_cuda=torch.cuda.is_available(), args=monotransquest_config)
+            model = MonoTransQuestModel(MODEL_TYPE, monotransquest_config["best_model_dir"], num_labels=1,
+                                        use_cuda=torch.cuda.is_available(), args=monotransquest_config)
             result, model_outputs, wrong_predictions = model.eval_model(dev, pearson_corr=pearson_corr,
                                                                         spearman_corr=spearman_corr,
                                                                         mae=mean_absolute_error)
@@ -98,4 +100,5 @@ test = un_fit(test, 'predictions')
 dev.to_csv(os.path.join(TEMP_DIRECTORY, RESULT_FILE), header=True, sep='\t', index=False, encoding='utf-8')
 draw_scatterplot(dev, 'labels', 'predictions', os.path.join(TEMP_DIRECTORY, RESULT_IMAGE), "English-German")
 print_stat(dev, 'labels', 'predictions')
-format_submission(df=test, index=index, language_pair="en-de", method="TransQuest", path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))
+format_submission(df=test, index=index, language_pair="en-de", method="TransQuest",
+                  path=os.path.join(TEMP_DIRECTORY, SUBMISSION_FILE))

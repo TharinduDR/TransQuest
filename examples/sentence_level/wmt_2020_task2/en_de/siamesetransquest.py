@@ -1,12 +1,9 @@
-import csv
 import logging
-import math
 import os
 import shutil
 
 import numpy as np
 from sklearn.model_selection import train_test_split
-from torch.utils.data import DataLoader
 
 from examples.sentence_level.wmt_2020_task2.common.util.draw import draw_scatterplot, print_stat
 from examples.sentence_level.wmt_2020_task2.common.util.normalizer import fit, un_fit
@@ -14,7 +11,6 @@ from examples.sentence_level.wmt_2020_task2.common.util.postprocess import forma
 from examples.sentence_level.wmt_2020_task2.common.util.reader import read_annotated_file, read_test_file
 from examples.sentence_level.wmt_2020_task2.en_de.siamesetransquest_config import TEMP_DIRECTORY, \
     MODEL_NAME, siamesetransquest_config, SEED, RESULT_FILE, SUBMISSION_FILE, RESULT_IMAGE
-
 from transquest.algo.sentence_level.siamesetransquest.logging_handler import LoggingHandler
 from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
 
@@ -26,12 +22,12 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-
 TRAIN_FOLDER = "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/train"
 DEV_FOLDER = "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/dev"
 TEST_FOLDER = "examples/sentence_level/wmt_2020_task2/en_de/data/en-de/test-blind"
 
-train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", translation_file="train.mt", hter_file="train.hter")
+train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", translation_file="train.mt",
+                            hter_file="train.hter")
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.src", translation_file="dev.mt", hter_file="dev.hter")
 test = read_test_file(path=TEST_FOLDER, original_file="test.src", translation_file="test.mt")
 
@@ -51,7 +47,7 @@ test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
-assert(len(index) == 1000)
+assert (len(index) == 1000)
 if siamesetransquest_config["evaluate_during_training"]:
     if siamesetransquest_config["n_fold"] > 0:
         dev_preds = np.zeros((len(dev), siamesetransquest_config["n_fold"]))

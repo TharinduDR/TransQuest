@@ -1,11 +1,9 @@
-
 import logging
 import os
 import shutil
 
 import numpy as np
 from sklearn.model_selection import train_test_split
-
 
 from examples.sentence_level.wmt_2020_task2.common.util.draw import draw_scatterplot, print_stat
 from examples.sentence_level.wmt_2020_task2.common.util.normalizer import fit, un_fit
@@ -28,7 +26,8 @@ TRAIN_FOLDER = "examples/sentence_level/wmt_2020_task2/en_zh/data/en-zh/train"
 DEV_FOLDER = "examples/sentence_level/wmt_2020_task2/en_zh/data/en-zh/dev"
 TEST_FOLDER = "examples/sentence_Level/wmt_2020_task2/en_zh/data/en-zh/test-blind"
 
-train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", translation_file="train.mt", hter_file="train.hter")
+train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", translation_file="train.mt",
+                            hter_file="train.hter")
 dev = read_annotated_file(path=DEV_FOLDER, original_file="dev.src", translation_file="dev.mt", hter_file="dev.hter")
 test = read_test_file(path=TEST_FOLDER, original_file="test.src", translation_file="test.mt")
 
@@ -38,7 +37,6 @@ train = train[['original', 'translation', 'hter']]
 dev = dev[['original', 'translation', 'hter']]
 test = test[['original', 'translation']]
 
-
 train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 dev = dev.rename(columns={'original': 'text_a', 'translation': 'text_b', 'hter': 'labels'}).dropna()
 test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).dropna()
@@ -46,11 +44,10 @@ test = test.rename(columns={'original': 'text_a', 'translation': 'text_b'}).drop
 dev_sentence_pairs = list(map(list, zip(dev['text_a'].to_list(), dev['text_b'].to_list())))
 test_sentence_pairs = list(map(list, zip(test['text_a'].to_list(), test['text_b'].to_list())))
 
-
 train = fit(train, 'labels')
 dev = fit(dev, 'labels')
 
-assert(len(index) == 1000)
+assert (len(index) == 1000)
 if siamesetransquest_config["evaluate_during_training"]:
     if siamesetransquest_config["n_fold"] > 0:
         dev_preds = np.zeros((len(dev), siamesetransquest_config["n_fold"]))

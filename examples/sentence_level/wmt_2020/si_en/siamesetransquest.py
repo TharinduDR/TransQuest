@@ -1,6 +1,4 @@
-import csv
 import logging
-import math
 import os
 import shutil
 
@@ -23,7 +21,6 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
-
 
 TRAIN_FILE = "examples/wmt_2020/si_en/data/si-en/train.sien.df.short.tsv"
 DEV_FILE = "examples/wmt_2020/si_en/data/si-en/dev.sien.df.short.tsv"

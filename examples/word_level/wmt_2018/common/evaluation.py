@@ -1,14 +1,15 @@
 from __future__ import division, print_function
 
-import os, sys
-import numpy as np
-from sklearn.metrics import f1_score, matthews_corrcoef
 import codecs
+import os
 
+import numpy as np
+from sklearn.metrics import f1_score
 
 """
 Scoring programme for WMT'20 Task 2 HTER **word-level**
 """
+
 
 # -------------PREPROCESSING----------------
 def list_of_lists(a_list):
@@ -30,7 +31,7 @@ def check_word_tag(words_seq, tags_seq, dataset_name='', gap_tags=False):
     for idx, (words, tags) in enumerate(zip(words_seq, tags_seq)):
         if gap_tags:
             words.append(' ')
-        assert(len(words) == len(tags)), "Numbers of words and tags don't match in sequence %d of %s: %i and %i" % (
+        assert (len(words) == len(tags)), "Numbers of words and tags don't match in sequence %d of %s: %i and %i" % (
             idx,
             dataset_name,
             len(words),
@@ -42,13 +43,13 @@ def check_words(ref_words, pred_words):
     '''
     check that words in reference and prediction match
     '''
-    assert(len(ref_words) == len(pred_words)), \
+    assert (len(ref_words) == len(pred_words)), \
         "Number of word sequences doesn't match in reference and hypothesis: %d and %d" % (len(ref_words),
                                                                                            len(pred_words))
     for idx, (ref, pred) in enumerate(zip(ref_words, pred_words)):
         ref_str = ' '.join(ref).lower()
         pred_str = ' '.join(pred).lower()
-        assert(ref_str == pred_str), \
+        assert (ref_str == pred_str), \
             "Word sequences don't match in reference and hypothesis at line %d:\n\t%s\n\t%s\n" % (idx,
                                                                                                   ref_str,
                                                                                                   pred_str)
@@ -136,7 +137,6 @@ def evaluate(ref_txt_file, ref_tags_file, submission, gap_tags=False):
 
 
 def main(ref_dir: 'dir containing all ref files', submit_dir: 'dir containing all predicitiosn files'):
-
     if not os.path.isdir(ref_dir):
         print("%s doesn't exist" % ref_dir)
 

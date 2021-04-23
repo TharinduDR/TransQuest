@@ -10,7 +10,8 @@ from examples.sentence_level.wmt_2020.common.util.draw import draw_scatterplot, 
 from examples.sentence_level.wmt_2020.common.util.normalizer import fit, un_fit
 from examples.sentence_level.wmt_2020.common.util.postprocess import format_submission
 from examples.sentence_level.wmt_2020.common.util.reader import read_annotated_file, read_test_file
-from examples.sentence_level.wmt_2020.en_zh.monotransquest_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, monotransquest_config, SEED, \
+from examples.sentence_level.wmt_2020.en_zh.monotransquest_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, \
+    monotransquest_config, SEED, \
     RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
 from transquest.algo.sentence_level.monotransquest.evaluation import pearson_corr, spearman_corr
 from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
@@ -47,7 +48,8 @@ if monotransquest_config["evaluate_during_training"]:
         test_preds = np.zeros((len(test), monotransquest_config["n_fold"]))
         for i in range(monotransquest_config["n_fold"]):
 
-            if os.path.exists(monotransquest_config['output_dir']) and os.path.isdir(monotransquest_config['output_dir']):
+            if os.path.exists(monotransquest_config['output_dir']) and os.path.isdir(
+                    monotransquest_config['output_dir']):
                 shutil.rmtree(monotransquest_config['output_dir'])
 
             model = MonoTransQuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),

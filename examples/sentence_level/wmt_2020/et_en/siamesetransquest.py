@@ -1,18 +1,15 @@
-import csv
 import logging
-import math
 import os
 import shutil
 
 import numpy as np
 from sklearn.model_selection import train_test_split
-from torch.utils.data import DataLoader
 
 from examples.sentence_level.wmt_2020.common.util.draw import draw_scatterplot, print_stat
 from examples.sentence_level.wmt_2020.common.util.normalizer import fit, un_fit
 from examples.sentence_level.wmt_2020.common.util.postprocess import format_submission
 from examples.sentence_level.wmt_2020.common.util.reader import read_annotated_file, read_test_file
-from examples.sentence_level.wmt_2020.et_en.siamesetransquest_config import TEMP_DIRECTORY, GOOGLE_DRIVE, DRIVE_FILE_ID, MODEL_NAME, \
+from examples.sentence_level.wmt_2020.et_en.siamesetransquest_config import TEMP_DIRECTORY, MODEL_NAME, \
     siamesetransquest_config, SEED, RESULT_FILE, RESULT_IMAGE, SUBMISSION_FILE
 from transquest.algo.sentence_level.siamesetransquest.logging_handler import LoggingHandler
 from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
@@ -24,7 +21,6 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
-
 
 TRAIN_FILE = "examples/sentence_level/wmt_2020/et_en/data/et-en/train.eten.df.short.tsv"
 DEV_FILE = "examples/sentence_level/wmt_2020/et_en/data/et-en/dev.eten.df.short.tsv"

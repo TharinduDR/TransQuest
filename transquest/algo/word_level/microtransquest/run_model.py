@@ -250,7 +250,6 @@ class MicroTransQuestModel:
             training_details: Average training loss if evaluate_during_training is False or full training progress scores if evaluate_during_training is True
         """  # noqa: ignore flake8"
 
-
         if args:
             self.args.update_from_dict(args)
 

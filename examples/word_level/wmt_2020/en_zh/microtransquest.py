@@ -1,7 +1,8 @@
+import os
 import shutil
 
 from sklearn.model_selection import train_test_split
-import os
+
 from examples.word_level.common.util import reader, prepare_testdata
 from examples.word_level.wmt_2020.en_zh.microtransquest_config import TRAIN_PATH, TRAIN_SOURCE_FILE, \
     TRAIN_SOURCE_TAGS_FILE, \
@@ -11,7 +12,6 @@ from examples.word_level.wmt_2020.en_zh.microtransquest_config import TRAIN_PATH
     DEV_SOURCE_TAGS_FILE_SUB, DEV_PATH, DEV_SOURCE_FILE, DEV_TARGET_FILE, DEV_SOURCE_TAGS_FILE, DEV_TARGET_TAGS_FLE
 from transquest.algo.word_level.microtransquest.run_model import MicroTransQuestModel
 
-
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
@@ -20,7 +20,6 @@ raw_train_df = reader(TRAIN_PATH, TRAIN_SOURCE_FILE, TRAIN_TARGET_FILE, TRAIN_SO
 raw_dev_df = reader(DEV_PATH, DEV_SOURCE_FILE, DEV_TARGET_FILE, DEV_SOURCE_TAGS_FILE,
                     DEV_TARGET_TAGS_FLE)
 raw_test_df = reader(TEST_PATH, TEST_SOURCE_FILE, TEST_TARGET_FILE)
-
 
 test_sentences = prepare_testdata(raw_test_df)
 dev_sentences = prepare_testdata(raw_dev_df)
@@ -55,7 +54,6 @@ for i in range(microtransquest_config["n_fold"]):
     dev_fold_sources_tags.append(dev_sources_tags)
     dev_fold_targets_tags.append(dev_targets_tags)
 
-
 source_predictions = []
 for sentence_id in range(len(test_sentences)):
     majority_prediction = []
@@ -77,7 +75,6 @@ with open(os.path.join(TEMP_DIRECTORY, TEST_SOURCE_TAGS_FILE), 'w') as f:
         for _string in _list:
             f.write(str(_string) + ' ')
         f.write(str('\n'))
-
 
 target_predictions = []
 for sentence_id in range(len(test_sentences)):
@@ -124,7 +121,6 @@ with open(os.path.join(TEMP_DIRECTORY, DEV_SOURCE_TAGS_FILE_SUB), 'w') as f:
             f.write(str(_string) + ' ')
         f.write(str('\n'))
 
-
 dev_target_predictions = []
 for sentence_id in range(len(dev_sentences)):
     majority_prediction = []
@@ -146,11 +142,3 @@ with open(os.path.join(TEMP_DIRECTORY, DEV_TARGET_TAGS_FILE_SUB), 'w') as f:
         for _string in _list:
             f.write(str(_string) + ' ')
         f.write(str('\n'))
-
-
-
-
-
-
-
-

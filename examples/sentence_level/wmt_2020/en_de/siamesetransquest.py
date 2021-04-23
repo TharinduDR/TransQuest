@@ -1,12 +1,9 @@
-
 import logging
-
 import os
 import shutil
 
 import numpy as np
 from sklearn.model_selection import train_test_split
-
 
 from examples.sentence_level.wmt_2020.common.util.draw import draw_scatterplot, print_stat
 from examples.sentence_level.wmt_2020.common.util.normalizer import fit, un_fit
@@ -24,7 +21,6 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
-
 
 TRAIN_FILE = "examples/sentence_level/wmt_2020/en_de/data/en-de/train.ende.df.short.tsv"
 DEV_FILE = "examples/sentence_level/wmt_2020/en_de/data/en-de/dev.ende.df.short.tsv"
