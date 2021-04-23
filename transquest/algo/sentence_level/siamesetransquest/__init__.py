@@ -1,1 +1,1 @@
-
+from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
