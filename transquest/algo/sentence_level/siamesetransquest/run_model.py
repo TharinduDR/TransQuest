@@ -57,7 +57,7 @@ class SiameseTransQuestModel(nn.Sequential):
             if self.args.n_gpu > 0:
                 torch.cuda.manual_seed_all(self.args.manual_seed)
 
-        transformer_model = Transformer(model_name, max_seq_length=80)
+        transformer_model = Transformer(model_name, max_seq_length=args.max_seq_length)
         pooling_model = Pooling(transformer_model.get_word_embedding_dimension(), pooling_mode_mean_tokens=True,
                                 pooling_mode_cls_token=False,
                                 pooling_mode_max_tokens=False)
@@ -332,6 +332,8 @@ class SiameseTransQuestModel(nn.Sequential):
 
         with open(os.path.join(path, 'modules.json'), 'w') as fOut:
             json.dump(contained_modules, fOut, indent=2)
+
+        self.save_model_args(path)
 
     def smart_batching_collate(self, batch):
         """
