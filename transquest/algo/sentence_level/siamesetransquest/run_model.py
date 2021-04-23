@@ -27,10 +27,10 @@ from . import __version__
 from transquest.algo.sentence_level.siamesetransquest.util import http_get, import_from_string, batch_to_device
 from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
 from transquest.algo.sentence_level.siamesetransquest.models import Transformer, Pooling
-from .evaluation.embedding_similarity_evaluator import EmbeddingSimilarityEvaluator
-from .losses.cosine_similarity_loss import CosineSimilarityLoss
-from .model_args import SiameseTransQuestArgs
-from .readers.input_example import InputExample
+from transquest.algo.sentence_level.siamesetransquest.evaluation.embedding_similarity_evaluator import EmbeddingSimilarityEvaluator
+from transquest.algo.sentence_level.siamesetransquest.losses.cosine_similarity_loss import CosineSimilarityLoss
+from transquest.algo.sentence_level.siamesetransquest.model_args import SiameseTransQuestArgs
+from transquest.algo.sentence_level.siamesetransquest.readers.input_example import InputExample
 
 logger = logging.getLogger(__name__)
 
