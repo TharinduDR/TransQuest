@@ -33,7 +33,8 @@ class SiameseTransQuestModel:
 
     def __init__(self, model_name: str = None, args=None, device: str = None):
 
-        self.args = self._load_model_args(model_name)
+        self.model = SiameseTransformer(model_name, max_seq_length=self.args.max_seq_length)
+        self.args = self.model.load_model_args(model_name)
 
         if isinstance(args, dict):
             self.args.update_from_dict(args)
@@ -49,8 +50,6 @@ class SiameseTransQuestModel:
             torch.manual_seed(self.args.manual_seed)
             if self.args.n_gpu > 0:
                 torch.cuda.manual_seed_all(self.args.manual_seed)
-
-        self.model = SiameseTransformer(model_name, max_seq_length=self.args.max_seq_length)
 
     def predict(self, to_predict, verbose=True):
         sentences1 = []
@@ -100,13 +99,6 @@ class SiameseTransQuestModel:
                  max_grad_norm=self.args.max_grad_norm,
                  output_path=self.args.best_model_dir)
 
-    def save_model_args(self, output_dir):
-        os.makedirs(output_dir, exist_ok=True)
-        self.args.save(output_dir)
 
-    def _load_model_args(self, input_dir):
-        args = SiameseTransQuestArgs()
-        args.load(input_dir)
-        return args
 
 

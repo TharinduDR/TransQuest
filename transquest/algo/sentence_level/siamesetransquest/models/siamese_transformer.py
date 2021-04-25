@@ -18,6 +18,7 @@ from torch.utils.data import DataLoader
 from tqdm.autonotebook import trange
 
 from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
+from transquest.algo.sentence_level.siamesetransquest.model_args import SiameseTransQuestArgs
 from transquest.algo.sentence_level.siamesetransquest.models import Transformer, Pooling
 from transquest.algo.sentence_level.siamesetransquest.util import batch_to_device
 
@@ -576,6 +577,15 @@ class SiameseTransformer(nn.Sequential):
             gen = self._named_members(get_members_fn=find_tensor_attributes)
             first_tuple = next(gen)
             return first_tuple[1].device
+
+    def save_model_args(self, output_dir):
+        os.makedirs(output_dir, exist_ok=True)
+        self.args.save(output_dir)
+
+    def load_model_args(self, input_dir):
+        args = SiameseTransQuestArgs()
+        args.load(input_dir)
+        return args
 
     @property
     def tokenizer(self):
