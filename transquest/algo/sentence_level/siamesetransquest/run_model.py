@@ -31,9 +31,9 @@ class SiameseTransQuestModel:
     :param device: Device (like 'cuda' / 'cpu') that should be used for computation. If None, checks if a GPU can be used.
     """
 
-    def __init__(self, model_name: str = None, args=None, device: str = None):
+    def __init__(self, model_name: str = None, args=None):
 
-        self.model = SiameseTransformer(model_name, max_seq_length=self.args.max_seq_length)
+        self.model = SiameseTransformer(model_name, args=args)
         self.args = self.model.load_model_args(model_name)
 
         if isinstance(args, dict):
