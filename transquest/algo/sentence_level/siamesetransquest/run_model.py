@@ -16,7 +16,8 @@ from transquest.algo.sentence_level.siamesetransquest.evaluation.embedding_simil
     EmbeddingSimilarityEvaluator
 from transquest.algo.sentence_level.siamesetransquest.losses.cosine_similarity_loss import CosineSimilarityLoss
 from transquest.algo.sentence_level.siamesetransquest.model_args import SiameseTransQuestArgs
-from transquest.algo.sentence_level.siamesetransquest.models.siamese_transformer import SiameseTransformer
+from transquest.algo.sentence_level.siamesetransquest.models import SiameseTransformer
+
 from transquest.algo.sentence_level.siamesetransquest.readers.input_example import InputExample
 
 

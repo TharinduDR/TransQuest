@@ -3,7 +3,7 @@ from typing import Iterable, Dict
 import torch
 from torch import nn, Tensor
 
-from transquest.algo.sentence_level.siamesetransquest.models.siamese_transformer import SiameseTransformer
+from transquest.algo.sentence_level.siamesetransquest.models import SiameseTransformer
 
 
 class CosineSimilarityLoss(nn.Module):
