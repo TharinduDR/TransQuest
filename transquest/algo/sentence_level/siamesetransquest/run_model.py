@@ -1,25 +1,18 @@
 import logging
 import math
-import os
 import random
-
 
 import numpy as np
 import torch
 from sklearn.metrics.pairwise import paired_cosine_distances
-
-
 from torch.utils.data import DataLoader
-
 
 from transquest.algo.sentence_level.siamesetransquest.evaluation.embedding_similarity_evaluator import \
     EmbeddingSimilarityEvaluator
 from transquest.algo.sentence_level.siamesetransquest.losses.cosine_similarity_loss import CosineSimilarityLoss
 from transquest.algo.sentence_level.siamesetransquest.model_args import SiameseTransQuestArgs
 from transquest.algo.sentence_level.siamesetransquest.models import SiameseTransformer
-
 from transquest.algo.sentence_level.siamesetransquest.readers.input_example import InputExample
-
 
 logger = logging.getLogger(__name__)
 
@@ -89,17 +82,13 @@ class SiameseTransQuestModel:
         warmup_steps = math.ceil(len(train_dataloader) * self.args.num_train_epochs * 0.1)
 
         self.model.fit(train_objectives=[(train_dataloader, train_loss)],
-                 evaluator=evaluator,
-                 epochs=self.args.num_train_epochs,
-                 evaluation_steps=self.args.evaluate_during_training_steps,
-                 optimizer_params={'lr': self.args.learning_rate,
-                                   'eps': self.args.adam_epsilon,
-                                   'correct_bias': False},
-                 warmup_steps=warmup_steps,
-                 weight_decay=self.args.weight_decay,
-                 max_grad_norm=self.args.max_grad_norm,
-                 output_path=self.args.best_model_dir)
-
-
-
-
+                       evaluator=evaluator,
+                       epochs=self.args.num_train_epochs,
+                       evaluation_steps=self.args.evaluate_during_training_steps,
+                       optimizer_params={'lr': self.args.learning_rate,
+                                         'eps': self.args.adam_epsilon,
+                                         'correct_bias': False},
+                       warmup_steps=warmup_steps,
+                       weight_decay=self.args.weight_decay,
+                       max_grad_norm=self.args.max_grad_norm,
+                       output_path=self.args.best_model_dir)

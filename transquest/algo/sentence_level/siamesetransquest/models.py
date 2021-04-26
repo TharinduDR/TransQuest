@@ -1,4 +1,3 @@
-from transformers import AutoModel, AutoTokenizer, AutoConfig
 import json
 import logging
 import math
@@ -17,10 +16,11 @@ from torch import nn, Tensor, device
 from torch.optim.optimizer import Optimizer
 from torch.utils.data import DataLoader
 from tqdm.autonotebook import trange
+from transformers import AutoModel, AutoTokenizer, AutoConfig
 
+from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
 from transquest.algo.sentence_level.siamesetransquest.model_args import SiameseTransQuestArgs
 from transquest.algo.sentence_level.siamesetransquest.util import batch_to_device
-from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
 
 logger = logging.getLogger(__name__)
 
@@ -557,7 +557,6 @@ class SiameseTransformer(nn.Sequential):
         else:
             return sum([len(t) for t in text])  # Sum of length of individual strings
 
-
     def fit(self,
             train_objectives: Iterable[Tuple[DataLoader, nn.Module]],
             evaluator: SentenceEvaluator = None,
@@ -818,4 +817,3 @@ class SiameseTransformer(nn.Sequential):
         Property to set the maximal input sequence length for the model. Longer inputs will be truncated.
         """
         self._first_module().max_seq_length = value
-

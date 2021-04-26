@@ -51,7 +51,7 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
         self.batch_size = batch_size
         if show_progress_bar is None:
             show_progress_bar = (
-                        logger.getEffectiveLevel() == logging.INFO or logger.getEffectiveLevel() == logging.DEBUG)
+                    logger.getEffectiveLevel() == logging.INFO or logger.getEffectiveLevel() == logging.DEBUG)
         self.show_progress_bar = show_progress_bar
 
         self.csv_file = "similarity_evaluation" + ("_" + name if name else '') + "_results.csv"
