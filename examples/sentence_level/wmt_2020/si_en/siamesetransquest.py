@@ -22,9 +22,9 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "examples/wmt_2020/si_en/data/si-en/train.sien.df.short.tsv"
-DEV_FILE = "examples/wmt_2020/si_en/data/si-en/dev.sien.df.short.tsv"
-TEST_FILE = "examples/wmt_2020/si_en/data/si-en/test20.sien.df.short.tsv"
+TRAIN_FILE = "examples/sentence_level/wmt_2020/si_en/data/si-en/train.sien.df.short.tsv"
+DEV_FILE = "examples/sentence_level/wmt_2020/si_en/data/si-en/dev.sien.df.short.tsv"
+TEST_FILE = "examples/sentence_level/wmt_2020/si_en/data/si-en/test20.sien.df.short.tsv"
 
 train = read_annotated_file(TRAIN_FILE)
 dev = read_annotated_file(DEV_FILE)
