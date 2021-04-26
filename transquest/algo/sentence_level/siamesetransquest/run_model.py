@@ -58,7 +58,11 @@ class SiameseTransQuestModel:
 
         cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
 
-        return cosine_scores
+        if len(cosine_scores) == 1:
+            return cosine_scores[0]
+
+        else:
+            return cosine_scores
 
     def train_model(self, train_df, eval_df, args=None, output_dir=None, verbose=True):
 
