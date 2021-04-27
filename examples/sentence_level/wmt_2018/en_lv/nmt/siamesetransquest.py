@@ -64,7 +64,7 @@ if siamesetransquest_config["evaluate_during_training"]:
                 shutil.rmtree(siamesetransquest_config['cache_dir'])
 
             train_df, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
-            model = SiameseTransQuestModel(MODEL_NAME)
+            model = SiameseTransQuestModel(MODEL_NAME, args=siamesetransquest_config)
             model.train_model(train_df, eval_df)
 
             model = SiameseTransQuestModel(siamesetransquest_config['best_model_dir'])
