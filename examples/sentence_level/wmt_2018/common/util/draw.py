@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.metrics import mean_absolute_error
 
-from examples.sentence_level.wmt_2018 import fit
+from examples.sentence_level.wmt_2018.common.util.normalizer import fit
 from transquest.algo.sentence_level.monotransquest.evaluation import pearson_corr, spearman_corr, rmse
 
 

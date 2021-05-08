@@ -8,7 +8,7 @@ With TransQuest, we have opensourced our research in translation quality estimat
 - Sentence-level translation quality estimation on both aspects: predicting post editing efforts and direct assessment.
 - Word-level translation quality estimation capable of predicting quality of source words, target words and target gaps.
 - Perform significantly better than current state-of-the-art quality estimation methods like DeepQuest and OpenKiwi in all the languages experimented. 
-- Pre-trained quality estimation models for fifteen language pairs.  
+- Pre-trained quality estimation models for fifteen language pairs are available in [HuggingFace.](https://huggingface.co/TransQuest)
 
 ## Table of Contents
 1. **[Installation](https://tharindudr.github.io/TransQuest/install/)** - Install TransQuest locally using pip. 
