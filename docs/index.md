@@ -26,11 +26,23 @@ With TransQuest, we have opensourced our research in translation quality estimat
 5. **[Contact](https://tharindudr.github.io/TransQuest/contact/)** - Contact us for any issues with TransQuest
 
 ## Resources
+* [COLING Presentation](https://youtu.be/WVgitropUyE) done on December, 2020. 
 - [Research Seminar](https://youtu.be/xbsbHUVVF3s) done on 1st of October 2020 in [RGCL](http://rgcl.wlv.ac.uk/2020/09/24/research-seminar/) and the [slides](https://www.slideshare.net/TharinduRanasinghe1/transquest-238713809).
 
 
 ## Citations
-If you are using the package, please consider citing this paper which is accepted to [COLING 2020](https://coling2020.org/)
+If you are using the word-level architecture, please consider citing this paper which is accepted to [ACL 2021](https://2021.aclweb.org/).
+
+```bash
+@InProceedings{ranasinghe2021,
+author = {Ranasinghe, Tharindu and Orasan, Constantin and Mitkov, Ruslan},
+title = {An Exploratory Analysis of Multilingual Word Level Quality Estimation with Cross-Lingual Transformers},
+booktitle = {Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics},
+year = {2021}
+}
+```
+
+If you are using the sentence-level architectures, please consider citing these papers which were presented in [COLING 2020](https://coling2020.org/) and in [WMT 2020](http://www.statmt.org/wmt20/) at EMNLP 2020.
 
 ```bash
 @InProceedings{transquest:2020a,
@@ -40,8 +52,6 @@ booktitle = {Proceedings of the 28th International Conference on Computational L
 year = {2020}
 }
 ```
-
-If you are using the task specific fine tuning, please consider citing this which is accepted to [WMT 2020](http://www.statmt.org/wmt20/) at EMNLP 2020.
  
 ```bash
 @InProceedings{transquest:2020b,

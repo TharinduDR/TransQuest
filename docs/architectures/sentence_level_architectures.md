@@ -57,71 +57,27 @@ Then the output of all the word embeddings goes through a mean pooling layer. Af
 
 ### Minimal Start for a SiameseTransQuest Model
 
-First save your train/dev pandas dataframes to csv files in a single folder. We refer the path to that folder as "path" in the code below. You have to provide the indices of source, target and quality labels when reading with the QEDataReader class. 
-
+Initiate and train the model like in the following code. train_df and eval_df are the pandas dataframes prepared with the instructions in Data Preparation section.
 ```python
-from transquest.algo.sentence_level.siamesetransquest import  LoggingHandler, SentencesDataset, \
-    SiameseTransQuestModel
-from transquest.algo.sentence_level.siamesetransquest import models, losses
-from transquest.algo.sentence_level.siamesetransquest.evaluation import EmbeddingSimilarityEvaluator
-from transquest.algo.sentence_level.siamesetransquest.readers import QEDataReader
-from torch.utils.data import DataLoader
-import math
-
-qe_reader = QEDataReader(path, s1_col_idx=0, s2_col_idx=1,
-                                      score_col_idx=2,
-                                      normalize_scores=False, min_score=0, max_score=1, header=True)
-
-word_embedding_model = models.Transformer("xlm-roberta-large", max_seq_length=siamesetransquest_config[
-                'max_seq_length'])
-
-pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
-                                           pooling_mode_mean_tokens=True,
-                                           pooling_mode_cls_token=False,
-                                           pooling_mode_max_tokens=False)
-
-model = SiameseTransQuestModel(modules=[word_embedding_model, pooling_model])
-train_data = SentencesDataset(qe_reader.get_examples('train.tsv'), model)
-train_dataloader = DataLoader(train_data, shuffle=True,
-                                          batch_size=siamesetransquest_config['train_batch_size'])
-train_loss = losses.CosineSimilarityLoss(model=model)
-
-eval_data = SentencesDataset(examples=qe_reader.get_examples('eval_df.tsv'), model=model)
-eval_dataloader = DataLoader(eval_data, shuffle=False,
-                                         batch_size=siamesetransquest_config['train_batch_size'])
-evaluator = EmbeddingSimilarityEvaluator(eval_dataloader)
-
-warmup_steps = math.ceil(
-                len(train_data) * siamesetransquest_config["num_train_epochs"] / siamese_transformer_config[
-                    'train_batch_size'] * 0.1)
+from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
 
 
-model.fit(train_objectives=[(train_dataloader, train_loss)],
-                evaluator=evaluator,
-                epochs=siamesetransquest_config['num_train_epochs'],
-                evaluation_steps=100,
-                optimizer_params={'lr': siamesetransquest_config["learning_rate"],
-                                        'eps': siamesetransquest_config["adam_epsilon"],
-                                        'correct_bias': False},
-                warmup_steps=warmup_steps,
-                output_path=siamesetransquest_config['best_model_dir'])
-
-
+model = SiameseTransQuestModel(MODEL_NAME, args=siamesetransquest_config)
+model.train_model(train_df, eval_df)
 
 ```
-An example siamese_transformer_config is available [here.](https://github.com/TharinduDR/TransQuest/blob/master/examples/wmt_2020/ro_en/siamese_transformer_config.py). The best model will be saved to the path specified in the "best_model_dir" in siamesetransquest_config. Then you can load it and do the predictions like this. 
+An example siamese_transformer_config is available [here.](https://github.com/TharinduDR/TransQuest/blob/master/examples/sentence_level/wmt_2020/ro_en/siamesetransquest_config.py). The best model will be saved to the path specified in the "best_model_dir" in siamesetransquest_config. Then you can load it and do the predictions like this. 
 
 ```python
-test_data = SentencesDataset(examples=qe_reader.get_examples("test.tsv", test_file=True), model=model)
-            test_dataloader = DataLoader(test_data, shuffle=False, batch_size=8)
-            evaluator = EmbeddingSimilarityEvaluator(test_dataloader)
+from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
 
-            model.evaluate(evaluator,
-                           result_path=os.path.join(siamesetransquest_config['cache_dir'], "test_result.txt"),
-                           verbose=False)
+model = SiameseTransQuestModel(siamesetransquest_config['best_model_dir'])
+
+predictions, raw_outputs = model.predict([[source, target]])
+print(predictions)
 ```
 
-You will find the predictions in the test_result.txt file in the siamesetransquest_config['cache_dir'] folder. 
+Predictions are the predicted quality scores.
 
 !!! tip
     Now that you know about the architectures in TransQuest, check how we can apply it in WMT QE shared tasks [here.](https://tharindudr.github.io/TransQuest/examples/sentence_level_examples/)
