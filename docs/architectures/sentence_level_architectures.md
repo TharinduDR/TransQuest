@@ -62,7 +62,7 @@ Initiate and train the model like in the following code. train_df and eval_df ar
 from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
 
 
-model = SiameseTransQuestModel(MODEL_NAME, args=siamesetransquest_config)
+model = SiameseTransQuestModel("xlm-roberta-large", args=siamesetransquest_config)
 model.train_model(train_df, eval_df)
 
 ```
