@@ -10,25 +10,25 @@ We have released several quality estimation models for this aspect. We have also
 
 | Language Pair   | NMT/SMT        |  Domain      |     Algorithm       |  Model Link                          | 
 |:---------------:|:--------------:|:------------:|:-------------------:|:------------------------------------:|
-| Romanian-English| NMT            |  Wikipedia   | MonoTransQuest      | [model.zip](http://bit.ly/3s7WOnS)  |
-|                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/37vT4mt)  |
-| Estonian-English| NMT            | Wikipedia    | MonoTransQuest      | [model.zip](http://bit.ly/3tD5Jhm)  | 
-|                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/30mO5mW)  | 
-| Nepalese-English| NMT            | Wikipedia    | MonoTransQuest      | [model.zip](http://bit.ly/3lwvsVT)  | 
-|                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/3h674bc)  | 
-| Sinhala-English | NMT            |  Wikipedia   | MonoTransQuest      | [model.zip](http://bit.ly/3cMXdpf)  | 
-|                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/3foBSlP)  | 
-| Russian-English | NMT            | Wikipedia    | MonoTransQuest      | [model.zip](http://bit.ly/3lx5L7H)  | 
-|                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/2B3UM2D)  | 
-| English-German  | NMT            | Wikipedia    | MonoTransQuest      | [model.zip](http://bit.ly/3bZmr4y)  | 
-|                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/3d8gT5n)  | 
-| English-Chinese | NMT            | Wikipedia    | MonoTransQuest      | [model.zip](http://bit.ly/3vGrApX)  | 
-|                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/3h4WSQ8)  | 
-| English-\*      | Any            | Any          | MonoTransQuest      | [model.zip](http://bit.ly/38Vp6KG)   | 
+| Romanian-English| NMT            |  Wikipedia   | MonoTransQuest      | [TransQuest/monotransquest-da-ro_en-wiki](https://huggingface.co/TransQuest/monotransquest-da-ro_en-wiki)  |
+|                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-ro_en-wiki](https://huggingface.co/TransQuest/siamesetransquest-da-ro_en-wiki)  |
+| Estonian-English| NMT            | Wikipedia    | MonoTransQuest      | [TransQuest/monotransquest-da-et_en-wiki](https://huggingface.co/TransQuest/monotransquest-da-et_en-wiki)  | 
+|                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-et_en-wiki](https://huggingface.co/TransQuest/siamesetransquest-da-et_en-wiki)  | 
+| Nepalese-English| NMT            | Wikipedia    | MonoTransQuest      | [TransQuest/monotransquest-da-ne_en-wiki](https://huggingface.co/TransQuest/monotransquest-da-ne_en-wiki)  | 
+|                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-ne_en-wiki](https://huggingface.co/TransQuest/siamesetransquest-da-ne_en-wiki)  | 
+| Sinhala-English | NMT            |  Wikipedia   | MonoTransQuest      | [TransQuest/monotransquest-da-ne_en-wiki](https://huggingface.co/TransQuest/monotransquest-da-ne_en-wiki)  | 
+|                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-si_en-wiki](https://huggingface.co/TransQuest/siamesetransquest-da-si_en-wiki)  | 
+| Russian-English | NMT            | Wikipedia    | MonoTransQuest      | [TransQuest/monotransquest-da-ru_en-reddit_wikiquotes](https://huggingface.co/TransQuest/monotransquest-da-ru_en-reddit_wikiquotes)  | 
+|                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-ru_en-reddit_wikiquotes](https://huggingface.co/TransQuest/siamesetransquest-da-ru_en-reddit_wikiquotes)  | 
+| English-German  | NMT            | Wikipedia    | MonoTransQuest      | [TransQuest/monotransquest-da-en_de-wiki](https://huggingface.co/TransQuest/monotransquest-da-en_de-wiki)  | 
+|                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-en_de-wiki](https://huggingface.co/TransQuest/siamesetransquest-da-en_de-wiki)  | 
+| English-Chinese | NMT            | Wikipedia    | MonoTransQuest      | [TransQuest/monotransquest-da-en_zh-wiki](https://huggingface.co/TransQuest/monotransquest-da-en_zh-wiki)  | 
+|                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-en_zh-wiki](https://huggingface.co/TransQuest/siamesetransquest-da-en_zh-wiki)  | 
+| English-\*      | Any            | Any          | MonoTransQuest      | [TransQuest/monotransquest-da-en_any](https://huggingface.co/TransQuest/monotransquest-da-en_any)   | 
 |                 |                |              | SiameseTransQuest   |                                      | 
-| \*-English      | Any            | Any          | MonoTransQuest      | [model.zip](http://bit.ly/3vKgX5u)  | 
+| \*-English      | Any            | Any          | MonoTransQuest      | [TransQuest/monotransquest-da-any_en](https://huggingface.co/TransQuest/monotransquest-da-any_en)  | 
 |                 |                |              | SiameseTransQuest   |                                      | 
-| \*-\*           | Any            | Any          | MonoTransQuest      | [model.zip](http://bit.ly/3eVOS5n)                                     | 
+| \*-\*           | Any            | Any          | MonoTransQuest      | [TransQuest/monotransquest-da-multilingual](https://huggingface.co/TransQuest/monotransquest-da-multilingual)                                     | 
 |                 |                |              | SiameseTransQuest   |                                     | 
 
 !!! note
@@ -43,19 +43,21 @@ We have released several quality estimation models for this aspect. We have also
 
 | Language Pair   | NMT/SMT        |  Domain      |     Algorithm       |  Model Link                          | 
 |:---------------:|:--------------:|:------------:|:-------------------:|:------------------------------------:|
-| English-German  | NMT            |  Wikipedia   | MonoTransQuest      | [model.zip](https://bit.ly/37tkTvZ)  |
-|                 |                |              | SiameseTransQuest   | [model.zip](https://bit.ly/3icI5Dw)  |
-|                 | SMT            |   IT         | MonoTransQuest      | [model.zip](https://bit.ly/3dNafBx)  | 
+| English-German  | NMT            |  Wikipedia   | MonoTransQuest      | [TransQuest/monotransquest-hter-en_de-wiki](https://huggingface.co/TransQuest/monotransquest-hter-en_de-wiki)  |
+|                 |                |              | SiameseTransQuest   |                                      |
+|                 | NMT            |   IT         | MonoTransQuest      | [TransQuest/monotransquest-hter-en_de-it-nmt](https://huggingface.co/TransQuest/monotransquest-hter-en_de-it-nmt)  | 
 |                 |                |              | SiameseTransQuest   |                                      |  
-| English-Latvian | SMT            | Life Sciences| MonoTransQuest      | [model.zip](https://bit.ly/3gkY7JX)  | 
+|                 | SMT            |   IT         | MonoTransQuest      | [TransQuest/monotransquest-hter-en_de-it-smt](https://huggingface.co/TransQuest/monotransquest-hter-en_de-it-smt)  | 
+|                 |                |              | SiameseTransQuest   |                                      |  
+| English-Latvian | SMT            | Life Sciences| MonoTransQuest      | [TransQuest/monotransquest-hter-en_lv-it-nmt](https://huggingface.co/TransQuest/monotransquest-hter-en_lv-it-nmt)  | 
 |                 |                |              | SiameseTransQuest   |                                      | 
-| English-Latvian | NMT            | Life Sciences| MonoTransQuest      | [model.zip](https://bit.ly/3eLb1jU)  | 
+|                 | NMT            | Life Sciences| MonoTransQuest      | [TransQuest/monotransquest-hter-en_lv-it-smt](https://huggingface.co/TransQuest/monotransquest-hter-en_lv-it-smt)  | 
 |                 |                |              | SiameseTransQuest   |                                      | 
-| English-Czech   | SMT            |  IT          | MonoTransQuest      | [model.zip](https://bit.ly/2VyBOZ2)  | 
+| English-Czech   | SMT            |  IT          | MonoTransQuest      | [TransQuest/monotransquest-hter-en_cs-pharmaceutical](https://huggingface.co/TransQuest/monotransquest-hter-en_cs-pharmaceutical)  | 
 |                 |                |              | SiameseTransQuest   |                                      | 
-| German-English  | SMT            | Life Sciences| MonoTransQuest      | [model.zip](https://bit.ly/3dRlqJu)  | 
+| German-English  | SMT            | Life Sciences| MonoTransQuest      | [TransQuest/monotransquest-hter-de_en-pharmaceutical](https://huggingface.co/TransQuest/monotransquest-hter-de_en-pharmaceutical)  | 
 |                 |                |              | SiameseTransQuest   |                                      | 
-| English-Chinese | NMT            | Wikipedia    | MonoTransQuest      | [model.zip](https://bit.ly/2YLIvJw)  | 
+| English-Chinese | NMT            | Wikipedia    | MonoTransQuest      | [TransQuest/monotransquest-hter-en_zh-wiki](https://huggingface.co/TransQuest/monotransquest-hter-en_zh-wiki)  | 
 |                 |                |              | SiameseTransQuest   |                                      | 
 | English-*       | Any            | Any          | MonoTransQuest      |                                      | 
 |                 |                |              | SiameseTransQuest   |                                      | 
