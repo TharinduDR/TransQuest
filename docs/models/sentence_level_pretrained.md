@@ -66,3 +66,29 @@ We have released several quality estimation models for this aspect. We have also
 
 !!! note
     \* denotes any language. (\*-\* means any language to any language)
+    
+If you are using the MonoTransQuest architecture, you can use the following code to load the model. The full notebook is available [here.](https://colab.research.google.com/drive/1qsE0e5MDafDeXl8reTwM1dnvy4BKF9Zb?usp=sharing)
+Let's consider loading monotransquest-da-ro_en-wiki. 
+
+```python
+import torch
+from transquest.algo.sentence_level.monotransquest.run_model import MonoTransQuestModel
+
+
+model = MonoTransQuestModel("xlmroberta", "TransQuest/monotransquest-da-ro_en-wiki", num_labels=1, use_cuda=torch.cuda.is_available())
+predictions, raw_outputs = model.predict([["Reducerea acestor conflicte este importantă pentru conservare.", "Reducing these conflicts is not important for preservation."]])
+print(predictions)
+```
+
+If you are using the SiameseTransQuest architecture, you can use the following code to load the model. The full notebook is available [here.](https://colab.research.google.com/drive/1EnLTs0691i3b0PELN54riwHRQnGK14B9?usp=sharing)
+Let's consider loading siamesetransquest-da-ro_en-wiki. 
+
+```python
+import torch
+from transquest.algo.sentence_level.siamesetransquest.run_model import SiameseTransQuestModel
+
+
+model = SiameseTransQuestModel("TransQuest/siamesetransquest-da-ro_en-wiki")
+predictions = model.predict([["Reducerea acestor conflicte este importantă pentru conservare.", "Reducing these conflicts is not important for preservation."]])
+print(predictions)
+```
