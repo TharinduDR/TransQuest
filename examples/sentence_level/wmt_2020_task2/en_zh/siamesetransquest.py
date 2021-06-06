@@ -24,7 +24,7 @@ if not os.path.exists(TEMP_DIRECTORY):
 
 TRAIN_FOLDER = "examples/sentence_level/wmt_2020_task2/en_zh/data/en-zh/train"
 DEV_FOLDER = "examples/sentence_level/wmt_2020_task2/en_zh/data/en-zh/dev"
-TEST_FOLDER = "examples/sentence_Level/wmt_2020_task2/en_zh/data/en-zh/test-blind"
+TEST_FOLDER = "examples/sentence_level/wmt_2020_task2/en_zh/data/en-zh/test-blind"
 
 train = read_annotated_file(path=TRAIN_FOLDER, original_file="train.src", translation_file="train.mt",
                             hter_file="train.hter")
