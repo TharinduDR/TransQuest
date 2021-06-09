@@ -16,7 +16,7 @@ We have released several quality estimation models for this aspect. We have also
 |                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-et_en-wiki](https://huggingface.co/TransQuest/siamesetransquest-da-et_en-wiki)  | 
 | Nepalese-English| NMT            | Wikipedia    | MonoTransQuest      | [TransQuest/monotransquest-da-ne_en-wiki](https://huggingface.co/TransQuest/monotransquest-da-ne_en-wiki)  | 
 |                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-ne_en-wiki](https://huggingface.co/TransQuest/siamesetransquest-da-ne_en-wiki)  | 
-| Sinhala-English | NMT            |  Wikipedia   | MonoTransQuest      | [TransQuest/monotransquest-da-ne_en-wiki](https://huggingface.co/TransQuest/monotransquest-da-ne_en-wiki)  | 
+| Sinhala-English | NMT            |  Wikipedia   | MonoTransQuest      | [TransQuest/monotransquest-da-si_en-wiki](https://huggingface.co/TransQuest/monotransquest-da-si_en-wiki)  | 
 |                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-si_en-wiki](https://huggingface.co/TransQuest/siamesetransquest-da-si_en-wiki)  | 
 | Russian-English | NMT            | Wikipedia    | MonoTransQuest      | [TransQuest/monotransquest-da-ru_en-reddit_wikiquotes](https://huggingface.co/TransQuest/monotransquest-da-ru_en-reddit_wikiquotes)  | 
 |                 |                |              | SiameseTransQuest   | [TransQuest/siamesetransquest-da-ru_en-reddit_wikiquotes](https://huggingface.co/TransQuest/siamesetransquest-da-ru_en-reddit_wikiquotes)  | 
