@@ -2,7 +2,7 @@
 We have provided several examples on how to use TransQuest in recent WMT word-level quality estimation shared tasks. They are included in the repository but are not shipped with the library. Therefore, if you need to run the examples, please clone the repository.
 
 !!! warning
-    Please don't use the same environment you used to install TransQuest to run the examples. Create a new environment. 
+    Please don't use the same environment that you used to install TransQuest to run the examples. Create a new environment. 
 
 ```bash
 git clone https://github.com/TharinduDR/TransQuest.git
