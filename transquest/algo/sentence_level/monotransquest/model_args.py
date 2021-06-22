@@ -6,7 +6,7 @@ from transquest.model_args import TransQuestArgs
 @dataclass
 class MonoTransQuestArgs(TransQuestArgs):
     """
-    Model args for a ClassificationModel
+    Model args for MonoTransQuest Model
     """
 
     model_class: str = "MonoTransQuestModel"
