@@ -1,15 +1,22 @@
+import fnmatch
+import heapq
+import huggingface_hub
 import importlib
 import logging
+import numpy as np
 import os
 import queue
-import sys
-from typing import List, Callable
-
-import numpy as np
 import requests
+import sys
 import torch
+from huggingface_hub import HfApi, hf_hub_url, cached_download, HfFolder
+from huggingface_hub.constants import HUGGINGFACE_HUB_CACHE
+from packaging import version
+from pathlib import Path
 from torch import Tensor, device
 from tqdm.autonotebook import tqdm
+from typing import Dict, Optional, Union
+from typing import List, Callable
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +71,34 @@ def dot_score(a: Tensor, b: Tensor):
     return torch.mm(a, b.transpose(0, 1))
 
 
+def pairwise_dot_score(a: Tensor, b: Tensor):
+    """
+   Computes the pairwise dot-product dot_prod(a[i], b[i])
+   :return: Vector with res[i] = dot_prod(a[i], b[i])
+   """
+    if not isinstance(a, torch.Tensor):
+        a = torch.tensor(a)
+
+    if not isinstance(b, torch.Tensor):
+        b = torch.tensor(b)
+
+    return (a * b).sum(dim=-1)
+
+
+def pairwise_cos_sim(a: Tensor, b: Tensor):
+    """
+   Computes the pairwise cossim cos_sim(a[i], b[i])
+   :return: Vector with res[i] = cos_sim(a[i], b[i])
+   """
+    if not isinstance(a, torch.Tensor):
+        a = torch.tensor(a)
+
+    if not isinstance(b, torch.Tensor):
+        b = torch.tensor(b)
+
+    return pairwise_dot_score(normalize_embeddings(a), normalize_embeddings(b))
+
+
 def normalize_embeddings(embeddings: Tensor):
     """
     Normalizes the embeddings matrix, so that each sentence embedding has unit length
@@ -89,7 +124,7 @@ def paraphrase_mining(model,
     :param corpus_chunk_size: Compare a sentence simultaneously against #corpus_chunk_size other sentences. Decrease, to lower memory footprint (increases run-time).
     :param max_pairs: Maximal number of text pairs returned.
     :param top_k: For each sentence, we retrieve up to top_k other sentences
-    :param score_function: Funtion for computing scores. By default, cosine similarity.
+    :param score_function: Function for computing scores. By default, cosine similarity.
     :return: Returns a list of triplets with the format [score, id1, id2]
     """
 
@@ -115,7 +150,7 @@ def paraphrase_mining_embeddings(embeddings: Tensor,
     :param corpus_chunk_size: Compare a sentence simultaneously against #corpus_chunk_size other sentences. Decrease, to lower memory footprint (increases run-time).
     :param max_pairs: Maximal number of text pairs returned.
     :param top_k: For each sentence, we retrieve up to top_k other sentences
-    :param score_function: Funtion for computing scores. By default, cosine similarity.
+    :param score_function: Function for computing scores. By default, cosine similarity.
     :return: Returns a list of triplets with the format [score, id1, id2]
     """
 
@@ -166,7 +201,7 @@ def paraphrase_mining_embeddings(embeddings: Tensor,
 
 
 def information_retrieval(*args, **kwargs):
-    """This function is decprecated. Use semantic_search insted"""
+    """This function is deprecated. Use semantic_search instead"""
     return semantic_search(*args, **kwargs)
 
 
@@ -185,8 +220,8 @@ def semantic_search(query_embeddings: Tensor,
     :param query_chunk_size: Process 100 queries simultaneously. Increasing that value increases the speed, but requires more memory.
     :param corpus_chunk_size: Scans the corpus 100k entries at a time. Increasing that value increases the speed, but requires more memory.
     :param top_k: Retrieve top k matching entries.
-    :param score_function: Funtion for computing scores. By default, cosine similarity.
-    :return: Returns a sorted list with decreasing cosine similarity scores. Entries are dictionaries with the keys 'corpus_id' and 'score'
+    :param score_function: Function for computing scores. By default, cosine similarity.
+    :return: Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by decreasing cosine similarity scores.
     """
 
     if isinstance(query_embeddings, (np.ndarray, np.generic)):
@@ -211,7 +246,7 @@ def semantic_search(query_embeddings: Tensor,
     for query_start_idx in range(0, len(query_embeddings), query_chunk_size):
         # Iterate over chunks of the corpus
         for corpus_start_idx in range(0, len(corpus_embeddings), corpus_chunk_size):
-            # Compute cosine similarites
+            # Compute cosine similarities
             cos_scores = score_function(query_embeddings[query_start_idx:query_start_idx + query_chunk_size],
                                         corpus_embeddings[corpus_start_idx:corpus_start_idx + corpus_chunk_size])
 
@@ -225,12 +260,18 @@ def semantic_search(query_embeddings: Tensor,
                 for sub_corpus_id, score in zip(cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]):
                     corpus_id = corpus_start_idx + sub_corpus_id
                     query_id = query_start_idx + query_itr
-                    queries_result_list[query_id].append({'corpus_id': corpus_id, 'score': score})
+                    if len(queries_result_list[query_id]) < top_k:
+                        heapq.heappush(queries_result_list[query_id], (
+                        score, corpus_id))  # heaqp tracks the quantity of the first element in the tuple
+                    else:
+                        heapq.heappushpop(queries_result_list[query_id], (score, corpus_id))
 
-    # Sort and strip to top_k results
-    for idx in range(len(queries_result_list)):
-        queries_result_list[idx] = sorted(queries_result_list[idx], key=lambda x: x['score'], reverse=True)
-        queries_result_list[idx] = queries_result_list[idx][0:top_k]
+    # change the data format and sort
+    for query_id in range(len(queries_result_list)):
+        for doc_itr in range(len(queries_result_list[query_id])):
+            score, corpus_id = queries_result_list[query_id][doc_itr]
+            queries_result_list[query_id][doc_itr] = {'corpus_id': corpus_id, 'score': score}
+        queries_result_list[query_id] = sorted(queries_result_list[query_id], key=lambda x: x['score'], reverse=True)
 
     return queries_result_list
 
@@ -306,3 +347,163 @@ def import_from_string(dotted_path):
     except AttributeError:
         msg = 'Module "%s" does not define a "%s" attribute/class' % (module_path, class_name)
         raise ImportError(msg)
+
+
+def community_detection(embeddings, threshold=0.75, min_community_size=10, batch_size=1024):
+    """
+    Function for Fast Community Detection
+    Finds in the embeddings all communities, i.e. embeddings that are close (closer than threshold).
+    Returns only communities that are larger than min_community_size. The communities are returned
+    in decreasing order. The first element in each list is the central point in the community.
+    """
+    if not isinstance(embeddings, torch.Tensor):
+        embeddings = torch.tensor(embeddings)
+
+    threshold = torch.tensor(threshold, device=embeddings.device)
+
+    extracted_communities = []
+
+    # Maximum size for community
+    min_community_size = min(min_community_size, len(embeddings))
+    sort_max_size = min(max(2 * min_community_size, 50), len(embeddings))
+
+    for start_idx in range(0, len(embeddings), batch_size):
+        # Compute cosine similarity scores
+        cos_scores = cos_sim(embeddings[start_idx:start_idx + batch_size], embeddings)
+
+        # Minimum size for a community
+        top_k_values, _ = cos_scores.topk(k=min_community_size, largest=True)
+
+        # Filter for rows >= min_threshold
+        for i in range(len(top_k_values)):
+            if top_k_values[i][-1] >= threshold:
+                new_cluster = []
+
+                # Only check top k most similar entries
+                top_val_large, top_idx_large = cos_scores[i].topk(k=sort_max_size, largest=True)
+
+                # Check if we need to increase sort_max_size
+                while top_val_large[-1] > threshold and sort_max_size < len(embeddings):
+                    sort_max_size = min(2 * sort_max_size, len(embeddings))
+                    top_val_large, top_idx_large = cos_scores[i].topk(k=sort_max_size, largest=True)
+
+                for idx, val in zip(top_idx_large.tolist(), top_val_large):
+                    if val < threshold:
+                        break
+
+                    new_cluster.append(idx)
+
+                extracted_communities.append(new_cluster)
+
+        del cos_scores
+
+    # Largest cluster first
+    extracted_communities = sorted(extracted_communities, key=lambda x: len(x), reverse=True)
+
+    # Step 2) Remove overlapping communities
+    unique_communities = []
+    extracted_ids = set()
+
+    for cluster_id, community in enumerate(extracted_communities):
+        community = sorted(community)
+        non_overlapped_community = []
+        for idx in community:
+            if idx not in extracted_ids:
+                non_overlapped_community.append(idx)
+
+        if len(non_overlapped_community) >= min_community_size:
+            unique_communities.append(non_overlapped_community)
+            extracted_ids.update(non_overlapped_community)
+
+    unique_communities = sorted(unique_communities, key=lambda x: len(x), reverse=True)
+
+    return unique_communities
+
+
+##################
+#
+######################
+
+
+def snapshot_download(
+        repo_id: str,
+        revision: Optional[str] = None,
+        cache_dir: Union[str, Path, None] = None,
+        library_name: Optional[str] = None,
+        library_version: Optional[str] = None,
+        user_agent: Union[Dict, str, None] = None,
+        ignore_files: Optional[List[str]] = None,
+        use_auth_token: Union[bool, str, None] = None
+) -> str:
+    """
+    Method derived from huggingface_hub.
+    Adds a new parameters 'ignore_files', which allows to ignore certain files / file-patterns
+    """
+    if cache_dir is None:
+        cache_dir = HUGGINGFACE_HUB_CACHE
+    if isinstance(cache_dir, Path):
+        cache_dir = str(cache_dir)
+
+    _api = HfApi()
+
+    token = None
+    if isinstance(use_auth_token, str):
+        token = use_auth_token
+    elif use_auth_token:
+        token = HfFolder.get_token()
+
+    model_info = _api.model_info(repo_id=repo_id, revision=revision, token=token)
+
+    storage_folder = os.path.join(
+        cache_dir, repo_id.replace("/", "_")
+    )
+
+    all_files = model_info.siblings
+    # Download modules.json as the last file
+    for idx, repofile in enumerate(all_files):
+        if repofile.rfilename == "modules.json":
+            del all_files[idx]
+            all_files.append(repofile)
+            break
+
+    for model_file in all_files:
+        if ignore_files is not None:
+            skip_download = False
+            for pattern in ignore_files:
+                if fnmatch.fnmatch(model_file.rfilename, pattern):
+                    skip_download = True
+                    break
+
+            if skip_download:
+                continue
+
+        url = hf_hub_url(
+            repo_id, filename=model_file.rfilename, revision=model_info.sha
+        )
+        relative_filepath = os.path.join(*model_file.rfilename.split("/"))
+
+        # Create potential nested dir
+        nested_dirname = os.path.dirname(
+            os.path.join(storage_folder, relative_filepath)
+        )
+        os.makedirs(nested_dirname, exist_ok=True)
+
+        cached_download_args = {'url': url,
+                                'cache_dir': storage_folder,
+                                'force_filename': relative_filepath,
+                                'library_name': library_name,
+                                'library_version': library_version,
+                                'user_agent': user_agent,
+                                'use_auth_token': use_auth_token}
+
+        if version.parse(huggingface_hub.__version__) >= version.parse("0.8.1"):
+            # huggingface_hub v0.8.1 introduces a new cache layout. We sill use a manual layout
+            # And need to pass legacy_cache_layout=True to avoid that a warning will be printed
+            cached_download_args['legacy_cache_layout'] = True
+
+        path = cached_download(**cached_download_args)
+
+        if os.path.exists(path + ".lock"):
+            os.remove(path + ".lock")
+
+    return storage_folder
