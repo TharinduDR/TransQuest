@@ -13,3 +13,4 @@ wandb
 sentencepiece
 onnxruntime
 seqeval
+huggingface_hub
