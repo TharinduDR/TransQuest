@@ -3,6 +3,7 @@ import logging
 import math
 import os
 import queue
+import shutil
 from collections import OrderedDict
 from typing import List, Dict, Tuple, Iterable, Type, Union, Callable, Optional
 
@@ -20,8 +21,11 @@ from transformers import AutoModel, AutoTokenizer, AutoConfig, T5Config, MT5Conf
 
 from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
 from transquest.algo.sentence_level.siamesetransquest.model_args import SiameseTransQuestArgs
-from transquest.algo.sentence_level.siamesetransquest.util import batch_to_device
+from transquest.algo.sentence_level.siamesetransquest.model_card_templates import ModelCardTemplate
+from transquest.algo.sentence_level.siamesetransquest.util import batch_to_device, import_from_string, \
+    snapshot_download, fullname
 
+__version__ = "2.0.0"
 logger = logging.getLogger(__name__)
 
 
@@ -342,21 +346,93 @@ class Pooling(nn.Module):
 
 
 class SiameseTransformer(nn.Sequential):
+    """
+    Loads or create a SentenceTransformer model, that can be used to map sentences / text to embeddings.
 
-    def __init__(self, model_name: str = None, args=None, device: str = None):
+    :param model_name_or_path: If it is a filepath on disc, it loads the model from that path. If it is not a path, it first tries to download a pre-trained SentenceTransformer model. If that fails, tries to construct a model from Huggingface models repository with that name.
+    :param modules: This parameter can be used to create custom SentenceTransformer models from scratch.
+    :param device: Device (like 'cuda' / 'cpu') that should be used for computation. If None, checks if a GPU can be used.
+    :param cache_folder: Path to store models. Can be also set by SENTENCE_TRANSFORMERS_HOME enviroment variable.
+    :param use_auth_token: HuggingFace authentication token to download private models.
+    """
 
-        self.args = self.load_model_args(model_name)
+    def __init__(self, model_name_or_path: Optional[str] = None,
+                 modules: Optional[Iterable[nn.Module]] = None,
+                 device: Optional[str] = None,
+                 cache_folder: Optional[str] = None,
+                 use_auth_token: Union[bool, str, None] = None
+                 ):
+        self._model_card_vars = {}
+        self._model_card_text = None
+        self._model_config = {}
 
-        if isinstance(args, dict):
-            self.args.update_from_dict(args)
-        elif isinstance(args, SiameseTransQuestArgs):
-            self.args = args
+        if cache_folder is None:
+            cache_folder = os.getenv('SENTENCE_TRANSFORMERS_HOME')
+            if cache_folder is None:
+                try:
+                    from torch.hub import _get_torch_home
 
-        transformer_model = Transformer(model_name, max_seq_length=self.args.max_seq_length)
-        pooling_model = Pooling(transformer_model.get_word_embedding_dimension(), pooling_mode_mean_tokens=True,
-                                pooling_mode_cls_token=False,
-                                pooling_mode_max_tokens=False)
-        modules = [transformer_model, pooling_model]
+                    torch_cache_home = _get_torch_home()
+                except ImportError:
+                    torch_cache_home = os.path.expanduser(
+                        os.getenv('TORCH_HOME', os.path.join(os.getenv('XDG_CACHE_HOME', '~/.cache'), 'torch')))
+
+                cache_folder = os.path.join(torch_cache_home, 'sentence_transformers')
+
+        if model_name_or_path is not None and model_name_or_path != "":
+            logger.info("Load pretrained SentenceTransformer: {}".format(model_name_or_path))
+
+            # Old models that don't belong to any organization
+            basic_transformer_models = ['albert-base-v1', 'albert-base-v2', 'albert-large-v1', 'albert-large-v2',
+                                        'albert-xlarge-v1', 'albert-xlarge-v2', 'albert-xxlarge-v1',
+                                        'albert-xxlarge-v2', 'bert-base-cased-finetuned-mrpc', 'bert-base-cased',
+                                        'bert-base-chinese', 'bert-base-german-cased', 'bert-base-german-dbmdz-cased',
+                                        'bert-base-german-dbmdz-uncased', 'bert-base-multilingual-cased',
+                                        'bert-base-multilingual-uncased', 'bert-base-uncased',
+                                        'bert-large-cased-whole-word-masking-finetuned-squad',
+                                        'bert-large-cased-whole-word-masking', 'bert-large-cased',
+                                        'bert-large-uncased-whole-word-masking-finetuned-squad',
+                                        'bert-large-uncased-whole-word-masking', 'bert-large-uncased', 'camembert-base',
+                                        'ctrl', 'distilbert-base-cased-distilled-squad', 'distilbert-base-cased',
+                                        'distilbert-base-german-cased', 'distilbert-base-multilingual-cased',
+                                        'distilbert-base-uncased-distilled-squad',
+                                        'distilbert-base-uncased-finetuned-sst-2-english', 'distilbert-base-uncased',
+                                        'distilgpt2', 'distilroberta-base', 'gpt2-large', 'gpt2-medium', 'gpt2-xl',
+                                        'gpt2', 'openai-gpt', 'roberta-base-openai-detector', 'roberta-base',
+                                        'roberta-large-mnli', 'roberta-large-openai-detector', 'roberta-large',
+                                        't5-11b', 't5-3b', 't5-base', 't5-large', 't5-small', 'transfo-xl-wt103',
+                                        'xlm-clm-ende-1024', 'xlm-clm-enfr-1024', 'xlm-mlm-100-1280', 'xlm-mlm-17-1280',
+                                        'xlm-mlm-en-2048', 'xlm-mlm-ende-1024', 'xlm-mlm-enfr-1024',
+                                        'xlm-mlm-enro-1024', 'xlm-mlm-tlm-xnli15-1024', 'xlm-mlm-xnli15-1024',
+                                        'xlm-roberta-base', 'xlm-roberta-large-finetuned-conll02-dutch',
+                                        'xlm-roberta-large-finetuned-conll02-spanish',
+                                        'xlm-roberta-large-finetuned-conll03-english',
+                                        'xlm-roberta-large-finetuned-conll03-german', 'xlm-roberta-large',
+                                        'xlnet-base-cased', 'xlnet-large-cased']
+
+            if os.path.exists(model_name_or_path):
+                # Load from path
+                model_path = model_name_or_path
+            else:
+                # Not a path, load from hub
+                if '\\' in model_name_or_path or model_name_or_path.count('/') > 1:
+                    raise ValueError("Path {} not found".format(model_name_or_path))
+
+                model_path = os.path.join(cache_folder, model_name_or_path.replace("/", "_"))
+
+                if not os.path.exists(os.path.join(model_path, 'modules.json')):
+                    # Download from hub with caching
+                    snapshot_download(model_name_or_path,
+                                      cache_dir=cache_folder,
+                                      library_name='sentence-transformers',
+                                      library_version=__version__,
+                                      ignore_files=['flax_model.msgpack', 'rust_model.ot', 'tf_model.h5'],
+                                      use_auth_token=use_auth_token)
+
+            if os.path.exists(os.path.join(model_path, 'modules.json')):  # Load as SentenceTransformer model
+                modules = self._load_sbert_model(model_path)
+            else:  # Load with AutoModel
+                modules = self._load_auto_model(model_path)
 
         if modules is not None and not isinstance(modules, OrderedDict):
             modules = OrderedDict([(str(idx), module) for idx, module in enumerate(modules)])
@@ -368,7 +444,7 @@ class SiameseTransformer(nn.Sequential):
 
         self._target_device = torch.device(device)
 
-    def encode(self, sentences: Union[str, List[str], List[int]],
+    def encode(self, sentences: Union[str, List[str]],
                batch_size: int = 32,
                show_progress_bar: bool = None,
                output_value: str = 'sentence_embedding',
@@ -382,7 +458,7 @@ class SiameseTransformer(nn.Sequential):
         :param sentences: the sentences to embed
         :param batch_size: the batch size used for the computation
         :param show_progress_bar: Output a progress bar when encode sentences
-        :param output_value:  Default sentence_embedding, to get sentence embeddings. Can be set to token_embeddings to get wordpiece token embeddings.
+        :param output_value:  Default sentence_embedding, to get sentence embeddings. Can be set to token_embeddings to get wordpiece token embeddings. Set to None, to get all output values
         :param convert_to_numpy: If true, the output is a list of numpy vectors. Else, it is a list of pytorch tensors.
         :param convert_to_tensor: If true, you get one large tensor as return. Overwrites any setting from convert_to_numpy
         :param device: Which torch.device to use for the computation
@@ -394,12 +470,12 @@ class SiameseTransformer(nn.Sequential):
         self.eval()
         if show_progress_bar is None:
             show_progress_bar = (
-                    logger.getEffectiveLevel() == logging.INFO or logger.getEffectiveLevel() == logging.DEBUG)
+                        logger.getEffectiveLevel() == logging.INFO or logger.getEffectiveLevel() == logging.DEBUG)
 
         if convert_to_tensor:
             convert_to_numpy = False
 
-        if output_value == 'token_embeddings':
+        if output_value != 'sentence_embedding':
             convert_to_tensor = False
             convert_to_numpy = False
 
@@ -434,6 +510,11 @@ class SiameseTransformer(nn.Sequential):
                             last_mask_id -= 1
 
                         embeddings.append(token_emb[0:last_mask_id + 1])
+                elif output_value is None:  # Return all outputs
+                    embeddings = []
+                    for sent_idx in range(len(out_features['sentence_embedding'])):
+                        row = {name: out_features[name][sent_idx] for name in out_features}
+                        embeddings.append(row)
                 else:  # Sentence embeddings
                     embeddings = out_features[output_value]
                     embeddings = embeddings.detach()
@@ -457,21 +538,6 @@ class SiameseTransformer(nn.Sequential):
             all_embeddings = all_embeddings[0]
 
         return all_embeddings
-
-    def predict(self, to_predict, verbose=True):
-        sentences1 = []
-        sentences2 = []
-
-        for text_1, text_2 in to_predict:
-            sentences1.append(text_1)
-            sentences2.append(text_2)
-
-        embeddings1 = self.encode(sentences1, show_progress_bar=verbose, convert_to_numpy=True)
-        embeddings2 = self.encode(sentences2, show_progress_bar=verbose, convert_to_numpy=True)
-
-        cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
-
-        return cosine_scores
 
     def start_multi_process_pool(self, target_devices: List[str] = None):
         """
@@ -536,7 +602,7 @@ class SiameseTransformer(nn.Sequential):
         if chunk_size is None:
             chunk_size = min(math.ceil(len(sentences) / len(pool["processes"]) / 10), 5000)
 
-        logger.info("Chunk data into packages of size {}".format(chunk_size))
+        logger.debug(f"Chunk data into {math.ceil(len(sentences) / chunk_size)} packages of size {chunk_size}")
 
         input_queue = pool['input']
         last_chunk_id = 0
@@ -581,11 +647,11 @@ class SiameseTransformer(nn.Sequential):
 
         return None
 
-    def tokenize(self, text: str):
+    def tokenize(self, texts: Union[List[str], List[Dict], List[Tuple[str, str]]]):
         """
-        Tokenizes the text
+        Tokenizes the texts
         """
-        return self._first_module().tokenize(text)
+        return self._first_module().tokenize(texts)
 
     def get_sentence_features(self, *features):
         return self._first_module().get_sentence_features(*features)
@@ -605,9 +671,14 @@ class SiameseTransformer(nn.Sequential):
         """Returns the last module of this sequential embedder"""
         return self._modules[next(reversed(self._modules))]
 
-    def save(self, path):
+    def save(self, path: str, model_name: Optional[str] = None, create_model_card: bool = True,
+             train_datasets: Optional[List[str]] = None):
         """
         Saves all elements for this seq. sentence embedder into different sub-folders
+        :param path: Path on disc
+        :param model_name: Optional model name
+        :param create_model_card: If True, create a README.md with basic information about this model
+        :param train_datasets: Optional list with the names of the datasets used to to train the model
         """
         if path is None:
             return
@@ -615,20 +686,90 @@ class SiameseTransformer(nn.Sequential):
         os.makedirs(path, exist_ok=True)
 
         logger.info("Save model to {}".format(path))
-        contained_modules = []
+        modules_config = []
 
+        # Save some model info
+        if '__version__' not in self._model_config:
+            self._model_config['__version__'] = {
+                'sentence_transformers': __version__,
+                'transformers': transformers.__version__,
+                'pytorch': torch.__version__,
+            }
+
+        with open(os.path.join(path, 'config_sentence_transformers.json'), 'w') as fOut:
+            json.dump(self._model_config, fOut, indent=2)
+
+        # Save modules
         for idx, name in enumerate(self._modules):
             module = self._modules[name]
-            # model_path = os.path.join(path, str(idx)+"_"+type(module).__name__)
-            os.makedirs(path, exist_ok=True)
-            module.save(path)
-            contained_modules.append(
-                {'idx': idx, 'name': name, 'path': os.path.basename(path), 'type': type(module).__module__})
+            if idx == 0 and isinstance(module, Transformer):  # Save transformer model in the main folder
+                model_path = path + "/"
+            else:
+                model_path = os.path.join(path, str(idx) + "_" + type(module).__name__)
+
+            os.makedirs(model_path, exist_ok=True)
+            module.save(model_path)
+            modules_config.append(
+                {'idx': idx, 'name': name, 'path': os.path.basename(model_path), 'type': type(module).__module__})
 
         with open(os.path.join(path, 'modules.json'), 'w') as fOut:
-            json.dump(contained_modules, fOut, indent=2)
+            json.dump(modules_config, fOut, indent=2)
 
-        self.save_model_args(path)
+        # Create model card
+        if create_model_card:
+            self._create_model_card(path, model_name, train_datasets)
+
+    def _create_model_card(self, path: str, model_name: Optional[str] = None,
+                           train_datasets: Optional[List[str]] = None):
+        """
+        Create an automatic model and stores it in path
+        """
+        if self._model_card_text is not None and len(self._model_card_text) > 0:
+            model_card = self._model_card_text
+        else:
+            tags = ModelCardTemplate.__TAGS__.copy()
+            model_card = ModelCardTemplate.__MODEL_CARD__
+
+            if len(self._modules) == 2 and isinstance(self._first_module(), Transformer) and isinstance(
+                    self._last_module(), Pooling) and self._last_module().get_pooling_mode_str() in ['cls', 'max',
+                                                                                                     'mean']:
+                pooling_module = self._last_module()
+                pooling_mode = pooling_module.get_pooling_mode_str()
+                model_card = model_card.replace("{USAGE_TRANSFORMERS_SECTION}",
+                                                ModelCardTemplate.__USAGE_TRANSFORMERS__)
+                pooling_fct_name, pooling_fct = ModelCardTemplate.model_card_get_pooling_function(pooling_mode)
+                model_card = model_card.replace("{POOLING_FUNCTION}", pooling_fct).replace("{POOLING_FUNCTION_NAME}",
+                                                                                           pooling_fct_name).replace(
+                    "{POOLING_MODE}", pooling_mode)
+                tags.append('transformers')
+
+            # Print full model
+            model_card = model_card.replace("{FULL_MODEL_STR}", str(self))
+
+            # Add tags
+            model_card = model_card.replace("{TAGS}", "\n".join(["- " + t for t in tags]))
+
+            datasets_str = ""
+            if train_datasets is not None:
+                datasets_str = "datasets:\n" + "\n".join(["- " + d for d in train_datasets])
+            model_card = model_card.replace("{DATASETS}", datasets_str)
+
+            # Add dim info
+            self._model_card_vars["{NUM_DIMENSIONS}"] = self.get_sentence_embedding_dimension()
+
+            # Replace vars we created while using the model
+            for name, value in self._model_card_vars.items():
+                model_card = model_card.replace(name, str(value))
+
+            # Replace remaining vars with default values
+            for name, value in ModelCardTemplate.__DEFAULT_VARS__.items():
+                model_card = model_card.replace(name, str(value))
+
+        if model_name is not None:
+            model_card = model_card.replace("{MODEL_NAME}", model_name.strip())
+
+        with open(os.path.join(path, "README.md"), "w", encoding='utf8') as fOut:
+            fOut.write(model_card.strip())
 
     def smart_batching_collate(self, batch):
         """
@@ -650,12 +791,11 @@ class SiameseTransformer(nn.Sequential):
 
             labels.append(example.label)
 
-        labels = torch.tensor(labels).to(self._target_device)
+        labels = torch.tensor(labels)
 
         sentence_features = []
         for idx in range(num_texts):
             tokenized = self.tokenize(texts[idx])
-            batch_to_device(tokenized, self._target_device)
             sentence_features.append(tokenized)
 
         return sentence_features, labels
@@ -683,7 +823,7 @@ class SiameseTransformer(nn.Sequential):
             steps_per_epoch=None,
             scheduler: str = 'WarmupLinear',
             warmup_steps: int = 10000,
-            optimizer_class: Type[Optimizer] = transformers.AdamW,
+            optimizer_class: Type[Optimizer] = torch.optim.AdamW,
             optimizer_params: Dict[str, object] = {'lr': 2e-5},
             weight_decay: float = 0.01,
             evaluation_steps: int = 0,
@@ -692,7 +832,10 @@ class SiameseTransformer(nn.Sequential):
             max_grad_norm: float = 1,
             use_amp: bool = False,
             callback: Callable[[float, int, int], None] = None,
-            show_progress_bar: bool = True
+            show_progress_bar: bool = True,
+            checkpoint_path: str = None,
+            checkpoint_save_steps: int = 500,
+            checkpoint_save_total_limit: int = 0
             ):
         """
         Train the model with the given training objective
@@ -718,16 +861,33 @@ class SiameseTransformer(nn.Sequential):
                 It must accept the following three parameters in this order:
                 `score`, `epoch`, `steps`
         :param show_progress_bar: If True, output a tqdm progress bar
+        :param checkpoint_path: Folder to save checkpoints during training
+        :param checkpoint_save_steps: Will save a checkpoint after so many steps
+        :param checkpoint_save_total_limit: Total number of checkpoints to store
         """
+
+        ##Add info to model card
+        # info_loss_functions = "\n".join(["- {} with {} training examples".format(str(loss), len(dataloader)) for dataloader, loss in train_objectives])
+        info_loss_functions = []
+        for dataloader, loss in train_objectives:
+            info_loss_functions.extend(ModelCardTemplate.get_train_objective_info(dataloader, loss))
+        info_loss_functions = "\n\n".join([text for text in info_loss_functions])
+
+        info_fit_parameters = json.dumps(
+            {"evaluator": fullname(evaluator), "epochs": epochs, "steps_per_epoch": steps_per_epoch,
+             "scheduler": scheduler, "warmup_steps": warmup_steps, "optimizer_class": str(optimizer_class),
+             "optimizer_params": optimizer_params, "weight_decay": weight_decay, "evaluation_steps": evaluation_steps,
+             "max_grad_norm": max_grad_norm}, indent=4, sort_keys=True)
+        self._model_card_text = None
+        self._model_card_vars['{TRAINING_SECTION}'] = ModelCardTemplate.__TRAINING_SECTION__.replace("{LOSS_FUNCTIONS}",
+                                                                                                     info_loss_functions).replace(
+            "{FIT_PARAMETERS}", info_fit_parameters)
 
         if use_amp:
             from torch.cuda.amp import autocast
             scaler = torch.cuda.amp.GradScaler()
 
         self.to(self._target_device)
-
-        if output_path is not None:
-            os.makedirs(output_path, exist_ok=True)
 
         dataloaders = [dataloader for dataloader, _ in train_objectives]
 
@@ -794,6 +954,8 @@ class SiameseTransformer(nn.Sequential):
                         data = next(data_iterator)
 
                     features, labels = data
+                    labels = labels.to(self._target_device)
+                    features = list(map(lambda batch: batch_to_device(batch, self._target_device), features))
 
                     if use_amp:
                         with autocast():
@@ -822,42 +984,120 @@ class SiameseTransformer(nn.Sequential):
                 global_step += 1
 
                 if evaluation_steps > 0 and training_steps % evaluation_steps == 0:
-                    self._eval_during_training(evaluator, output_path, save_best_model, epoch,
-                                               training_steps, callback)
+                    self._eval_during_training(evaluator, output_path, save_best_model, epoch, training_steps, callback)
+
                     for loss_model in loss_models:
                         loss_model.zero_grad()
                         loss_model.train()
+
+                if checkpoint_path is not None and checkpoint_save_steps is not None and checkpoint_save_steps > 0 and global_step % checkpoint_save_steps == 0:
+                    self._save_checkpoint(checkpoint_path, checkpoint_save_total_limit, global_step)
 
             self._eval_during_training(evaluator, output_path, save_best_model, epoch, -1, callback)
 
         if evaluator is None and output_path is not None:  # No evaluator, but output path: save final model version
             self.save(output_path)
 
-    def evaluate(self, evaluator: SentenceEvaluator, output_path: str = None, verbose: bool = True):
+        if checkpoint_path is not None:
+            self._save_checkpoint(checkpoint_path, checkpoint_save_total_limit, global_step)
+
+    def evaluate(self, evaluator: SentenceEvaluator, output_path: str = None):
         """
         Evaluate the model
 
         :param evaluator:
             the evaluator
-        :param verbose:
-            print the results
         :param output_path:
             the evaluator can write the results to this path
         """
         if output_path is not None:
             os.makedirs(output_path, exist_ok=True)
-        return evaluator(self, output_path, verbose)
+        return evaluator(self, output_path)
 
     def _eval_during_training(self, evaluator, output_path, save_best_model, epoch, steps, callback):
         """Runs evaluation during the training"""
+        eval_path = output_path
+        if output_path is not None:
+            os.makedirs(output_path, exist_ok=True)
+            eval_path = os.path.join(output_path, "eval")
+            os.makedirs(eval_path, exist_ok=True)
+
         if evaluator is not None:
-            score = evaluator(self, output_path=output_path, epoch=epoch, steps=steps)
+            score = evaluator(self, output_path=eval_path, epoch=epoch, steps=steps)
             if callback is not None:
                 callback(score, epoch, steps)
             if score > self.best_score:
                 self.best_score = score
                 if save_best_model:
                     self.save(output_path)
+
+    def _save_checkpoint(self, checkpoint_path, checkpoint_save_total_limit, step):
+        # Store new checkpoint
+        self.save(os.path.join(checkpoint_path, str(step)))
+
+        # Delete old checkpoints
+        if checkpoint_save_total_limit is not None and checkpoint_save_total_limit > 0:
+            old_checkpoints = []
+            for subdir in os.listdir(checkpoint_path):
+                if subdir.isdigit():
+                    old_checkpoints.append({'step': int(subdir), 'path': os.path.join(checkpoint_path, subdir)})
+
+            if len(old_checkpoints) > checkpoint_save_total_limit:
+                old_checkpoints = sorted(old_checkpoints, key=lambda x: x['step'])
+                shutil.rmtree(old_checkpoints[0]['path'])
+
+    def _load_auto_model(self, model_name_or_path):
+        """
+        Creates a simple Transformer + Mean Pooling model and returns the modules
+        """
+        logger.warning(
+            "No sentence-transformers model found with name {}. Creating a new one with MEAN pooling.".format(
+                model_name_or_path))
+        transformer_model = Transformer(model_name_or_path)
+        pooling_model = Pooling(transformer_model.get_word_embedding_dimension(), 'mean')
+        return [transformer_model, pooling_model]
+
+    def _load_sbert_model(self, model_path):
+        """
+        Loads a full sentence-transformers model
+        """
+        # Check if the config_sentence_transformers.json file exists (exists since v2 of the framework)
+        config_sentence_transformers_json_path = os.path.join(model_path, 'config_sentence_transformers.json')
+        if os.path.exists(config_sentence_transformers_json_path):
+            with open(config_sentence_transformers_json_path) as fIn:
+                self._model_config = json.load(fIn)
+
+            if '__version__' in self._model_config and 'sentence_transformers' in self._model_config['__version__'] and \
+                    self._model_config['__version__']['sentence_transformers'] > __version__:
+                logger.warning(
+                    "You try to use a model that was created with version {}, however, your version is {}. This might cause unexpected behavior or errors. In that case, try to update to the latest version.\n\n\n".format(
+                        self._model_config['__version__']['sentence_transformers'], __version__))
+
+        # Check if a readme exists
+        model_card_path = os.path.join(model_path, 'README.md')
+        if os.path.exists(model_card_path):
+            try:
+                with open(model_card_path, encoding='utf8') as fIn:
+                    self._model_card_text = fIn.read()
+            except:
+                pass
+
+        # Load the modules of sentence transformer
+        modules_json_path = os.path.join(model_path, 'modules.json')
+        with open(modules_json_path) as fIn:
+            modules_config = json.load(fIn)
+
+        modules = OrderedDict()
+        for module_config in modules_config:
+            module_class = import_from_string(module_config['type'])
+            module = module_class.load(os.path.join(model_path, module_config['path']))
+            modules[module_config['name']] = module
+
+        return modules
+
+    @staticmethod
+    def load(input_path):
+        return SiameseTransformer(input_path)
 
     @staticmethod
     def _get_scheduler(optimizer, scheduler: str, warmup_steps: int, t_total: int):
@@ -900,15 +1140,6 @@ class SiameseTransformer(nn.Sequential):
             first_tuple = next(gen)
             return first_tuple[1].device
 
-    def save_model_args(self, output_dir):
-        os.makedirs(output_dir, exist_ok=True)
-        self.args.save(output_dir)
-
-    def load_model_args(self, input_dir):
-        args = SiameseTransQuestArgs()
-        args.load(input_dir)
-        return args
-
     @property
     def tokenizer(self):
         """
@@ -919,7 +1150,7 @@ class SiameseTransformer(nn.Sequential):
     @tokenizer.setter
     def tokenizer(self, value):
         """
-        Property to set the tokenizer that is should used by this model
+        Property to set the tokenizer that should be used by this model
         """
         self._first_module().tokenizer = value
 
