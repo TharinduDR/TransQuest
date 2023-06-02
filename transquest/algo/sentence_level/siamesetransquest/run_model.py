@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 
 from transquest.algo.sentence_level.siamesetransquest.evaluation.embedding_similarity_evaluator import \
     EmbeddingSimilarityEvaluator
+from transquest.algo.sentence_level.siamesetransquest.losses.contrastive_loss import ContrastiveLoss
 from transquest.algo.sentence_level.siamesetransquest.losses.cosine_similarity_loss import CosineSimilarityLoss
 from transquest.algo.sentence_level.siamesetransquest.model_args import SiameseTransQuestArgs
 from transquest.algo.sentence_level.siamesetransquest.models import SiameseTransformer
@@ -80,7 +81,7 @@ class SiameseTransQuestModel:
 
         train_dataloader = DataLoader(train_samples, shuffle=True,
                                       batch_size=self.args.train_batch_size)
-        train_loss = CosineSimilarityLoss(model=self.model)
+        train_loss = ContrastiveLoss(model=self.model)
 
         evaluator = EmbeddingSimilarityEvaluator.from_input_examples(eval_samples, name='eval')
         warmup_steps = math.ceil(len(train_dataloader) * self.args.num_train_epochs * 0.1)
