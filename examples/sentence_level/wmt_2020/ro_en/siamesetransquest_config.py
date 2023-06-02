@@ -7,8 +7,8 @@ SUBMISSION_FILE = "predictions.txt"
 RESULT_IMAGE = "result.jpg"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
-MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "xlm-roberta-large"
+MODEL_TYPE = "mt5"
+MODEL_NAME = "google/mt5-base"
 
 siamesetransquest_config = {
     'output_dir': 'temp/outputs/',
