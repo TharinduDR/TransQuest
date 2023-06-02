@@ -357,11 +357,19 @@ class SiameseTransformer(nn.Sequential):
     """
 
     def __init__(self, model_name_or_path: Optional[str] = None,
-                 modules: Optional[Iterable[nn.Module]] = None,
+                 modules: Optional[Iterable[nn.Module]] = None, args=None,
                  device: Optional[str] = None,
                  cache_folder: Optional[str] = None,
                  use_auth_token: Union[bool, str, None] = None
                  ):
+
+        self.args = self.load_model_args(model_name_or_path)
+
+        if isinstance(args, dict):
+            self.args.update_from_dict(args)
+        elif isinstance(args, SiameseTransQuestArgs):
+            self.args = args
+
         self._model_card_vars = {}
         self._model_card_text = None
         self._model_config = {}
@@ -1098,6 +1106,15 @@ class SiameseTransformer(nn.Sequential):
     @staticmethod
     def load(input_path):
         return SiameseTransformer(input_path)
+
+    def save_model_args(self, output_dir):
+        os.makedirs(output_dir, exist_ok=True)
+        self.args.save(output_dir)
+
+    def load_model_args(self, input_dir):
+        args = SiameseTransQuestArgs()
+        args.load(input_dir)
+        return args
 
     @staticmethod
     def _get_scheduler(optimizer, scheduler: str, warmup_steps: int, t_total: int):
