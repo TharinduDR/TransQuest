@@ -16,7 +16,7 @@ from torch import nn, Tensor, device
 from torch.optim.optimizer import Optimizer
 from torch.utils.data import DataLoader
 from tqdm.autonotebook import trange
-from transformers import AutoModel, AutoTokenizer, AutoConfig
+from transformers import AutoModel, AutoTokenizer, AutoConfig, T5Config, MT5Config
 
 from transquest.algo.sentence_level.siamesetransquest.evaluation.sentence_evaluator import SentenceEvaluator
 from transquest.algo.sentence_level.siamesetransquest.model_args import SiameseTransQuestArgs
