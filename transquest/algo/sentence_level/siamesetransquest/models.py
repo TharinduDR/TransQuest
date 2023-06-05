@@ -370,77 +370,11 @@ class SiameseTransformer(nn.Sequential):
         elif isinstance(args, SiameseTransQuestArgs):
             self.args = args
 
-        self._model_card_vars = {}
-        self._model_card_text = None
-        self._model_config = {}
-
-        if cache_folder is None:
-            cache_folder = os.getenv('SENTENCE_TRANSFORMERS_HOME')
-            if cache_folder is None:
-                try:
-                    from torch.hub import _get_torch_home
-
-                    torch_cache_home = _get_torch_home()
-                except ImportError:
-                    torch_cache_home = os.path.expanduser(
-                        os.getenv('TORCH_HOME', os.path.join(os.getenv('XDG_CACHE_HOME', '~/.cache'), 'torch')))
-
-                cache_folder = os.path.join(torch_cache_home, 'sentence_transformers')
-
-        if model_name_or_path is not None and model_name_or_path != "":
-            logger.info("Load pretrained SentenceTransformer: {}".format(model_name_or_path))
-
-            # Old models that don't belong to any organization
-            basic_transformer_models = ['albert-base-v1', 'albert-base-v2', 'albert-large-v1', 'albert-large-v2',
-                                        'albert-xlarge-v1', 'albert-xlarge-v2', 'albert-xxlarge-v1',
-                                        'albert-xxlarge-v2', 'bert-base-cased-finetuned-mrpc', 'bert-base-cased',
-                                        'bert-base-chinese', 'bert-base-german-cased', 'bert-base-german-dbmdz-cased',
-                                        'bert-base-german-dbmdz-uncased', 'bert-base-multilingual-cased',
-                                        'bert-base-multilingual-uncased', 'bert-base-uncased',
-                                        'bert-large-cased-whole-word-masking-finetuned-squad',
-                                        'bert-large-cased-whole-word-masking', 'bert-large-cased',
-                                        'bert-large-uncased-whole-word-masking-finetuned-squad',
-                                        'bert-large-uncased-whole-word-masking', 'bert-large-uncased', 'camembert-base',
-                                        'ctrl', 'distilbert-base-cased-distilled-squad', 'distilbert-base-cased',
-                                        'distilbert-base-german-cased', 'distilbert-base-multilingual-cased',
-                                        'distilbert-base-uncased-distilled-squad',
-                                        'distilbert-base-uncased-finetuned-sst-2-english', 'distilbert-base-uncased',
-                                        'distilgpt2', 'distilroberta-base', 'gpt2-large', 'gpt2-medium', 'gpt2-xl',
-                                        'gpt2', 'openai-gpt', 'roberta-base-openai-detector', 'roberta-base',
-                                        'roberta-large-mnli', 'roberta-large-openai-detector', 'roberta-large',
-                                        't5-11b', 't5-3b', 't5-base', 't5-large', 't5-small', 'transfo-xl-wt103',
-                                        'xlm-clm-ende-1024', 'xlm-clm-enfr-1024', 'xlm-mlm-100-1280', 'xlm-mlm-17-1280',
-                                        'xlm-mlm-en-2048', 'xlm-mlm-ende-1024', 'xlm-mlm-enfr-1024',
-                                        'xlm-mlm-enro-1024', 'xlm-mlm-tlm-xnli15-1024', 'xlm-mlm-xnli15-1024',
-                                        'xlm-roberta-base', 'xlm-roberta-large-finetuned-conll02-dutch',
-                                        'xlm-roberta-large-finetuned-conll02-spanish',
-                                        'xlm-roberta-large-finetuned-conll03-english',
-                                        'xlm-roberta-large-finetuned-conll03-german', 'xlm-roberta-large',
-                                        'xlnet-base-cased', 'xlnet-large-cased']
-
-            if os.path.exists(model_name_or_path):
-                # Load from path
-                model_path = model_name_or_path
-            else:
-                # Not a path, load from hub
-                if '\\' in model_name_or_path or model_name_or_path.count('/') > 1:
-                    raise ValueError("Path {} not found".format(model_name_or_path))
-
-                model_path = os.path.join(cache_folder, model_name_or_path.replace("/", "_"))
-
-                if not os.path.exists(os.path.join(model_path, 'modules.json')):
-                    # Download from hub with caching
-                    snapshot_download(model_name_or_path,
-                                      cache_dir=cache_folder,
-                                      library_name='sentence-transformers',
-                                      library_version=__version__,
-                                      ignore_files=['flax_model.msgpack', 'rust_model.ot', 'tf_model.h5'],
-                                      use_auth_token=use_auth_token)
-
-            if os.path.exists(os.path.join(model_path, 'modules.json')):  # Load as SentenceTransformer model
-                modules = self._load_sbert_model(model_path)
-            else:  # Load with AutoModel
-                modules = self._load_auto_model(model_path)
+        transformer_model = Transformer(model_name_or_path, max_seq_length=self.args.max_seq_length)
+        pooling_model = Pooling(transformer_model.get_word_embedding_dimension(), pooling_mode_mean_tokens=True,
+                                pooling_mode_cls_token=False,
+                                pooling_mode_max_tokens=False)
+        modules = [transformer_model, pooling_model]
 
         if modules is not None and not isinstance(modules, OrderedDict):
             modules = OrderedDict([(str(idx), module) for idx, module in enumerate(modules)])
@@ -710,15 +644,11 @@ class SiameseTransformer(nn.Sequential):
         # Save modules
         for idx, name in enumerate(self._modules):
             module = self._modules[name]
-            if idx == 0 and isinstance(module, Transformer):  # Save transformer model in the main folder
-                model_path = path + "/"
-            else:
-                model_path = os.path.join(path, str(idx) + "_" + type(module).__name__)
-
-            os.makedirs(model_path, exist_ok=True)
-            module.save(model_path)
+            # model_path = os.path.join(path, str(idx)+"_"+type(module).__name__)
+            os.makedirs(path, exist_ok=True)
+            module.save(path)
             modules_config.append(
-                {'idx': idx, 'name': name, 'path': os.path.basename(model_path), 'type': type(module).__module__})
+                {'idx': idx, 'name': name, 'path': os.path.basename(path), 'type': type(module).__module__})
 
         with open(os.path.join(path, 'modules.json'), 'w') as fOut:
             json.dump(modules_config, fOut, indent=2)
