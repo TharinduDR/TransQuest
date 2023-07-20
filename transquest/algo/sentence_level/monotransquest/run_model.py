@@ -40,7 +40,7 @@ from transformers import (
     XLMConfig,
     XLMRobertaConfig,
     XLMRobertaTokenizer,
-    XLMTokenizer,
+    XLMTokenizer, AutoConfig, AutoModelForSequenceClassification, AutoTokenizer,
 )
 from transformers.convert_graph_to_onnx import convert, quantize
 from transformers.optimization import AdamW, Adafactor
@@ -103,6 +103,7 @@ class MonoTransQuestModel:
         """  # noqa: ignore flake8"
 
         MODEL_CLASSES = {
+            "auto": (AutoConfig, AutoModelForSequenceClassification, AutoTokenizer),
             "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
             "distilbert": (DistilBertConfig, DistilBertForSequenceClassification, DistilBertTokenizer),
             "longformer": (LongformerConfig, LongformerForSequenceClassification, LongformerTokenizer),
