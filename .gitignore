@@ -4,7 +4,8 @@
 # User-specific stuff
 .idea
 .ipynb_checkpoints
-
+wandb/
+wandb/*
 
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -82,3 +83,5 @@ cache
 
 site
 
+outputs
+outputs/*

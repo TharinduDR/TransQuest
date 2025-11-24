@@ -13,6 +13,8 @@ from transquest.algo.sentence_level.siamesetransquest.losses.cosine_similarity_l
 from transquest.algo.sentence_level.siamesetransquest.model_args import SiameseTransQuestArgs
 from transquest.algo.sentence_level.siamesetransquest.models import SiameseTransformer
 from transquest.algo.sentence_level.siamesetransquest.readers.input_example import InputExample
+from geoopt.optim import RiemannianAdam
+from transquest.algo.sentence_level.hypertransquest.hyperbolic_net import HyperbolicSiameseNet
 
 logger = logging.getLogger(__name__)
 
